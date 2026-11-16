@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,800;0,900;1,800&family=Yanone+Kaffeesatz:wght@400;700&display=block" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/timing.js"></script>
+    <script src="assets/kit.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #081a2a; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Nunito", sans-serif; }
+      .scene { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60.0" data-width="1920" data-height="1080">
+      <div id="host-open" class="scene" style="z-index:1" data-composition-id="open" data-composition-src="compositions/open.html" data-start="0.0" data-duration="5.4" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-infection" class="scene" style="z-index:2" data-composition-id="infection" data-composition-src="compositions/infection.html" data-start="5.15" data-duration="12.74" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-compare" class="scene" style="z-index:3" data-composition-id="compare" data-composition-src="compositions/compare.html" data-start="17.89" data-duration="3.412" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-wall" class="scene" style="z-index:4" data-composition-id="wall" data-composition-src="compositions/wall.html" data-start="21.302" data-duration="12.177" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-machines" class="scene" style="z-index:5" data-composition-id="machines" data-composition-src="compositions/machines.html" data-start="33.479" data-duration="7.11" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-viruses" class="scene" style="z-index:6" data-composition-id="viruses" data-composition-src="compositions/viruses.html" data-start="40.589" data-duration="6.106" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-resistance" class="scene" style="z-index:7" data-composition-id="resistance" data-composition-src="compositions/resistance.html" data-start="46.695" data-duration="8.24" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div id="host-ending" class="scene" style="z-index:8" data-composition-id="ending" data-composition-src="compositions/ending.html" data-start="54.935" data-duration="5.065" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <audio id="track-vo" src="assets/vo.wav" data-start="0" data-duration="60.0" data-track-index="10" data-volume="1.0"></audio>
+      <audio id="track-sfx" src="assets/sfx.wav" data-start="0" data-duration="60.0" data-track-index="11" data-volume="1.0"></audio>
+      <audio id="track-music" src="assets/music.wav" data-start="0" data-duration="60.0" data-track-index="12" data-volume="1.0"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      // crossfade from the cold open into the skin scene
+      tl.fromTo("#host-infection", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.inOut" }, 5.15);
+      tl.set({}, {}, 60.0);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

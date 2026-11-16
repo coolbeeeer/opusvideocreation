@@ -1,0 +1,10 @@
+# Audio synthesis and mixing (required)
+numpy>=2.0
+scipy>=1.13
+
+# Voice: local text-to-speech (only for `python vo.py` in TTS mode)
+kokoro-onnx>=0.6
+soundfile>=0.12
+
+# Word timing (only for `python align.py`)
+faster-whisper>=1.2

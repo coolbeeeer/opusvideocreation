@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=block" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Palette: measured underground strata from the reference study (style/STYLE.md) */
+      :root {
+        --ground: #350a26;
+        --ink: #ffffff;
+        --font-display: "Nunito", sans-serif;
+        --banner: #9a1e5a;
+        --banner-drop: #5e0f38;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: var(--font-display); }
+      #scene { position: absolute; inset: 0; }
+      #camera { position: absolute; inset: 0; transform-origin: 960px 650px; }
+      #shake { position: absolute; inset: 0; }
+      svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      #flash { position: absolute; inset: 0; background: #fff3c0; opacity: 0; pointer-events: none; }
+
+      .callout { position: absolute; transform-origin: 50% 50%; opacity: 0; }
+      .callout .drop, .callout .face {
+        clip-path: polygon(22px 0, calc(100% - 22px) 0, 100% 50%, calc(100% - 22px) 100%, 22px 100%, 0 50%);
+        height: 92px;
+      }
+      .callout .drop { position: absolute; left: 0; right: 0; top: 9px; background: var(--banner-drop); }
+      .callout .face {
+        position: relative; background: var(--banner);
+        display: flex; align-items: center; justify-content: center; gap: 22px; padding: 0 64px;
+        color: var(--ink); font-size: 60px; font-weight: 900; letter-spacing: 0.005em; white-space: nowrap;
+      }
+      .callout .w { display: inline-block; opacity: 0; transform-origin: 50% 70%; }
+      #call1 { left: 960px; top: 150px; transform: translateX(-50%); }
+      #call2 { left: 1440px; top: 420px; transform: translateX(-50%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="4" data-width="1920" data-height="1080">
+      <div id="scene" class="clip" data-start="0" data-duration="4" data-track-index="0">
+        <div id="camera">
+          <div id="shake">
+            <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#100a45" />
+                  <stop offset="1" stop-color="#14095f" />
+                </linearGradient>
+                <linearGradient id="cavity" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#2a0a22" />
+                  <stop offset="1" stop-color="#1c0618" />
+                </linearGradient>
+                <radialGradient id="halo">
+                  <stop offset="0" stop-color="#fff6d0" stop-opacity="0.9" />
+                  <stop offset="0.3" stop-color="#ffc83a" stop-opacity="0.45" />
+                  <stop offset="1" stop-color="#ff9000" stop-opacity="0" />
+                </radialGradient>
+                <filter id="blur16" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16" /></filter>
+                <clipPath id="chamberClip"><path id="chamberClipPath" /></clipPath>
+              </defs>
+
+              <!-- surface strip: night sky + grass line -->
+              <rect width="1920" height="110" fill="url(#sky)" />
+              <g id="stars" fill="#dcd0fc"></g>
+              <!-- soil strata (generated) -->
+              <g id="strata"></g>
+              <g id="speckles" fill="#b04a3a" opacity="0.55"></g>
+              <g id="grass" fill="#1c0a2a"></g>
+
+              <!-- far chambers: dim, close to soil colour = far away -->
+              <g fill="#4a1530" stroke="#9a3a2e" stroke-width="10" opacity="0.95">
+                <ellipse cx="250" cy="300" rx="150" ry="64" />
+                <ellipse cx="1720" cy="240" rx="140" ry="58" />
+                <ellipse cx="430" cy="1024" rx="190" ry="60" />
+              </g>
+              <g fill="#4a1530">
+                <ellipse cx="250" cy="300" rx="150" ry="64" />
+                <ellipse cx="1720" cy="240" rx="140" ry="58" />
+                <ellipse cx="430" cy="1024" rx="190" ry="60" />
+              </g>
+              <g fill="#a37a78" opacity="0.75">
+                <ellipse cx="200" cy="334" rx="19" ry="13" /><ellipse cx="244" cy="338" rx="19" ry="13" /><ellipse cx="288" cy="334" rx="19" ry="13" />
+                <ellipse cx="1694" cy="270" rx="17" ry="11" /><ellipse cx="1734" cy="272" rx="17" ry="11" />
+              </g>
+
+              <!-- tunnels + chamber: stroke pass for the lighter lip, then fill pass hides inner joins -->
+              <g id="cavStroke" fill="none" stroke="#9a3a2e" stroke-width="12" stroke-linejoin="round"></g>
+              <g id="cavFill" fill="url(#cavity)"></g>
+
+              <g clip-path="url(#chamberClip)">
+                <!-- floor band, slightly lighter for form -->
+                <path d="M200 846 C 600 836, 1100 836, 1250 846 L1250 960 L200 960 Z" fill="#3a0f2c" />
+                <!-- puddle: the only cool accent -->
+                <g id="puddle">
+                  <path d="M1220 880 L1790 880 L1790 1000 L1220 1000 Z" fill="#127a7a" />
+                  <path id="waterTop" d="M1220 878 C 1400 873, 1620 873, 1790 878 L1790 892 C 1620 887, 1400 887, 1220 892 Z" fill="#3fb3a8" />
+                  <g id="ripples" fill="none" stroke="#bff3ea" stroke-width="5"></g>
+                </g>
+              </g>
+
+              <!-- lightning strike down the shaft (emits light, so it glows) -->
+              <g id="bolt" opacity="0">
+                <path class="boltPath" stroke="#ffc83a" stroke-width="44" fill="none" stroke-linejoin="round" filter="url(#blur16)" opacity="0.8" />
+                <path class="boltPath" stroke="#ffe36a" stroke-width="20" fill="none" stroke-linejoin="round" />
+                <path class="boltPath" stroke="#ffffff" stroke-width="8" fill="none" stroke-linejoin="round" />
+              </g>
+
+              <!-- ants -->
+              <g id="redPos">
+                <g id="redLines" opacity="0" fill="#b4524a">
+                  <rect x="-560" y="-180" width="280" height="14" rx="7" />
+                  <rect x="-510" y="-126" width="230" height="14" rx="7" />
+                  <rect x="-600" y="-72" width="300" height="14" rx="7" />
+                </g>
+                <g id="redTilt"><g transform="scale(2.1)" id="redAnt"></g></g>
+              </g>
+              <g id="vioPos">
+                <g id="vioLines" opacity="0" fill="#7a5a9a">
+                  <rect x="280" y="-180" width="280" height="14" rx="7" />
+                  <rect x="280" y="-126" width="230" height="14" rx="7" />
+                  <rect x="300" y="-72" width="300" height="14" rx="7" />
+                </g>
+                <g id="vioTilt"><g transform="scale(-2.1,2.1)" id="vioAnt"></g></g>
+              </g>
+
+              <!-- front water layer: sinks the thrown ant into the puddle -->
+              <g clip-path="url(#chamberClip)">
+                <path d="M1220 888 C 1400 884, 1620 884, 1790 888 L1790 1000 L1220 1000 Z" fill="#1d9a94" opacity="0.6" />
+                <g fill="#ffffff" opacity="0.85">
+                  <rect x="1340" y="910" width="56" height="7" rx="3.5" />
+                  <rect x="1450" y="932" width="30" height="7" rx="3.5" />
+                  <rect x="1630" y="910" width="48" height="7" rx="3.5" />
+                </g>
+              </g>
+
+              <!-- clash starburst (emits light) -->
+              <g id="burst" opacity="0">
+                <circle cx="960" cy="725" r="260" fill="url(#halo)" />
+                <polygon id="burstStar" fill="#ffe36a" />
+                <polygon id="burstCore" fill="#ffffff" />
+              </g>
+
+              <!-- splash -->
+              <g id="drops" fill="#6fd6c8"></g>
+
+              <!-- dazed sparkles: cartoon symbols, flat, no glow -->
+              <g id="sparkles" opacity="0" fill="#ffd84a"></g>
+
+              <!-- foreground: dark, cropped by frame edge = close -->
+              <g fill="none" stroke-linecap="round">
+                <g stroke="#1e0810" stroke-width="22">
+                  <path d="M110 0 C 120 110, 90 210, 112 330" />
+                  <path d="M116 120 C 150 170, 190 210, 214 270" />
+                  <path d="M1818 0 C 1806 120, 1834 220, 1816 310" />
+                </g>
+                <g stroke="#4e2224" stroke-width="5">
+                  <path d="M104 10 C 112 110, 84 210, 104 316" />
+                  <path d="M1810 10 C 1800 120, 1826 220, 1808 296" />
+                </g>
+              </g>
+              <g fill="#170512">
+                <ellipse cx="70" cy="1070" rx="190" ry="96" />
+                <ellipse cx="1880" cy="1060" rx="170" ry="90" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div id="flash"></div>
+        <div id="call1" class="callout"><div class="drop"></div><div class="face"><span class="w">Jaws</span><span class="w">locked</span></div></div>
+        <div id="call2" class="callout"><div class="drop"></div><div class="face"><span class="w">Out</span><span class="w">cold</span></div></div>
+      </div>
+      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="4" data-track-index="1" data-volume="1"></audio>
+    </div>
+    <script>
+      const NS = "http://www.w3.org/2000/svg";
+      let seed = 11;
+      const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const el = (tag, attrs, parent) => {
+        const e = document.createElementNS(NS, tag);
+        for (const k in attrs) e.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(e);
+        return e;
+      };
+
+      // ---- soil strata: wavy horizontal bands, measured palette ----
+      const strataCols = ["#8d2e22", "#7e2324", "#691a29", "#581d2d", "#44122a", "#350a26"];
+      const strata = document.getElementById("strata");
+      strataCols.forEach((c, i) => {
+        const y0 = 110 + i * 165;
+        let d = `M0 ${y0}`;
+        for (let x = 0; x <= 1920; x += 80) {
+          const y = y0 + (i === 0 ? 0 : Math.sin(x / 210 + i * 1.7) * 18 + Math.sin(x / 90 + i) * 6);
+          d += ` L${x} ${y.toFixed(1)}`;
+        }
+        d += " L1920 1080 L0 1080 Z";
+        el("path", { d, fill: c }, strata);
+      });
+      const sp = document.getElementById("speckles");
+      for (let i = 0; i < 140; i++) el("circle", { cx: (rnd() * 1920).toFixed(1), cy: (130 + rnd() * 940).toFixed(1), r: (2 + rnd() * 5).toFixed(1) }, sp);
+      const stars = document.getElementById("stars");
+      for (let i = 0; i < 40; i++) el("circle", { cx: (rnd() * 1920).toFixed(1), cy: (rnd() * 90).toFixed(1), r: (0.8 + rnd() * 1.6).toFixed(1), opacity: (0.4 + rnd() * 0.5).toFixed(2) }, stars);
+      const grass = document.getElementById("grass");
+      for (let i = 0; i < 90; i++) {
+        const x = rnd() * 1920, h = 14 + rnd() * 26, w = 3 + rnd() * 3, l = -8 + rnd() * 16;
+        el("path", { d: `M${x - w} 112 Q ${x + l * 0.4} ${112 - h * 0.6} ${x + l} ${112 - h} Q ${x + l * 0.3} ${112 - h * 0.5} ${x + w} 112 Z` }, grass);
+      }
+
+      // ---- chamber shape (also used as clip for floor and puddle) ----
+      const chamberD = "M330 862 C 270 700, 380 470, 700 410 C 860 382, 1060 382, 1220 410 C 1560 470, 1770 640, 1760 830 C 1756 880, 1730 930, 1680 952 C 1580 980, 1400 980, 1320 940 C 1290 904, 1270 868, 1240 864 L380 864 C 355 864, 338 864, 330 862 Z";
+      document.getElementById("chamberClipPath").setAttribute("d", chamberD);
+      const cavities = [
+        "M915 440 C 925 330, 895 230, 920 110 L 1008 110 C 986 230, 1014 330, 1004 440 Z",
+        "M0 540 C 130 552, 240 590, 380 650 L 362 750 C 240 708, 120 640, 0 636 Z",
+        "M190 580 C 200 480, 226 400, 232 340 L 292 344 C 290 410, 270 490, 270 590 Z",
+        "M1590 520 C 1700 466, 1810 420, 1920 396 L1920 490 C 1810 506, 1720 556, 1640 626 Z",
+        "M1688 480 C 1690 400, 1700 330, 1692 280 L 1752 280 C 1756 330, 1752 400, 1762 452 Z",
+        "M520 870 C 500 930, 470 970, 440 1000 L 520 1010 C 550 970, 580 930, 600 870 Z",
+        chamberD,
+      ];
+      cavities.forEach((d) => { el("path", { d }, document.getElementById("cavStroke")); el("path", { d }, document.getElementById("cavFill")); });
+
+      // ---- ant builder ----
+      function buildAnt(root, p, id) {
+        root.innerHTML = `
+          <g fill="none" stroke="${p.far}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(-6,-46)"><path class="${id}-legB" d="M0 0 L-26 18 L-40 46" /></g>
+            <g transform="translate(6,-46)"><path class="${id}-legA" d="M0 0 L8 22 L2 46" /></g>
+            <g transform="translate(16,-46)"><path class="${id}-legB" d="M0 0 L30 18 L44 46" /></g>
+          </g>
+          <ellipse cx="-62" cy="-58" rx="44" ry="30" fill="${p.abd}" />
+          <ellipse cx="-70" cy="-68" rx="24" ry="11" fill="${p.hi}" opacity="0.8" />
+          <path d="M-90 -52 Q -62 -40 -32 -52" stroke="${p.shade}" stroke-width="4" fill="none" />
+          <ellipse cx="-16" cy="-54" rx="10" ry="8" fill="${p.body}" />
+          <ellipse cx="10" cy="-56" rx="26" ry="15" fill="${p.body}" />
+          <ellipse cx="4" cy="-62" rx="13" ry="5" fill="${p.hi}" opacity="0.8" />
+          <g transform="translate(68,-62)"><path id="${id}-jawU" d="M0 0 C 14 -16, 36 -12, 44 6 C 34 -2, 18 -4, 4 8 Z" fill="${p.jaw}" /></g>
+          <g transform="translate(66,-50)"><path id="${id}-jawL" d="M0 0 C 14 16, 36 12, 44 -6 C 34 2, 18 4, 4 -8 Z" fill="${p.jaw}" /></g>
+          <circle cx="52" cy="-66" r="22" fill="${p.head}" />
+          <ellipse cx="46" cy="-74" rx="10" ry="5" fill="${p.hi}" opacity="0.8" />
+          <circle cx="60" cy="-70" r="6" fill="#1c1430" />
+          <circle cx="62" cy="-72" r="2" fill="#ffffff" />
+          <g transform="translate(56,-84)"><path id="${id}-antL" d="M0 0 Q 10 -30 34 -40" stroke="${p.leg}" stroke-width="5" fill="none" stroke-linecap="round" /></g>
+          <g transform="translate(48,-86)"><path id="${id}-antR" d="M0 0 Q 4 -34 24 -48" stroke="${p.far}" stroke-width="5" fill="none" stroke-linecap="round" /></g>
+          <g fill="none" stroke="${p.leg}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(-2,-48)"><path class="${id}-legA" d="M0 0 L-30 16 L-46 46" /></g>
+            <g transform="translate(10,-48)"><path class="${id}-legB" d="M0 0 L4 24 L-4 46" /></g>
+            <g transform="translate(20,-48)"><path class="${id}-legA" d="M0 0 L32 16 L50 46" /></g>
+          </g>
+          <g id="${id}-rim" opacity="0" fill="none" stroke="#ffe066" stroke-width="5" stroke-linecap="round">
+            <path d="M44 -87 A22 22 0 0 1 74 -64" />
+            <path d="M-2 -70 Q 16 -73 33 -61" />
+            <path d="M-58 -88 Q -32 -86 -20 -68" />
+          </g>`;
+      }
+      buildAnt(document.getElementById("redAnt"), { body: "#e2412f", abd: "#d63a2f", head: "#e64532", hi: "#f58466", shade: "#a52a22", leg: "#c2342a", far: "#a8302a", jaw: "#c8382c" }, "r");
+      buildAnt(document.getElementById("vioAnt"), { body: "#7656b0", abd: "#6c4ea4", head: "#7c5cb8", hi: "#a88ee0", shade: "#4e3880", leg: "#8a6cc4", far: "#5e4596", jaw: "#9a7cd0" }, "v");
+
+      // ---- starburst geometry ----
+      const star = (cx, cy, n, r1, r2, rot) => {
+        let pts = [];
+        for (let i = 0; i < n * 2; i++) {
+          const r = i % 2 ? r2 : r1, a = rot + (i * Math.PI) / n;
+          pts.push(`${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`);
+        }
+        return pts.join(" ");
+      };
+      document.getElementById("burstStar").setAttribute("points", star(960, 725, 12, 170, 70, 0.1));
+      document.getElementById("burstCore").setAttribute("points", star(960, 725, 12, 96, 46, 0.36));
+
+      // ---- lightning bolt down the shaft ----
+      const boltD = "M966 100 L942 180 L986 236 L946 324 L992 400 L930 500 L984 584 L952 650 L960 722";
+      document.querySelectorAll(".boltPath").forEach((p) => p.setAttribute("d", boltD));
+
+      // ---- splash drops and ripples ----
+      const dropsG = document.getElementById("drops");
+      const DROPS = [];
+      for (let i = 0; i < 12; i++) {
+        const c = el("circle", { cx: 1470, cy: 880, r: (10 + rnd() * 8).toFixed(1), opacity: 0 }, dropsG);
+        DROPS.push({ c, dx: -170 + (i / 11) * 340 + (rnd() - 0.5) * 30, h: 160 + rnd() * 140 });
+      }
+      const ripG = document.getElementById("ripples");
+      const RIPS = [0, 1, 2].map(() => el("ellipse", { cx: 1470, cy: 884, rx: 10, ry: 3, opacity: 0 }, ripG));
+
+      // ---- sparkles ----
+      const spG = document.getElementById("sparkles");
+      const SPARK = [0, 1, 2].map(() => {
+        const g = el("g", {}, spG);
+        el("polygon", { points: star(0, 0, 4, 40, 10, -Math.PI / 2) }, g);
+        el("circle", { cx: 0, cy: 0, r: 7, fill: "#ffffff" }, g);
+        return g;
+      });
+
+      // ================= TIMELINE =================
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const FLOOR = 864;
+
+      gsap.set("#redPos", { x: 560, y: FLOOR });
+      gsap.set("#vioPos", { x: 1200, y: FLOOR });
+      const legs = (id) => [`.${id}-legA`, `.${id}-legB`];
+      gsap.set(["#r-jawU", "#v-jawU"], { rotation: 16, svgOrigin: "0 0" });
+      gsap.set(["#r-jawL", "#v-jawL"], { rotation: -16, svgOrigin: "0 0" });
+      gsap.set([...legs("r"), ...legs("v"), "#r-antL", "#r-antR", "#v-antL", "#v-antR", "#r-jawU", "#r-jawL", "#v-jawU", "#v-jawL"], { svgOrigin: "0 0" });
+
+      const gait = (id, t0, half, reps, amp) => {
+        tl.fromTo(`.${id}-legA`, { rotation: -amp }, { rotation: amp, duration: half, ease: "sine.inOut", repeat: reps, yoyo: true, immediateRender: false }, t0);
+        tl.fromTo(`.${id}-legB`, { rotation: amp }, { rotation: -amp, duration: half, ease: "sine.inOut", repeat: reps, yoyo: true, immediateRender: false }, t0);
+      };
+      const jaws = (id, open, t, d = 0.06) => {
+        tl.to(`#${id}-jawU`, { rotation: open ? -30 : 16, duration: d, ease: "power2.out" }, t);
+        tl.to(`#${id}-jawL`, { rotation: open ? 30 : -16, duration: d, ease: "power2.out" }, t);
+      };
+
+      // camera drift (never fully still)
+      tl.fromTo("#camera", { scale: 1.0 }, { scale: 1.05, duration: 4, ease: "none" }, 0);
+
+      // ---- 0.00-0.80 squaring up ----
+      gait("r", 0, 0.1, 7, 10);
+      gait("v", 0, 0.1, 7, 10);
+      tl.to("#redTilt", { rotation: -10, svgOrigin: "-84 0", duration: 0.25, ease: "power2.out" }, 0.08);
+      tl.to("#redTilt", { rotation: 0, svgOrigin: "-84 0", duration: 0.2, ease: "power2.in" }, 0.5);
+      tl.to("#vioTilt", { rotation: 10, svgOrigin: "84 0", duration: 0.25, ease: "power2.out" }, 0.16);
+      tl.to("#vioTilt", { rotation: 0, svgOrigin: "84 0", duration: 0.2, ease: "power2.in" }, 0.55);
+      jaws("r", true, 0.1); jaws("r", false, 0.3); jaws("r", true, 0.42);
+      jaws("v", true, 0.18); jaws("v", false, 0.36); jaws("v", true, 0.5);
+      tl.to(["#r-antL", "#v-antL"], { rotation: -18, duration: 0.1, repeat: 5, yoyo: true }, 0.05);
+      tl.to(["#r-antR", "#v-antR"], { rotation: 14, duration: 0.12, repeat: 5, yoyo: true }, 0.1);
+      tl.to("#redPos", { x: 540, duration: 0.3, ease: "power2.out" }, 0.45);
+      tl.to("#vioPos", { x: 1222, duration: 0.3, ease: "power2.out" }, 0.45);
+
+      // ---- 0.80-1.30 charge ----
+      gait("r", 0.8, 0.0625, 7, 18);
+      gait("v", 0.8, 0.0625, 7, 18);
+      tl.to("#redPos", { x: 785, duration: 0.5, ease: "power2.in" }, 0.8);
+      tl.to("#vioPos", { x: 1135, duration: 0.5, ease: "power2.in" }, 0.8);
+      tl.fromTo(["#redLines", "#vioLines"], { opacity: 0, scaleX: 0.3 }, { opacity: 0.7, scaleX: 1, duration: 0.3, ease: "power1.out" }, 0.95);
+      tl.to(["#redLines", "#vioLines"], { opacity: 0, duration: 0.12 }, 1.28);
+
+      // ---- 1.30 clash: starburst, lightning, flash, shake ----
+      const T = 1.3;
+      jaws("r", false, T, 0.04); jaws("v", false, T, 0.04);
+      tl.fromTo("#burst", { opacity: 1, scale: 0.1, svgOrigin: "960 725" }, { scale: 1.25, duration: 0.12, ease: "power3.out", immediateRender: false }, T);
+      tl.to("#burst", { opacity: 0, scale: 1.4, svgOrigin: "960 725", duration: 0.3, ease: "power1.in" }, T + 0.12);
+      tl.to("#burstStar", { rotation: 20, svgOrigin: "960 725", duration: 0.42, ease: "none" }, T);
+      // bolt draws down then flickers
+      tl.fromTo(".boltPath", { strokeDasharray: 1000, strokeDashoffset: 1000 }, { strokeDashoffset: 0, duration: 0.05, ease: "none", immediateRender: false }, T - 0.05);
+      tl.set("#bolt", { opacity: 1 }, T - 0.05);
+      tl.set("#bolt", { opacity: 0.25 }, T + 0.05);
+      tl.set("#bolt", { opacity: 1 }, T + 0.09);
+      tl.set("#bolt", { opacity: 0.4 }, T + 0.16);
+      tl.set("#bolt", { opacity: 0.9 }, T + 0.2);
+      tl.to("#bolt", { opacity: 0, duration: 0.12 }, T + 0.24);
+      tl.fromTo("#flash", { opacity: 0.18 }, { opacity: 0, duration: 0.22, ease: "power2.out", immediateRender: false }, T);
+      tl.fromTo(["#r-rim", "#v-rim"], { opacity: 1 }, { opacity: 0, duration: 0.45, ease: "power1.in", immediateRender: false }, T);
+      const shake = [[-22, 12], [18, -14], [-14, 10], [10, -8], [-6, 5], [3, -2], [0, 0]];
+      shake.forEach(([x, y], i) => tl.to("#shake", { x, y, duration: 0.045, ease: "none" }, T + i * 0.045));
+
+      // ---- 1.30-2.30 jaws locked: wrestle and push ----
+      gait("r", T, 0.125, 7, 14);
+      gait("v", T, 0.125, 7, 8);
+      tl.to("#redTilt", { rotation: -6, svgOrigin: "-84 0", duration: 0.2 }, T + 0.05);
+      tl.to("#vioTilt", { rotation: 6, svgOrigin: "84 0", duration: 0.2 }, T + 0.05);
+      [[800, 1150], [775, 1125], [815, 1165], [830, 1180], [860, 1210]].forEach(([rx, vx], i) => {
+        tl.to("#redPos", { x: rx, duration: 0.18, ease: "sine.inOut" }, T + 0.1 + i * 0.18);
+        tl.to("#vioPos", { x: vx, duration: 0.18, ease: "sine.inOut" }, T + 0.1 + i * 0.18);
+      });
+      // callout 1: banner grows from a sliver, then words pop in one by one
+      tl.set("#call1", { opacity: 1 }, 1.42);
+      tl.fromTo("#call1", { scaleX: 0.03, xPercent: -50, x: 0 }, { scaleX: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, 1.42);
+      tl.fromTo("#call1 .w", { opacity: 0, scale: 0.4, y: 14 }, { opacity: 1, scale: 1, y: 0, duration: 0.22, ease: "back.out(2.6)", stagger: 0.15, immediateRender: false }, 1.6);
+      tl.to("#call1", { opacity: 0, scale: 0.85, duration: 0.18, ease: "power2.in" }, 2.3);
+
+      // ---- 2.30-2.90 the throw ----
+      tl.to("#redTilt", { rotation: -20, svgOrigin: "-84 0", duration: 0.16, ease: "power3.out" }, 2.26);
+      tl.to("#redTilt", { rotation: 0, svgOrigin: "-84 0", duration: 0.3, ease: "power2.inOut" }, 2.6);
+      jaws("r", true, 2.32); jaws("v", true, 2.32);
+      tl.to("#vioPos", { x: 1440, duration: 0.6, ease: "power1.inOut" }, 2.3);
+      tl.to("#vioPos", { y: 470, duration: 0.3, ease: "power2.out" }, 2.3);
+      tl.to("#vioPos", { y: 745, duration: 0.3, ease: "power2.in" }, 2.6);
+      tl.fromTo("#vioTilt", { rotation: 6 }, { rotation: 190, svgOrigin: "0 0", duration: 0.6, ease: "power1.inOut", immediateRender: false }, 2.3);
+      tl.to("#vioTilt", { rotation: 180, svgOrigin: "0 0", duration: 0.2, ease: "back.out(3)" }, 2.9);
+      gait("v", 2.3, 0.075, 7, 24);
+
+      // ---- 2.88 splash ----
+      const S = 2.88;
+      DROPS.forEach(({ c, dx, h }, i) => {
+        tl.set(c, { attr: { cx: 1470, cy: 880 }, opacity: 1 }, S);
+        tl.to(c, { attr: { cx: 1470 + dx }, duration: 0.55, ease: "none" }, S);
+        tl.to(c, { attr: { cy: 880 - h }, duration: 0.25, ease: "power2.out" }, S);
+        tl.to(c, { attr: { cy: 886 }, duration: 0.3, ease: "power2.in" }, S + 0.25);
+        tl.set(c, { opacity: 0 }, S + 0.55);
+      });
+      RIPS.forEach((r, i) => {
+        tl.fromTo(r, { attr: { rx: 20, ry: 4 }, opacity: 0.9 }, { attr: { rx: 200 + i * 40, ry: 14 + i * 3 }, opacity: 0, duration: 0.8, ease: "power2.out", immediateRender: false }, S + i * 0.14);
+      });
+      tl.fromTo("#waterTop", { y: 0 }, { y: -6, duration: 0.08, repeat: 5, yoyo: true, ease: "sine.inOut", immediateRender: false }, S);
+      [[10, -8], [-8, 6], [5, -3], [0, 0]].forEach(([x, y], i) => tl.to("#shake", { x, y, duration: 0.05, ease: "none" }, S + i * 0.05));
+
+      // ---- 2.95-4.00 dazed ----
+      gait("v", 2.95, 0.15, 6, 12);
+      tl.to(["#v-antL", "#v-antR"], { rotation: 70, duration: 0.3, ease: "power2.out" }, 2.6);
+      tl.fromTo(["#v-antL", "#v-antR"], { rotation: 70 }, { rotation: 55, duration: 0.25, repeat: 3, yoyo: true, ease: "sine.inOut", immediateRender: false }, 2.95);
+      gait("r", 2.6, 0.12, 2, 6);
+      jaws("r", false, 3.0, 0.1);
+      tl.to(["#r-antL", "#r-antR"], { rotation: -16, duration: 0.2, ease: "back.out(2)" }, 3.05);
+      tl.to("#redPos", { y: FLOOR - 26, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1 }, 3.15);
+      tl.set("#sparkles", { opacity: 1 }, 3.0);
+      const orbit = { a: 0, s: 0 };
+      const placeSparks = () => {
+        SPARK.forEach((g, i) => {
+          const a = orbit.a + (i * Math.PI * 2) / 3;
+          const x = 1560 + Math.cos(a) * 100, y = 800 + Math.sin(a) * 28;
+          const sc = orbit.s * (0.8 + 0.3 * Math.sin(a));
+          g.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${sc.toFixed(3)})`);
+        });
+      };
+      tl.fromTo(orbit, { a: 0 }, { a: Math.PI * 4, duration: 1.0, ease: "none", onUpdate: placeSparks, immediateRender: false }, 3.0);
+      tl.fromTo(orbit, { s: 0 }, { s: 1, duration: 0.2, ease: "back.out(2)", onUpdate: placeSparks, immediateRender: false }, 3.0);
+      placeSparks();
+
+      // callout 2: word by word
+      tl.set("#call2", { opacity: 1 }, 2.95);
+      tl.fromTo("#call2", { scaleX: 0.03, xPercent: -50, x: 0 }, { scaleX: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, 2.95);
+      tl.fromTo("#call2 .w", { opacity: 0, scale: 0.4, y: 14 }, { opacity: 1, scale: 1, y: 0, duration: 0.22, ease: "back.out(2.6)", stagger: 0.15, immediateRender: false }, 3.12);
+
+      tl.set({}, {}, 4);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

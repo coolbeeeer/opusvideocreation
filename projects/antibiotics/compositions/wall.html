@@ -1,0 +1,279 @@
+<template id="wall-template">
+  <div data-composition-id="wall" data-width="1920" data-height="1080" data-duration="12.177">
+    <style>
+      [data-composition-id="wall"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0a2232; }
+      [data-composition-id="wall"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="wall"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <radialGradient id="wal-bg" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#123a4c" /><stop offset="1" stop-color="#071926" /></radialGradient>
+          <clipPath id="wal-band"><rect x="660" y="350" width="600" height="44" /></clipPath>
+        </defs>
+        <g class="cam">
+          <rect x="-2000" y="-1500" width="5920" height="4080" fill="url(#wal-bg)" />
+          <g class="specks" fill="#7fb8c8"></g>
+          <g class="water" fill="#5cc8e0"></g>
+          <g class="bact">
+            <path class="flag" fill="none" stroke="#6c8436" stroke-width="16" stroke-linecap="round" />
+            <path class="outer" fill="#4a6226" />
+            <g class="bandMarks" fill="#6c8a36"></g>
+            <path class="shade" fill="#6f8a34" />
+            <path class="body" fill="#8aa446" />
+            <path class="hi" fill="#b4c870" opacity="0.9" />
+            <g class="inner"></g>
+            <g class="mesh"><rect x="660" y="350" width="600" height="44" fill="#3a5020" /><g class="rows"></g><g class="pegs"></g><g class="newPegs"></g></g>
+            <path class="glint" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" opacity="0" clip-path="url(#wal-band)" />
+            <g class="holes" fill="#0b2433"></g>
+            <g class="enz"></g>
+          </g>
+          <g class="drugs"></g>
+          <g class="frags"></g>
+          <polygon class="burst1" fill="#fff3c0" opacity="0" />
+          <polygon class="burst2" fill="#ffffff" opacity="0" />
+          <g class="spray" fill="#9fe4f2"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="wall"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const T0 = K.scene("wall").start, DUR = K.scene("wall").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(404);
+        const tl = gsap.timeline({ paused: true });
+        const BC = [960, 600], L = 1100, RAD = 250;
+
+        // ------------------------------------------------ the big bacterium
+        const shapeAt = (sx) => {
+          $(".outer").setAttribute("d", K.capsule(L, RAD));
+          $(".shade").setAttribute("d", K.capsule(L - 88, RAD - 44));
+          $(".body").setAttribute("d", K.capsule(L - 88 - 40, (RAD - 44) * 0.8));
+          $(".hi").setAttribute("d", K.capsule(L * 0.3, RAD * 0.11));
+        };
+        shapeAt();
+        $(".outer").setAttribute("transform", `translate(${BC[0]},${BC[1]})`);
+        $(".shade").setAttribute("transform", `translate(${BC[0]},${BC[1]})`);
+        $(".body").setAttribute("transform", `translate(${BC[0]},${BC[1] - 34})`);
+        $(".hi").setAttribute("transform", `translate(${BC[0] - 180},${BC[1] - 130})`);
+        const inner = $(".inner");
+        for (let i = 0; i < 16; i++) K.el("circle", { cx: K.f(560 + rnd() * 800), cy: K.f(520 + rnd() * 200), r: K.f(9 + rnd() * 7), fill: "#4e6626" }, inner);
+        K.el("path", { d: "M 780 640 c 60 -90 140 60 220 -10 s 150 70 200 -20", fill: "none", stroke: "#4e6626", "stroke-width": 12, "stroke-linecap": "round" }, inner);
+        const flagP = { p: 0 };
+        const drawFlag = () => {
+          const pts = [];
+          for (let i = 0; i <= 18; i++) { const u = i / 18; pts.push([BC[0] + L / 2 - 20 + u * 560, BC[1] + 40 + Math.sin(flagP.p + u * 8) * 70 * u]); }
+          $(".flag").setAttribute("d", K.smooth(pts, false));
+        };
+        drawFlag();
+        tl.fromTo(flagP, { p: 0 }, { p: 40, duration: DUR, ease: "none", immediateRender: false, onUpdate: drawFlag }, 0);
+        // band texture on the curved ends and the bottom (seen when zoomed out)
+        const bm = $(".bandMarks");
+        for (let i = 0; i < 70; i++) {
+          const u = i / 70, per = 2 * (L - 2 * RAD) + 2 * Math.PI * RAD; let d = u * per, x, y, ang;
+          const a = L / 2 - RAD;
+          if (d < 2 * a) { x = -a + d; y = RAD - 22; ang = 0; }
+          else if (d < 2 * a + Math.PI * RAD) { const th = (d - 2 * a) / RAD; x = -a - Math.sin(th) * (RAD - 22); y = Math.cos(th) * (RAD - 22); ang = (th * 180) / Math.PI; }
+          else if (d < 4 * a + Math.PI * RAD) { x = -a + (d - 2 * a - Math.PI * RAD); y = -(RAD - 22); ang = 0; if (x > -a && x < a) continue; }
+          else { const th = (d - 4 * a - Math.PI * RAD) / RAD; x = a + Math.sin(th) * (RAD - 22); y = -Math.cos(th) * (RAD - 22); ang = (th * 180) / Math.PI; }
+          K.el("rect", { x: -8, y: -4, width: 16, height: 8, rx: 4, transform: `translate(${K.f(BC[0] + x)},${K.f(BC[1] + y)}) rotate(${K.f(ang)})` }, bm);
+        }
+
+        // ------------------------------------------------ the wall mesh (top straight segment)
+        const rows = $(".rows"), pegs = $(".pegs"), newPegs = $(".newPegs");
+        const ROWY = [358, 372, 386];
+        ROWY.forEach((y, ri) => {
+          const g = K.g(rows);
+          for (let x = 662; x < 1258; x += 20) K.el("rect", { x: x + (ri === 1 ? 10 : 0) - 8, y: y - 4, width: 16, height: 8, rx: 4, fill: ((x / 20) | 0) % 2 ? "#7d9a3e" : "#9cb854" }, g);
+        });
+        const PEG = [];
+        const addPeg = (parent, x, y) => K.el("rect", { x: x - 2.5, y: y - 6, width: 5, height: 12, rx: 2.5, fill: "#dce88e" }, parent);
+        for (let x = 672; x < 1250; x += 40) {
+          if (!(x > 840 && x < 1080)) PEG.push(addPeg(pegs, x, 365));
+          if (!(x > 820 && x < 1100)) PEG.push(addPeg(pegs, x + 20, 379));
+        }
+        const holesZoom = [[905, 372], [1015, 365], [1110, 379], [800, 379]].map(([x, y]) => K.el("ellipse", { cx: x, cy: y, rx: 0.1, ry: 0.1, fill: "#0b2433" }, $(".mesh")));
+
+        // ------------------------------------------------ builder enzymes
+        const ENZ = [880, 960, 1040].map((x, i) => {
+          const g = K.g($(".enz"));
+          const arms = K.g(g);
+          const aL = K.el("rect", { x: -5, y: -20, width: 10, height: 22, rx: 5, fill: "#3f8f98" }, arms);
+          const aR = K.el("rect", { x: -5, y: -20, width: 10, height: 22, rx: 5, fill: "#3f8f98" }, arms);
+          aL.setAttribute("transform", "translate(-9,-8)");
+          aR.setAttribute("transform", "translate(9,-8)");
+          const body = K.el("ellipse", { cx: 0, cy: 4, rx: 21, ry: 15, fill: "#4aa3ad" }, g);
+          K.el("ellipse", { cx: 3, cy: 9, rx: 16, ry: 9, fill: "#3a8790" }, g);
+          K.el("ellipse", { cx: -7, cy: -2, rx: 7, ry: 3.5, fill: "#8ad0d6" }, g);
+          const lockTint = K.el("ellipse", { cx: 0, cy: 4, rx: 21, ry: 15, fill: "#596a74", opacity: 0 }, g);
+          gsap.set(g, { svgOrigin: "0 0", x, y: 412 });
+          gsap.set(aL, { svgOrigin: "-9 -6" });
+          gsap.set(aR, { svgOrigin: "9 -6" });
+          return { g, aL, aR, x, lockTint };
+        });
+        // a short walk + grab loop until each one is jammed
+        const tJam = [at("jams"), at("tools"), at("build")];
+        const workFrom = at("wall") - 0.2;
+        ENZ.forEach((e, i) => {
+          gsap.set(e.aL, { rotation: -28 }); gsap.set(e.aR, { rotation: 28 });
+          for (let t = workFrom + i * 0.17; t < tJam[i] - 0.45; t += 0.55) {
+            tl.to(e.aL, { rotation: 0, duration: 0.09, ease: "power2.in" }, t);
+            tl.to(e.aR, { rotation: 0, duration: 0.09, ease: "power2.in" }, t);
+            tl.to(e.aL, { rotation: -28, duration: 0.18, ease: "power2.out" }, t + 0.12);
+            tl.to(e.aR, { rotation: 28, duration: 0.18, ease: "power2.out" }, t + 0.12);
+            const px = e.x + (((t * 7) | 0) % 3 - 1) * 20 + 10, py = ((t * 3) | 0) % 2 ? 365 : 379;
+            const pg = addPeg(newPegs, px, py);
+            gsap.set(pg, { svgOrigin: `${px} ${py}`, scale: 0 });
+            tl.to(pg, { scale: 1, duration: 0.16, ease: "back.out(3)" }, t + 0.08);
+            PEG.push(pg);
+            if (t + 0.5 < tJam[i] - 0.62) tl.to(e.g, { x: e.x + Math.sin(t * 2.3 + i) * 14, duration: 0.5, ease: "sine.inOut" }, t);
+          }
+        });
+
+        // ------------------------------------------------ camera
+        const cam = K.camera($(".cam"), 960, 600, 0.95);
+        K.camTo(tl, cam, 0, { s: 1.02 }, 0.9, "sine.inOut");
+        K.camTo(tl, cam, at("wall") - 0.55, { px: 960, py: 395, s: 4.6 }, 0.75, "power2.inOut");
+        K.camTo(tl, cam, at("wall") + 0.25, { px: 975 }, at("leaks") - at("wall") - 0.75, "sine.inOut");
+
+        const tagWall = K.tag(ui, { text: "Cell wall", x: 640, y: 300, color: "green", size: 48 });
+        K.show(tl, tagWall, at("wall") + 0.2);
+        K.hide(tl, tagWall, at("your") - 0.1);
+
+        // "like armour": a glint across the mesh
+        const glint = $(".glint");
+        glint.setAttribute("d", "M 700 372 L 1220 372");
+        const tA = at("armour") - 0.05;
+        tl.set(glint, { opacity: 0.55, strokeDasharray: "70 900", strokeDashoffset: 70 }, tA);
+        tl.to(glint, { strokeDashoffset: -560, duration: 0.45, ease: "power1.inOut" }, tA);
+        tl.to(glint, { opacity: 0, duration: 0.1 }, tA + 0.42);
+
+        // ------------------------------------------------ "Your cells don't." inset
+        const ins = document.createElement("div");
+        ins.style.cssText = "position:absolute;left:1560px;top:330px;width:400px;height:400px;margin:-200px 0 0 -200px;border-radius:50%;background:#123a4c;border:14px solid #ffffff;overflow:hidden;opacity:0;transform:scale(0)";
+        ins.innerHTML = `<svg viewBox="0 0 400 400" style="position:absolute;inset:0;width:100%;height:100%"><path class="memFill" fill="#cf8396" /><path class="mem" fill="none" stroke="#e6a2b2" stroke-width="26" stroke-linecap="round" /><g class="memDots" fill="#b86c82"></g></svg>`;
+        ui.appendChild(ins);
+        const mem = ins.querySelector(".mem"), memFill = ins.querySelector(".memFill"), memDots = ins.querySelector(".memDots");
+        for (let i = 0; i < 6; i++) K.el("circle", { cx: K.f(60 + i * 56 + rnd() * 20), cy: K.f(290 + rnd() * 60), r: K.f(8 + rnd() * 8) }, memDots);
+        const mp = { p: 0 };
+        const drawMem = () => {
+          const pts = [];
+          for (let i = 0; i <= 12; i++) pts.push([-20 + i * 37, 200 + Math.sin(mp.p + i * 0.9) * 22 + Math.sin(mp.p * 0.7 + i * 2.1) * 8]);
+          const d = K.smooth(pts, false);
+          mem.setAttribute("d", d);
+          memFill.setAttribute("d", d + " L 430 430 L -30 430 Z");
+        };
+        drawMem();
+        const tY = at("your");
+        tl.to(ins, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(1.7)" }, tY - 0.12);
+        tl.fromTo(mp, { p: 0 }, { p: 9, duration: 1.6, ease: "none", immediateRender: false, onUpdate: drawMem }, tY - 0.12);
+        const tagNo = K.tag(ui, { text: "No wall", x: 1560, y: 600, color: "crimson", size: 46, pointer: false });
+        K.show(tl, tagNo, at("don't") - 0.05);
+        tl.to(ins, { opacity: 0, scale: 0.6, duration: 0.22, ease: "power2.in" }, at("penicillin") - 0.25);
+        K.hide(tl, tagNo, at("penicillin") - 0.25);
+
+        // ------------------------------------------------ "Penicillin targets that wall."
+        const tP = at("penicillin");
+        const ban = K.callout(ui, { text: "Penicillin", x: 960, y: 140, color: "crimson", size: 64 });
+        K.show(tl, ban, tP - 0.05);
+        K.hide(tl, ban, at("jams") - 0.15);
+        const drugs = $(".drugs");
+        const DR = [0, 1, 2, 3, 4, 5].map((i) => {
+          const m = K.mol(drugs, "pen", 0.22);
+          const x0 = 700 + i * 90 + rnd() * 30, y0 = 230 + rnd() * 40;
+          gsap.set(m, { svgOrigin: "0 0", x: x0 - 260, y: y0 - 60, rotation: rnd() * 360, opacity: 0 });
+          tl.to(m, { opacity: 1, duration: 0.15 }, tP + i * 0.07);
+          tl.to(m, { x: x0, y: y0 + 60, rotation: "+=" + (rnd() * 120 - 60), duration: 0.9, ease: "power2.out" }, tP + i * 0.07);
+          return m;
+        });
+        // three of them head for the builders and jam them, one after another
+        ENZ.forEach((e, i) => {
+          const m = DR[i * 2], tj = tJam[i];
+          tl.to(m, { x: e.x + Math.sin(tj * 2.3 + i) * 0, y: 398, rotation: 90, duration: 0.6, ease: "power2.inOut" }, tj - 0.62);
+          tl.to(e.g, { x: e.x, duration: 0.3, ease: "power2.out" }, tj - 0.6);
+          tl.to(e.aL, { rotation: -6, duration: 0.07, ease: "power3.in" }, tj);
+          tl.to(e.aR, { rotation: 6, duration: 0.07, ease: "power3.in" }, tj);
+          tl.to(e.g, { y: 416, duration: 0.06, yoyo: true, repeat: 1 }, tj);
+          tl.to(e.lockTint, { opacity: 0.55, duration: 0.25 }, tj + 0.05);
+        });
+        DR.filter((m, i) => i % 2).forEach((m, i) => tl.to(m, { x: "+=" + (i - 1) * 40, y: "+=" + 30, rotation: "+=" + 60, duration: 2.2, ease: "sine.inOut" }, tP + 1.0));
+        const tagTools = K.tag(ui, { text: "Wall builders", x: 960, y: 900, color: "teal", size: 46, pointer: false });
+        K.show(tl, tagTools, at("tools") - 0.05);
+        K.hide(tl, tagTools, at("springs") - 0.2);
+
+        // ------------------------------------------------ "The wall springs leaks,"
+        const tL = at("springs") - 0.1;
+        tl.to(rows.children, { scaleX: 1.14, svgOrigin: "960 372", duration: 0.6, ease: "power2.out" }, tL);
+        tl.to([pegs, newPegs], { scaleX: 1.14, svgOrigin: "960 372", duration: 0.6, ease: "power2.out" }, tL);
+        PEG.forEach((p, i) => { if (i % 3 !== 0) tl.to(p, { opacity: 0, y: (i % 2 ? -1 : 1) * 10, duration: 0.2, ease: "power2.in" }, tL + 0.05 + (i % 7) * 0.04); });
+        holesZoom.forEach((h, i) => tl.to(h, { attr: { rx: 9 + i, ry: 6 }, duration: 0.3, ease: "back.out(2)" }, tL + 0.1 + i * 0.07));
+        K.camTo(tl, cam, at("leaks") - 0.3, { px: 960, py: 600, s: 1.0 }, 0.8, "power2.inOut");
+        // holes around the whole wall (seen once the camera pulls back)
+        const HOLES = [[760, 372], [1150, 372], [700, 828], [960, 828], [1200, 828], [450, 560], [1470, 650], [520, 760], [1400, 450]].map(([x, y], i) => {
+          const h = K.el("ellipse", { cx: x, cy: y, rx: 0.1, ry: 0.1 }, $(".holes"));
+          tl.to(h, { attr: { rx: 22 + (i % 3) * 5, ry: 15 }, duration: 0.35, ease: "back.out(2)" }, at("leaks") - 0.1 + i * 0.05);
+          return [x, y];
+        });
+
+        // ------------------------------------------------ "water rushes in,"
+        const tW = at("water") - 0.1, tB = at("bursts");
+        const water = $(".water");
+        HOLES.forEach(([hx, hy], i) => {
+          const dx = hx - BC[0], dy = hy - BC[1], len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+          for (let k = 0; k < 6; k++) {
+            const d = K.el("ellipse", { cx: 0, cy: 0, rx: 13, ry: 9, opacity: 0 }, water);
+            const t0 = tW + k * 0.22 + (i % 3) * 0.06;
+            const ang = (Math.atan2(uy, ux) * 180) / Math.PI;
+            gsap.set(d, { svgOrigin: "0 0", x: hx + ux * 260, y: hy + uy * 260, rotation: ang });
+            tl.set(d, { opacity: 0.95 }, t0);
+            tl.to(d, { x: hx - ux * 30, y: hy - uy * 30, duration: 0.55, ease: "power1.in" }, t0);
+            tl.set(d, { opacity: 0 }, t0 + 0.55);
+          }
+        });
+        const bact = $(".bact");
+        gsap.set(bact, { svgOrigin: "960 600" });
+        tl.to(bact, { scaleX: 1.08, scaleY: 1.2, duration: tB - tW, ease: "power1.in" }, tW);
+        for (let t = tW + 0.3; t < tB - 0.1; t += 0.24) tl.to(bact, { rotation: ((t * 10) | 0) % 2 ? 0.8 : -0.8, duration: 0.12, ease: "sine.inOut", yoyo: true, repeat: 1 }, t);
+        K.camTo(tl, cam, tW, { s: 1.06 }, tB - tW, "power1.in");
+
+        // ------------------------------------------------ "and the bacterium bursts."
+        tl.set(bact, { autoAlpha: 0 }, tB);
+        tl.set(water, { autoAlpha: 0 }, tB);
+        $(".burst1").setAttribute("points", K.star(960, 600, 14, 520, 230, 0.1));
+        $(".burst2").setAttribute("points", K.star(960, 600, 14, 300, 130, 0.33));
+        tl.fromTo([".burst1", ".burst2"].map((s) => $(s)), { opacity: 1, scale: 0.2, svgOrigin: "960 600" }, { scale: 1.15, duration: 0.14, ease: "power3.out", immediateRender: false }, tB);
+        tl.to([".burst1", ".burst2"].map((s) => $(s)), { opacity: 0, scale: 1.35, svgOrigin: "960 600", duration: 0.32, ease: "power1.in" }, tB + 0.14);
+        const frags = $(".frags");
+        for (let i = 0; i < 26; i++) {
+          const a = (i / 26) * Math.PI * 2 + rnd() * 0.2, rr = 0.55 + rnd() * 0.45;
+          const x = BC[0] + Math.cos(a) * (L / 2) * rr, y = BC[1] + Math.sin(a) * RAD * rr * 1.2;
+          const col = i % 3 === 0 ? "#4a6226" : i % 3 === 1 ? "#8aa446" : "#6f8a34";
+          const p = K.el("path", { d: K.blob(30 + rnd() * 50, 0.25, rnd() * 6, 7, 900 + i, 1.4, 0.8), fill: col, opacity: 0 }, frags);
+          gsap.set(p, { svgOrigin: "0 0", x, y, rotation: rnd() * 360 });
+          tl.set(p, { opacity: 1 }, tB);
+          tl.to(p, { x: x + Math.cos(a) * (380 + rnd() * 380), y: y + Math.sin(a) * (300 + rnd() * 300), rotation: "+=" + (rnd() * 360 - 180), scale: 0.7, duration: 1.2, ease: "power3.out" }, tB);
+          tl.to(p, { opacity: 0.35, duration: 0.6 }, tB + 0.3);
+        }
+        const spray = $(".spray");
+        for (let i = 0; i < 40; i++) {
+          const a = rnd() * Math.PI * 2, d = K.el("circle", { r: K.f(6 + rnd() * 10), opacity: 0 }, spray);
+          gsap.set(d, { svgOrigin: "0 0", x: 960 + Math.cos(a) * 200, y: 600 + Math.sin(a) * 140 });
+          tl.set(d, { opacity: 0.9 }, tB);
+          tl.to(d, { x: 960 + Math.cos(a) * (600 + rnd() * 600), y: 600 + Math.sin(a) * (420 + rnd() * 400) + 80, duration: 0.7, ease: "power2.out" }, tB);
+          tl.to(d, { opacity: 0.25, duration: 0.4 }, tB + 0.45);
+        }
+        K.shake(tl, cam, tB, 26, 8, 0.045);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["wall"] = tl;
+      })();
+    </script>
+  </div>
+</template>

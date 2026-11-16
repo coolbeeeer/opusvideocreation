@@ -1,0 +1,80 @@
+<template id="intro-template">
+  <!-- data-duration is rewritten by build.py; never edit it by hand -->
+  <div data-composition-id="intro" data-width="1920" data-height="1080" data-duration="5">
+    <style>
+      [data-composition-id="intro"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0a2232; }
+      [data-composition-id="intro"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="intro"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <!-- gradient ids are document-global: prefix them with the scene id -->
+          <radialGradient id="intro-bg" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#123a4c" /><stop offset="1" stop-color="#071926" /></radialGradient>
+        </defs>
+        <g class="cam">
+          <!-- backgrounds must cover every camera move, so draw them far bigger than the frame -->
+          <rect x="-2000" y="-1500" width="5920" height="4080" fill="url(#intro-bg)" />
+          <g class="specks" fill="#7fb8c8"></g>
+          <g class="hero"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="intro"]');
+        const $ = (s) => R.querySelector(s);
+        const T0 = K.scene("intro").start, DUR = K.scene("intro").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;      // scene-local time of a narrated word
+        const rnd = K.rng(101);                             // seeded: no Math.random() anywhere
+        const tl = gsap.timeline({ paused: true });
+
+        // depth: faint specks that drift slower than the camera
+        for (let i = 0; i < 60; i++) K.el("circle", { cx: K.f(-200 + rnd() * 2300), cy: K.f(-100 + rnd() * 1300), r: K.f(1.5 + rnd() * 4), opacity: K.f(0.08 + rnd() * 0.2) }, $(".specks"));
+        tl.to($(".specks"), { x: -80, duration: DUR, ease: "none" }, 0);
+
+        // the hero: two overlapping bacteria that look like one until they separate (binary fission)
+        const pairA = K.g($(".hero")), pairB = K.g($(".hero"));
+        const a = K.bacterium(pairA, { L: 300, r: 66, seed: 3, flagSide: -1 });
+        const b = K.bacterium(pairB, { L: 300, r: 66, seed: 4, flagSide: 1 });
+        gsap.set($(".hero"), { svgOrigin: "0 0", x: 960, y: 560 });   // svgOrigin "0 0" = rotate/scale about the local origin
+        gsap.set([pairA, pairB], { svgOrigin: "0 0" });
+        const ph = { p: 0 };
+        tl.fromTo(ph, { p: 0 }, { p: 20, duration: DUR, ease: "none", immediateRender: false,
+          onUpdate: () => { a.phase = ph.p; a.update(); b.phase = ph.p + 1; b.update(); } }, 0);
+
+        // "This is a bacterium."  -> slides in on the word
+        const tB = at("bacterium");
+        tl.fromTo($(".hero"), { x: 1500, opacity: 0 }, { x: 960, opacity: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, tB - 0.45);
+        gsap.set($(".hero"), { opacity: 0 });
+        const tag = K.tag($(".ui"), { text: "Bacterium", x: 960, y: 450, color: "green", size: 48 });
+        K.show(tl, tag, tB);
+
+        // "Give it twenty minutes, ..."
+        const tagT = K.tag($(".ui"), { text: "20 minutes", x: 960, y: 830, color: "teal", size: 44, pointer: false });
+        K.show(tl, tagT, at("twenty"));
+        K.hide(tl, tag, at("splits") - 0.3);
+
+        // "... and it splits in two."  -> the halves slide apart: elongate, pinch, separate
+        const tS = at("splits") - 0.1;
+        tl.to(pairA, { x: -158, duration: 0.6, ease: "power2.inOut" }, tS);
+        tl.to(pairB, { x: 158, duration: 0.6, ease: "power2.inOut" }, tS);
+        tl.to(pairA, { x: -200, y: -40, rotation: -12, duration: 0.8, ease: "sine.inOut" }, tS + 0.6);
+        tl.to(pairB, { x: 200, y: 40, rotation: 10, duration: 0.8, ease: "sine.inOut" }, tS + 0.6);
+        const tag2 = K.tag($(".ui"), { text: "×2", x: 960, y: 420, color: "teal", size: 56 });
+        K.show(tl, tag2, at("two"));
+
+        // the camera is never fully still
+        const cam = K.camera($(".cam"), 960, 540, 1.06);
+        K.camTo(tl, cam, 0, { s: 1.0, px: 980 }, DUR, "sine.inOut");
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["intro"] = tl;
+      })();
+    </script>
+  </div>
+</template>

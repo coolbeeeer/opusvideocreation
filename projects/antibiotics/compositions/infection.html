@@ -1,0 +1,264 @@
+<template id="infection-template">
+  <div data-composition-id="infection" data-width="1920" data-height="1080" data-duration="12.74">
+    <style>
+      [data-composition-id="infection"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0d2c40; }
+      [data-composition-id="infection"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="infection"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <linearGradient id="inf-air" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2638" /><stop offset="1" stop-color="#18475f" /></linearGradient>
+          <linearGradient id="inf-derm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b45c78" /><stop offset="1" stop-color="#874062" /></linearGradient>
+        </defs>
+        <g class="cam">
+          <rect x="-1200" y="-1400" width="4320" height="1800" fill="url(#inf-air)" />
+          <g class="dust" fill="#a8d4e4"></g>
+          <rect x="-1200" y="380" width="4320" height="1600" fill="url(#inf-derm)" />
+          <g class="fibers" fill="none" stroke="#c46e8a" stroke-width="5" stroke-linecap="round" opacity="0.45"></g>
+          <g class="fat"></g>
+          <g class="follicles"></g>
+          <g class="capillary"></g>
+          <g class="epiL"></g>
+          <g class="epiR"></g>
+          <path class="wound" fill="#3e0c22" />
+          <path class="woundIn" fill="#6a1a38" />
+          <g class="drops" fill="#a8384a"></g>
+          <path class="slash" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0" />
+          <g class="swarm"></g>
+          <g class="enter"></g>
+          <g class="hero"></g>
+          <g class="wbcLayer"></g>
+          <g class="swarm2"></g>
+          <g class="drugs"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="infection"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const T0 = K.scene("infection").start;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(202);
+        const tl = gsap.timeline({ paused: true });
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const DUR = K.scene("infection").dur;
+
+        // ------------------------------------------------ world
+        const ytop = (x) => 330 + 8 * Math.sin(x / 90) + 5 * Math.sin(x / 37);
+        const band = (x0, x1, a, b, wavyB) => {
+          let d = `M ${x0} ${K.f(ytop(x0) + a)}`;
+          for (let x = x0; x <= x1; x += 20) d += ` L ${x} ${K.f(ytop(x) + a)}`;
+          d += ` L ${x1} ${K.f(ytop(x1) + a)}`;
+          for (let x = x1; x >= x0; x -= 20) d += ` L ${x} ${K.f(ytop(x) + b + (wavyB ? 14 * Math.sin(x / 60) : 0))}`;
+          return d + " Z";
+        };
+        const epi = (g, x0, x1) => {
+          K.el("path", { d: band(x0, x1, 72, 104, true), fill: K.C.tissue.epi3 }, g);
+          K.el("path", { d: band(x0, x1, 16, 76, false), fill: K.C.tissue.epi2 }, g);
+          K.el("path", { d: band(x0, x1, 0, 18, false), fill: K.C.tissue.epi1 }, g);
+          for (let x = x0 + 20; x < x1; x += 46 + rnd() * 30) K.el("ellipse", { cx: K.f(x), cy: K.f(ytop(x) + 46 + rnd() * 10), rx: K.f(14 + rnd() * 6), ry: 7, fill: "#c98a74", opacity: 0.6 }, g);
+        };
+        epi($(".epiL"), -1200, 960);
+        epi($(".epiR"), 960, 3120);
+        const dust = $(".dust");
+        for (let i = 0; i < 50; i++) K.el("circle", { cx: K.f(-300 + rnd() * 2500), cy: K.f(-200 + rnd() * 500), r: K.f(1.5 + rnd() * 3), opacity: K.f(0.15 + rnd() * 0.3) }, dust);
+        const fibers = $(".fibers");
+        for (let i = 0; i < 70; i++) {
+          const x = -400 + rnd() * 2700, y = 480 + rnd() * 500, l = 80 + rnd() * 120;
+          K.el("path", { d: `M ${K.f(x)} ${K.f(y)} q ${K.f(l / 4)} ${K.f(-12 - rnd() * 10)} ${K.f(l / 2)} 0 t ${K.f(l / 2)} 0` }, fibers);
+        }
+        const fat = $(".fat");
+        for (let x = -500; x < 2500; x += 90 + rnd() * 30) K.el("circle", { cx: K.f(x), cy: K.f(1030 + rnd() * 30), r: K.f(40 + rnd() * 18), fill: "#c99a7a", opacity: 0.35 }, fat);
+        const fol = $(".follicles");
+        [[330, 1], [1650, -1]].forEach(([x, dir]) => {
+          K.el("path", { d: `M ${x - 22} ${ytop(x) + 30} C ${x - 26} 520, ${x - 10} 680, ${x - 30} 760 L ${x + 30} 760 C ${x + 18} 680, ${x + 26} 520, ${x + 22} ${ytop(x) + 30} Z`, fill: "#9a4a66" }, fol);
+          K.el("ellipse", { cx: x, cy: 772, rx: 42, ry: 32, fill: "#7a3a5a" }, fol);
+          K.el("path", { d: `M ${x} 770 C ${x - 4} 600, ${x + 6} 420, ${x} ${ytop(x)} C ${x + dir * 6} ${ytop(x) - 70}, ${x + dir * 34} ${ytop(x) - 150}, ${x + dir * 80} ${ytop(x) - 205}`, fill: "none", stroke: "#3a1e4a", "stroke-width": 13, "stroke-linecap": "round" }, fol);
+        });
+        // capillary with flowing red cells
+        const cap = $(".capillary");
+        K.el("rect", { x: -1200, y: 899, width: 4320, height: 72, rx: 36, fill: "#3a0a1e" }, cap);
+        const rbcs = K.el("g", {}, cap);
+        for (let i = 0; i < 40; i++) {
+          const c = K.rbc(rbcs, 15 + rnd() * 6, rnd() * 0.9);
+          gsap.set(c, { svgOrigin: "0 0", x: -1100 + i * 110 + rnd() * 40, y: 935 + (rnd() - 0.5) * 22 });
+        }
+        tl.to(rbcs, { x: 900, duration: DUR, ease: "none" }, 0);
+        K.el("rect", { x: -1200, y: 892, width: 4320, height: 86, rx: 43, fill: "none", stroke: "#7a2448", "stroke-width": 14 }, cap);
+
+        const cam = K.camera($(".cam"), 960, 935, 3.2);
+        K.camTo(tl, cam, 0, { px: 960, py: 540, s: 1 }, 0.5, "power2.out");
+
+        // ------------------------------------------------ "A tiny cut."
+        const tCut = Math.max(at("cut") + 0.02, 0.5);
+        const slash = $(".slash");
+        slash.setAttribute("d", "M 860 230 L 1060 420");
+        tl.set(slash, { opacity: 1, strokeDasharray: 300, strokeDashoffset: 300 }, tCut - 0.08);
+        tl.to(slash, { strokeDashoffset: 0, duration: 0.08, ease: "none" }, tCut - 0.08);
+        tl.to(slash, { opacity: 0, duration: 0.25 }, tCut + 0.04);
+        const W = { w: 0, d: 0 };
+        const drawWound = () => {
+          const y = ytop(960);
+          $(".wound").setAttribute("d", `M ${K.f(960 - W.w)} ${K.f(y - 2)} L ${K.f(960 + W.w)} ${K.f(y - 2)} L 960 ${K.f(y + W.d)} Z`);
+          $(".woundIn").setAttribute("d", `M ${K.f(960 - W.w * 0.45)} ${K.f(y + 16)} L ${K.f(960 + W.w * 0.45)} ${K.f(y + 16)} L 960 ${K.f(y + W.d * 0.8)} Z`);
+          $(".epiL").setAttribute("transform", `translate(${K.f(-W.w * 0.55)},0)`);
+          $(".epiR").setAttribute("transform", `translate(${K.f(W.w * 0.55)},0)`);
+        };
+        drawWound();
+        tl.to(W, { w: 40, d: 260, duration: 0.3, ease: "power3.out", onUpdate: drawWound }, tCut);
+        for (let i = 0; i < 5; i++) {
+          const c = K.el("circle", { cx: 960, cy: ytop(960) + 30, r: K.f(7 + rnd() * 6), opacity: 0 }, $(".drops"));
+          tl.set(c, { opacity: 1 }, tCut + 0.05);
+          tl.to(c, { attr: { cx: 960 + (i - 2) * 26, cy: ytop(960) - 50 - rnd() * 40 }, duration: 0.28, ease: "power2.out" }, tCut + 0.05);
+          tl.to(c, { attr: { cy: ytop(960) + 40 }, opacity: 0, duration: 0.3, ease: "power2.in" }, tCut + 0.33);
+        }
+
+        // ------------------------------------------------ "Within minutes, bacteria slip inside."
+        const tIn = at("bacteria") - 0.15;
+        const landings = [[760, 520], [1170, 545], [640, 640], [1290, 650], [700, 860], [1230, 870]];
+        const ENTER = landings.map(([x, y], i) => {
+          const b = K.bacterium($(".enter"), { L: 120, r: 26, seed: 30 + i, flagSide: i % 2 ? 1 : -1 });
+          const sx = 760 + i * 80, sy = 120 + (i % 3) * 50;
+          gsap.set(b.g, { svgOrigin: "0 0", x: sx, y: sy, rotation: rnd() * 180, opacity: 0 });
+          tl.set(b.g, { opacity: 1 }, tIn + i * 0.1);
+          tl.to(b.g, { x: 960 + (rnd() - 0.5) * 30, y: ytop(960) + 60, rotation: "+=" + (160 + rnd() * 120), duration: 0.55, ease: "power2.in" }, tIn + i * 0.1);
+          tl.to(b.g, { x, y, rotation: "+=" + (rnd() * 120 - 60), duration: 0.6, ease: "power2.out" }, tIn + i * 0.1 + 0.55);
+          return b;
+        });
+        // the hero bacterium (four overlapping copies that will separate)
+        const P = [960, 700];
+        const heroG = $(".hero");
+        const pairL = K.g(heroG), pairR = K.g(heroG);
+        gsap.set([pairL, pairR], { svgOrigin: "0 0" });
+        const H = [K.bacterium(pairL, { L: 120, r: 26, seed: 11, flagSide: -1 }), K.bacterium(pairL, { L: 120, r: 26, seed: 12, flagSide: 1 }),
+                   K.bacterium(pairR, { L: 120, r: 26, seed: 13, flagSide: -1 }), K.bacterium(pairR, { L: 120, r: 26, seed: 14, flagSide: 1 })];
+        gsap.set(heroG, { svgOrigin: "0 0", x: 820, y: 130, rotation: 60, opacity: 0 });
+        tl.set(heroG, { opacity: 1 }, tIn + 0.2);
+        tl.to(heroG, { x: 962, y: ytop(960) + 70, rotation: 250, duration: 0.55, ease: "power2.in" }, tIn + 0.2);
+        tl.to(heroG, { x: P[0], y: P[1], rotation: 360, duration: 0.6, ease: "power2.out" }, tIn + 0.75);
+        const tagBact = K.tag(ui, { text: "Bacteria", x: 960, y: 250, color: "green", size: 46 });
+        K.show(tl, tagBact, at("inside") - 0.1);
+        K.hide(tl, tagBact, at("one") - 0.35);
+
+        // ------------------------------------------------ "One becomes two, two become four."
+        const tOne = at("one");
+        K.camTo(tl, cam, tOne - 0.3, { px: P[0], py: P[1], s: 3.0 }, 0.55, "power2.inOut");
+        const D = 60 + 4;
+        const t2 = at("two") - 0.25, t4 = at("four") - 0.25;
+        tl.to(pairL, { x: -D, duration: 0.45, ease: "power2.inOut" }, t2);
+        tl.to(pairR, { x: D, duration: 0.45, ease: "power2.inOut" }, t2);
+        tl.to(pairL, { x: -D - 30, y: -36, rotation: -55, duration: 0.4, ease: "power1.inOut" }, t2 + 0.45);
+        tl.to(pairR, { x: D + 30, y: 36, rotation: -55, duration: 0.4, ease: "power1.inOut" }, t2 + 0.45);
+        [[H[0], -D], [H[1], D], [H[2], -D], [H[3], D]].forEach(([b, dx]) => tl.to(b.g, { x: dx, duration: 0.45, ease: "power2.inOut" }, t4));
+        const tagX2 = K.tag(ui, { text: "×2", x: 960, y: 330, color: "teal", size: 56 });
+        const tagX4 = K.tag(ui, { text: "×4", x: 960, y: 330, color: "teal", size: 56 });
+        K.show(tl, tagX2, at("two"));
+        K.hide(tl, tagX2, at("four") - 0.05);
+        K.show(tl, tagX4, at("four"));
+        K.hide(tl, tagX4, at("millions") - 0.45);
+        // flagella wiggle for the visible swimmers
+        const swim = [...ENTER, ...H];
+        const ph = { p: 0 };
+        tl.fromTo(ph, { p: 0 }, { p: 60, duration: DUR, ease: "none", immediateRender: false, onUpdate: () => swim.forEach((b, i) => { b.phase = ph.p + i; b.update(); }) }, 0);
+
+        // ------------------------------------------------ "Within hours, millions."
+        const tMil = at("millions");
+        K.camTo(tl, cam, at("within", 2) - 0.1, { px: 960, py: 600, s: 0.94 }, 0.6, "power2.inOut");
+        const swarm = $(".swarm"), SW = [];
+        for (let i = 0; i < 170; i++) {
+          const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 900;
+          const x = 960 + Math.cos(a) * d * 1.05, y = clamp(660 + Math.sin(a) * d * 0.32, 470, 860);
+          const b = K.bacterium(swarm, { L: 70 + rnd() * 40, r: 16 + rnd() * 6, seed: 400 + i, flag: false });
+          gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rnd() * 360, scale: 0 });
+          tl.to(b.g, { scale: 1, duration: 0.25, ease: "back.out(2)" }, tMil - 0.35 + (d / 900) * 0.8);
+          SW.push({ b, x, y });
+        }
+        const tagMil = K.tag(ui, { text: "1,000,000+", x: 960, y: 245, color: "crimson", size: 60 });
+        K.show(tl, tagMil, tMil);
+        K.hide(tl, tagMil, at("usually") + 0.2);
+
+        // ------------------------------------------------ "Usually your immune system wins."
+        const tUs = at("usually");
+        const wbc = K.wbc($(".wbcLayer"), 130, 9);
+        gsap.set(wbc.g, { svgOrigin: "0 0", x: 560, y: 950, scaleY: 0.25, scaleX: 0.7, opacity: 0 });
+        tl.set(wbc.g, { opacity: 1 }, tUs);
+        tl.to(wbc.g, { y: 790, scaleY: 1, scaleX: 1, duration: 0.55, ease: "back.out(1.6)" }, tUs);
+        const wob = { p: 0 };
+        tl.fromTo(wob, { p: 0 }, { p: 30, duration: DUR - tUs, ease: "none", immediateRender: false, onUpdate: () => { wbc.phase = wob.p; wbc.update(); } }, tUs);
+        const tagWbc = K.tag(ui, { text: "White blood cell", x: 840, y: 330, color: "violet", size: 44 });
+        K.show(tl, tagWbc, at("immune"));
+        K.hide(tl, tagWbc, at("when", 1, T0) - 0.1);
+        // it hunts down and swallows nearby bacteria
+        const prey = SW.filter((s) => Math.abs(s.x - 640) < 160 && s.y > 560).slice(0, 4);
+        let t = tUs + 0.55;
+        prey.forEach((s, i) => {
+          tl.to(wbc.g, { x: s.x, y: s.y + 10, duration: 0.3, ease: "power2.inOut" }, t);
+          tl.to(s.b.g, { x: s.x + (i % 2 ? 12 : -12), scale: 0.5, duration: 0.25, ease: "power2.in" }, t + 0.18);
+          tl.to(s.b.g, { opacity: 0, duration: 0.12 }, t + 0.4);
+          tl.to(wbc.g, { scaleX: 1.12, scaleY: 0.9, duration: 0.1, yoyo: true, repeat: 1 }, t + 0.3);
+          t += 0.36;
+        });
+
+        // ------------------------------------------------ "When it can't,"
+        const tCant = at("can't");
+        const sw2 = $(".swarm2");
+        for (let i = 0; i < 60; i++) {
+          const a = rnd() * Math.PI * 2, d = 120 + rnd() * 260;
+          const b = K.bacterium(sw2, { L: 70 + rnd() * 40, r: 16 + rnd() * 6, seed: 700 + i, flag: false });
+          const x = 720 + Math.cos(a) * d, y = clamp(720 + Math.sin(a) * d * 0.5, 470, 870);
+          gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rnd() * 360, scale: 0 });
+          tl.to(b.g, { scale: 1, duration: 0.22, ease: "back.out(2)" }, tCant - 0.2 + rnd() * 0.5);
+          tl.to(b.g, { x: x + (720 - x) * 0.25, y: y + (720 - y) * 0.25, duration: 1.2, ease: "power1.inOut" }, tCant + 0.2);
+        }
+        tl.to(wbc.g, { scaleX: 0.86, scaleY: 1.08, duration: 0.5, ease: "power2.inOut", yoyo: true, repeat: 1 }, tCant + 0.25);
+
+        // ------------------------------------------------ "doctors call in help:"
+        const tDoc = at("doctors");
+        const ins = document.createElement("div");
+        ins.style.cssText = "position:absolute;left:1500px;top:250px;width:330px;height:330px;margin:-165px 0 0 -165px;border-radius:50%;background:#1f4d5c;border:14px solid #ffffff;overflow:hidden;opacity:0;transform:scale(0)";
+        ins.innerHTML = `<svg viewBox="0 0 330 330" style="position:absolute;inset:0;width:100%;height:100%">
+          <rect x="0" y="230" width="330" height="100" fill="#5c3a52" />
+          <rect x="112" y="96" width="106" height="150" rx="16" fill="#d9811e" />
+          <rect x="126" y="106" width="14" height="128" rx="7" fill="#f5b25a" opacity="0.6" />
+          <rect x="102" y="62" width="126" height="44" rx="10" fill="#f1ede4" />
+          <rect x="128" y="132" width="78" height="72" rx="8" fill="#f6f0e6" />
+          <text data-layout-ignore="true" x="167" y="172" font-family="Nunito, sans-serif" font-weight="900" font-size="30" text-anchor="middle" fill="#2a2a3a">Rx</text>
+          <g transform="translate(250,232) rotate(-20)"><path d="M -24 -10 L 0 -10 L 0 10 L -24 10 A 10 10 0 0 1 -24 -10 Z" fill="#ff9000" /><path d="M 0 -10 L 24 -10 A 10 10 0 0 1 24 10 L 0 10 Z" fill="#ffd79a" /></g>
+          <g transform="translate(70,238) rotate(15)"><path d="M -24 -10 L 0 -10 L 0 10 L -24 10 A 10 10 0 0 1 -24 -10 Z" fill="#ff9000" /><path d="M 0 -10 L 24 -10 A 10 10 0 0 1 24 10 L 0 10 Z" fill="#ffd79a" /></g>
+        </svg>`;
+        ui.appendChild(ins);
+        tl.to(ins, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, tDoc);
+        tl.to(ins, { opacity: 0, scale: 0.6, duration: 0.25, ease: "power2.in" }, at("antibiotics") + 0.45);
+
+        // ------------------------------------------------ "antibiotics."
+        const tAb = at("antibiotics");
+        const drugs = $(".drugs");
+        for (let i = 0; i < 38; i++) {
+          const m = K.mol(drugs, "pen", 0.55 + rnd() * 0.35);
+          const x0 = 150 + rnd() * 1650, tgt = SW[Math.floor(rnd() * SW.length)];
+          gsap.set(m, { svgOrigin: "0 0", x: x0, y: 935, rotation: rnd() * 360, scale: 0.2, opacity: 0 });
+          const t0 = tAb - 0.35 + rnd() * 0.5;
+          tl.set(m, { opacity: 1 }, t0);
+          tl.to(m, { x: tgt.x + (rnd() - 0.5) * 80, y: tgt.y + (rnd() - 0.5) * 60, scale: 1, rotation: "+=" + (rnd() * 300 - 150), duration: 1.1 + rnd() * 0.3, ease: "power2.out" }, t0);
+        }
+        const ban = K.callout(ui, { text: "Antibiotics", x: 960, y: 170, color: "crimson", size: 64 });
+        K.show(tl, ban, tAb - 0.05);
+
+        // gentle drift for the wide shot
+        K.camTo(tl, cam, at("usually") - 0.15, { px: 640, py: 740, s: 1.55 }, 0.6, "power2.inOut");
+        K.camTo(tl, cam, at("can't") - 0.1, { px: 900, py: 610, s: 1.0 }, 0.7, "power2.inOut");
+        K.camTo(tl, cam, at("can't") + 0.6, { px: 930, py: 600, s: 1.04 }, DUR - at("can't") - 0.6, "sine.inOut");
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["infection"] = tl;
+      })();
+    </script>
+  </div>
+</template>
