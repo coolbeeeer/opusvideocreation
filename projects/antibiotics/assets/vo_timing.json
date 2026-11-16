@@ -1,0 +1,941 @@
+{
+ "voice": "af_heart",
+ "speed": 1.044,
+ "film": 60.0,
+ "open": 5.3,
+ "vo_end": 58.625,
+ "lines": [
+  {
+   "line": 1,
+   "start": 5.3,
+   "end": 12.424,
+   "sentences": [
+    {
+     "text": "A tiny cut.",
+     "start": 5.3,
+     "end": 6.303,
+     "clauses": [
+      {
+       "text": "A tiny cut.",
+       "start": 5.3,
+       "end": 6.303
+      }
+     ],
+     "words": [
+      {
+       "w": "A",
+       "t": 5.3
+      },
+      {
+       "w": "tiny",
+       "t": 5.489
+      },
+      {
+       "w": "cut",
+       "t": 5.903
+      }
+     ]
+    },
+    {
+     "text": "Within minutes, bacteria slip inside.",
+     "start": 6.523,
+     "end": 8.656,
+     "clauses": [
+      {
+       "text": "Within minutes,",
+       "start": 6.523,
+       "end": 7.413
+      },
+      {
+       "text": "bacteria slip inside.",
+       "start": 7.413,
+       "end": 8.656
+      }
+     ],
+     "words": [
+      {
+       "w": "Within",
+       "t": 6.523
+      },
+      {
+       "w": "minutes",
+       "t": 6.912
+      },
+      {
+       "w": "bacteria",
+       "t": 7.443
+      },
+      {
+       "w": "slip",
+       "t": 7.93
+      },
+      {
+       "w": "inside",
+       "t": 8.212
+      }
+     ]
+    },
+    {
+     "text": "One becomes two, two become four.",
+     "start": 8.876,
+     "end": 10.839,
+     "clauses": [
+      {
+       "text": "One becomes two,",
+       "start": 8.876,
+       "end": 9.881
+      },
+      {
+       "text": "two become four.",
+       "start": 9.881,
+       "end": 10.839
+      }
+     ],
+     "words": [
+      {
+       "w": "One",
+       "t": 8.876
+      },
+      {
+       "w": "becomes",
+       "t": 9.119
+      },
+      {
+       "w": "two",
+       "t": 9.578
+      },
+      {
+       "w": "two",
+       "t": 9.911
+      },
+      {
+       "w": "become",
+       "t": 10.134
+      },
+      {
+       "w": "four",
+       "t": 10.506
+      }
+     ]
+    },
+    {
+     "text": "Within hours, millions.",
+     "start": 11.059,
+     "end": 12.424,
+     "clauses": [
+      {
+       "text": "Within hours,",
+       "start": 11.059,
+       "end": 11.374
+      },
+      {
+       "text": "millions.",
+       "start": 11.374,
+       "end": 12.424
+      }
+     ],
+     "words": [
+      {
+       "w": "Within",
+       "t": 11.059
+      },
+      {
+       "w": "hours",
+       "t": 11.195
+      },
+      {
+       "w": "millions",
+       "t": 11.404
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 2,
+   "start": 12.764,
+   "end": 17.72,
+   "sentences": [
+    {
+     "text": "Usually your immune system wins.",
+     "start": 12.764,
+     "end": 14.577,
+     "clauses": [
+      {
+       "text": "Usually your immune system wins.",
+       "start": 12.764,
+       "end": 14.577
+      }
+     ],
+     "words": [
+      {
+       "w": "Usually",
+       "t": 12.764
+      },
+      {
+       "w": "your",
+       "t": 13.196
+      },
+      {
+       "w": "immune",
+       "t": 13.475
+      },
+      {
+       "w": "system",
+       "t": 13.857
+      },
+      {
+       "w": "wins",
+       "t": 14.238
+      }
+     ]
+    },
+    {
+     "text": "When it can't, doctors call in help: antibiotics.",
+     "start": 14.797,
+     "end": 17.72,
+     "clauses": [
+      {
+       "text": "When it can't,",
+       "start": 14.797,
+       "end": 16.512
+      },
+      {
+       "text": "doctors call in help:",
+       "start": 16.512,
+       "end": 17.452
+      },
+      {
+       "text": "antibiotics.",
+       "start": 17.452,
+       "end": 17.72
+      }
+     ],
+     "words": [
+      {
+       "w": "When",
+       "t": 14.797
+      },
+      {
+       "w": "it",
+       "t": 15.385
+      },
+      {
+       "w": "can't",
+       "t": 15.758
+      },
+      {
+       "w": "doctors",
+       "t": 16.542
+      },
+      {
+       "w": "call",
+       "t": 16.856
+      },
+      {
+       "w": "in",
+       "t": 17.06
+      },
+      {
+       "w": "help",
+       "t": 17.189
+      },
+      {
+       "w": "antibiotics",
+       "t": 17.482
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 3,
+   "start": 18.06,
+   "end": 21.132,
+   "sentences": [
+    {
+     "text": "They work because bacteria are built differently from your cells.",
+     "start": 18.06,
+     "end": 21.132,
+     "clauses": [
+      {
+       "text": "They work because bacteria are built differently from your cells.",
+       "start": 18.06,
+       "end": 21.132
+      }
+     ],
+     "words": [
+      {
+       "w": "They",
+       "t": 18.06
+      },
+      {
+       "w": "work",
+       "t": 18.297
+      },
+      {
+       "w": "because",
+       "t": 18.533
+      },
+      {
+       "w": "bacteria",
+       "t": 18.899
+      },
+      {
+       "w": "are",
+       "t": 19.308
+      },
+      {
+       "w": "built",
+       "t": 19.501
+      },
+      {
+       "w": "differently",
+       "t": 19.781
+      },
+      {
+       "w": "from",
+       "t": 20.319
+      },
+      {
+       "w": "your",
+       "t": 20.556
+      },
+      {
+       "w": "cells",
+       "t": 20.792
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 4,
+   "start": 21.472,
+   "end": 27.267,
+   "sentences": [
+    {
+     "text": "Most bacteria wear a stiff wall, like armour.",
+     "start": 21.472,
+     "end": 24.032,
+     "clauses": [
+      {
+       "text": "Most bacteria wear a stiff wall,",
+       "start": 21.472,
+       "end": 23.247
+      },
+      {
+       "text": "like armour.",
+       "start": 23.247,
+       "end": 24.032
+      }
+     ],
+     "words": [
+      {
+       "w": "Most",
+       "t": 21.472
+      },
+      {
+       "w": "bacteria",
+       "t": 21.741
+      },
+      {
+       "w": "wear",
+       "t": 22.207
+      },
+      {
+       "w": "a",
+       "t": 22.476
+      },
+      {
+       "w": "stiff",
+       "t": 22.599
+      },
+      {
+       "w": "wall",
+       "t": 22.917
+      },
+      {
+       "w": "like",
+       "t": 23.277
+      },
+      {
+       "w": "armour",
+       "t": 23.571
+      }
+     ]
+    },
+    {
+     "text": "Your cells don't.",
+     "start": 24.252,
+     "end": 25.34,
+     "clauses": [
+      {
+       "text": "Your cells don't.",
+       "start": 24.252,
+       "end": 25.34
+      }
+     ],
+     "words": [
+      {
+       "w": "Your",
+       "t": 24.252
+      },
+      {
+       "w": "cells",
+       "t": 24.558
+      },
+      {
+       "w": "don't",
+       "t": 24.919
+      }
+     ]
+    },
+    {
+     "text": "Penicillin targets that wall.",
+     "start": 25.56,
+     "end": 27.267,
+     "clauses": [
+      {
+       "text": "Penicillin targets that wall.",
+       "start": 25.56,
+       "end": 27.267
+      }
+     ],
+     "words": [
+      {
+       "w": "Penicillin",
+       "t": 25.56
+      },
+      {
+       "w": "targets",
+       "t": 26.171
+      },
+      {
+       "w": "that",
+       "t": 26.622
+      },
+      {
+       "w": "wall",
+       "t": 26.915
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 5,
+   "start": 27.607,
+   "end": 33.309,
+   "sentences": [
+    {
+     "text": "It jams the tools that build it.",
+     "start": 27.607,
+     "end": 29.313,
+     "clauses": [
+      {
+       "text": "It jams the tools that build it.",
+       "start": 27.607,
+       "end": 29.313
+      }
+     ],
+     "words": [
+      {
+       "w": "It",
+       "t": 27.607
+      },
+      {
+       "w": "jams",
+       "t": 27.769
+      },
+      {
+       "w": "the",
+       "t": 28.024
+      },
+      {
+       "w": "tools",
+       "t": 28.233
+      },
+      {
+       "w": "that",
+       "t": 28.534
+      },
+      {
+       "w": "build",
+       "t": 28.789
+      },
+      {
+       "w": "it",
+       "t": 29.091
+      }
+     ]
+    },
+    {
+     "text": "The wall springs leaks, water rushes in, and the bacterium bursts.",
+     "start": 29.533,
+     "end": 33.309,
+     "clauses": [
+      {
+       "text": "The wall springs leaks,",
+       "start": 29.533,
+       "end": 30.813
+      },
+      {
+       "text": "water rushes in,",
+       "start": 30.813,
+       "end": 32.348
+      },
+      {
+       "text": "and the bacterium bursts.",
+       "start": 32.348,
+       "end": 33.309
+      }
+     ],
+     "words": [
+      {
+       "w": "The",
+       "t": 29.533
+      },
+      {
+       "w": "wall",
+       "t": 29.753
+      },
+      {
+       "w": "springs",
+       "t": 30.021
+      },
+      {
+       "w": "leaks",
+       "t": 30.436
+      },
+      {
+       "w": "water",
+       "t": 30.843
+      },
+      {
+       "w": "rushes",
+       "t": 31.38
+      },
+      {
+       "w": "in",
+       "t": 31.999
+      },
+      {
+       "w": "and",
+       "t": 32.378
+      },
+      {
+       "w": "the",
+       "t": 32.523
+      },
+      {
+       "w": "bacterium",
+       "t": 32.669
+      },
+      {
+       "w": "bursts",
+       "t": 33.007
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 6,
+   "start": 33.649,
+   "end": 40.419,
+   "sentences": [
+    {
+     "text": "Other antibiotics block its protein factories, or stop it copying its DNA.",
+     "start": 33.649,
+     "end": 38.428,
+     "clauses": [
+      {
+       "text": "Other antibiotics block its protein factories,",
+       "start": 33.649,
+       "end": 36.384
+      },
+      {
+       "text": "or stop it copying its DNA.",
+       "start": 36.384,
+       "end": 38.428
+      }
+     ],
+     "words": [
+      {
+       "w": "Other",
+       "t": 33.649
+      },
+      {
+       "w": "antibiotics",
+       "t": 34.004
+      },
+      {
+       "w": "block",
+       "t": 34.687
+      },
+      {
+       "w": "its",
+       "t": 35.041
+      },
+      {
+       "w": "protein",
+       "t": 35.287
+      },
+      {
+       "w": "factories",
+       "t": 35.751
+      },
+      {
+       "w": "or",
+       "t": 36.414
+      },
+      {
+       "w": "stop",
+       "t": 36.642
+      },
+      {
+       "w": "it",
+       "t": 37.0
+      },
+      {
+       "w": "copying",
+       "t": 37.228
+      },
+      {
+       "w": "its",
+       "t": 37.782
+      },
+      {
+       "w": "DNA",
+       "t": 38.075
+      }
+     ]
+    },
+    {
+     "text": "Either way, it can't multiply.",
+     "start": 38.648,
+     "end": 40.419,
+     "clauses": [
+      {
+       "text": "Either way,",
+       "start": 38.648,
+       "end": 39.323
+      },
+      {
+       "text": "it can't multiply.",
+       "start": 39.323,
+       "end": 40.419
+      }
+     ],
+     "words": [
+      {
+       "w": "Either",
+       "t": 38.648
+      },
+      {
+       "w": "way",
+       "t": 39.032
+      },
+      {
+       "w": "it",
+       "t": 39.353
+      },
+      {
+       "w": "can't",
+       "t": 39.534
+      },
+      {
+       "w": "multiply",
+       "t": 39.869
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 7,
+   "start": 40.759,
+   "end": 46.525,
+   "sentences": [
+    {
+     "text": "But antibiotics only work on bacteria.",
+     "start": 40.759,
+     "end": 43.148,
+     "clauses": [
+      {
+       "text": "But antibiotics only work on bacteria.",
+       "start": 40.759,
+       "end": 43.148
+      }
+     ],
+     "words": [
+      {
+       "w": "But",
+       "t": 40.759
+      },
+      {
+       "w": "antibiotics",
+       "t": 41.014
+      },
+      {
+       "w": "only",
+       "t": 41.724
+      },
+      {
+       "w": "work",
+       "t": 42.037
+      },
+      {
+       "w": "on",
+       "t": 42.349
+      },
+      {
+       "w": "bacteria",
+       "t": 42.548
+      }
+     ]
+    },
+    {
+     "text": "Against viruses, like colds or flu, they do nothing.",
+     "start": 43.368,
+     "end": 46.525,
+     "clauses": [
+      {
+       "text": "Against viruses,",
+       "start": 43.368,
+       "end": 44.508
+      },
+      {
+       "text": "like colds or flu,",
+       "start": 44.508,
+       "end": 45.698
+      },
+      {
+       "text": "they do nothing.",
+       "start": 45.698,
+       "end": 46.525
+      }
+     ],
+     "words": [
+      {
+       "w": "Against",
+       "t": 43.368
+      },
+      {
+       "w": "viruses",
+       "t": 43.908
+      },
+      {
+       "w": "like",
+       "t": 44.538
+      },
+      {
+       "w": "colds",
+       "t": 44.84
+      },
+      {
+       "w": "or",
+       "t": 45.198
+      },
+      {
+       "w": "flu",
+       "t": 45.39
+      },
+      {
+       "w": "they",
+       "t": 45.728
+      },
+      {
+       "w": "do",
+       "t": 45.96
+      },
+      {
+       "w": "nothing",
+       "t": 46.107
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 8,
+   "start": 46.865,
+   "end": 54.765,
+   "sentences": [
+    {
+     "text": "And every time they're used, bacteria that resist them survive, multiply and share their defences.",
+     "start": 46.865,
+     "end": 52.775,
+     "clauses": [
+      {
+       "text": "And every time they're used,",
+       "start": 46.865,
+       "end": 48.38
+      },
+      {
+       "text": "bacteria that resist them survive,",
+       "start": 48.38,
+       "end": 50.54
+      },
+      {
+       "text": "multiply and share their defences.",
+       "start": 50.54,
+       "end": 52.775
+      }
+     ],
+     "words": [
+      {
+       "w": "And",
+       "t": 46.865
+      },
+      {
+       "w": "every",
+       "t": 47.08
+      },
+      {
+       "w": "time",
+       "t": 47.39
+      },
+      {
+       "w": "they're",
+       "t": 47.652
+      },
+      {
+       "w": "used",
+       "t": 48.058
+      },
+      {
+       "w": "bacteria",
+       "t": 48.41
+      },
+      {
+       "w": "that",
+       "t": 48.949
+      },
+      {
+       "w": "resist",
+       "t": 49.261
+      },
+      {
+       "w": "them",
+       "t": 49.686
+      },
+      {
+       "w": "survive",
+       "t": 49.998
+      },
+      {
+       "w": "multiply",
+       "t": 50.57
+      },
+      {
+       "w": "and",
+       "t": 51.128
+      },
+      {
+       "w": "share",
+       "t": 51.393
+      },
+      {
+       "w": "their",
+       "t": 51.775
+      },
+      {
+       "w": "defences",
+       "t": 52.157
+      }
+     ]
+    },
+    {
+     "text": "That's antibiotic resistance.",
+     "start": 52.995,
+     "end": 54.765,
+     "clauses": [
+      {
+       "text": "That's antibiotic resistance.",
+       "start": 52.995,
+       "end": 54.765
+      }
+     ],
+     "words": [
+      {
+       "w": "That's",
+       "t": 52.995
+      },
+      {
+       "w": "antibiotic",
+       "t": 53.415
+      },
+      {
+       "w": "resistance",
+       "t": 54.06
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "line": 9,
+   "start": 55.105,
+   "end": 58.625,
+   "sentences": [
+    {
+     "text": "So take them only when prescribed, exactly as prescribed.",
+     "start": 55.105,
+     "end": 58.625,
+     "clauses": [
+      {
+       "text": "So take them only when prescribed,",
+       "start": 55.105,
+       "end": 56.975
+      },
+      {
+       "text": "exactly as prescribed.",
+       "start": 56.975,
+       "end": 58.625
+      }
+     ],
+     "words": [
+      {
+       "w": "So",
+       "t": 55.105
+      },
+      {
+       "w": "take",
+       "t": 55.277
+      },
+      {
+       "w": "them",
+       "t": 55.546
+      },
+      {
+       "w": "only",
+       "t": 55.815
+      },
+      {
+       "w": "when",
+       "t": 56.084
+      },
+      {
+       "w": "prescribed",
+       "t": 56.353
+      },
+      {
+       "w": "exactly",
+       "t": 57.005
+      },
+      {
+       "w": "as",
+       "t": 57.57
+      },
+      {
+       "w": "prescribed",
+       "t": 57.802
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

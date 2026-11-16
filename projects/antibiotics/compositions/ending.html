@@ -1,0 +1,108 @@
+<template id="ending-template">
+  <div data-composition-id="ending" data-width="1920" data-height="1080" data-duration="5.065">
+    <style>
+      [data-composition-id="ending"] .stage { position: absolute; inset: 0; overflow: hidden; background: #143847; }
+      [data-composition-id="ending"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="ending"] .ui { position: absolute; inset: 0; }
+      [data-composition-id="ending"] .title { position: absolute; inset: 0; background: #050d18; opacity: 0; }
+      [data-composition-id="ending"] .t-small { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 400; font-size: 76px; color: #9a6ae0; opacity: 0; }
+      [data-composition-id="ending"] .t-big { position: absolute; left: 0; right: 0; top: 405px; text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 700; font-size: 176px; letter-spacing: 0.04em; color: #fff1d6; opacity: 0;
+        text-shadow: 0 0 26px rgba(255, 144, 0, 0.6), 0 0 8px rgba(255, 176, 70, 0.75); }
+      [data-composition-id="ending"] .t-bar { position: absolute; left: 560px; width: 800px; top: 650px; height: 14px; border-radius: 7px; background: linear-gradient(90deg, #ff9000 0%, #ff9000 9%, #5a4a9a 22%, #2aa89a 100%); transform-origin: 0 50%; transform: scaleX(0); }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <linearGradient id="end-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f4d5c" /><stop offset="1" stop-color="#143847" /></linearGradient>
+        </defs>
+        <g class="cam">
+          <rect x="-600" y="-400" width="3120" height="1880" fill="url(#end-wall)" />
+          <path d="M 300 100 L 1500 460 L 1500 1100 L 300 700 Z" fill="#bfe6f0" opacity="0.04" />
+          <rect x="-600" y="780" width="3120" height="70" rx="10" fill="#5c3a52" />
+          <rect x="-600" y="780" width="3120" height="14" rx="7" fill="#71506a" />
+          <rect x="-600" y="846" width="3120" height="600" fill="#442b3f" />
+          <!-- prescription note -->
+          <g class="note"><g transform="translate(1250 560) rotate(-5)">
+            <rect x="-230" y="-250" width="460" height="460" rx="18" fill="#2a1f34" opacity="0.25" transform="translate(10 14)" />
+            <rect x="-230" y="-250" width="460" height="460" rx="18" fill="#f6f0e6" />
+            <rect x="-230" y="-250" width="460" height="70" rx="18" fill="#3f8a8a" />
+            <rect x="-230" y="-200" width="460" height="20" fill="#3f8a8a" />
+            <text data-layout-ignore="true" x="-180" y="-110" font-family="Nunito, sans-serif" font-weight="900" font-size="64" fill="#2a2a3a">Rx</text>
+            <rect x="-180" y="-70" width="300" height="12" rx="6" fill="#c9c1b4" />
+            <rect x="-180" y="-40" width="220" height="12" rx="6" fill="#c9c1b4" />
+            <path d="M -170 120 C -130 80, -100 150, -60 100 S 10 90, 60 120" fill="none" stroke="#3a3a6a" stroke-width="7" stroke-linecap="round" />
+            <g class="doses"></g>
+          </g></g>
+          <!-- the same bottle from the opening -->
+          <g class="bottle"><g transform="translate(660 520) scale(2)">
+            <rect x="-50" y="0" width="100" height="156" rx="16" fill="#d9811e" opacity="0.93" />
+            <rect x="-36" y="10" width="14" height="136" rx="7" fill="#f5b25a" opacity="0.6" />
+            <rect x="-60" y="-36" width="120" height="44" rx="10" fill="#f1ede4" />
+            <rect x="-60" y="-2" width="120" height="8" fill="#d9d4c8" />
+            <rect x="-32" y="38" width="78" height="76" rx="8" fill="#f6f0e6" />
+            <text data-layout-ignore="true" x="7" y="78" font-family="Nunito, sans-serif" font-weight="900" font-size="30" text-anchor="middle" fill="#2a2a3a">Rx</text>
+          </g></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+      <div class="title">
+        <div class="t-small">How</div>
+        <div class="t-big">ANTIBIOTICS WORK</div>
+        <div class="t-bar"></div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="ending"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const T0 = K.scene("ending").start, DUR = K.scene("ending").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const cam = K.camera($(".cam"), 960, 540, 1.06);
+        K.camTo(tl, cam, 0, { s: 1.0, px: 940 }, 3.2, "sine.inOut");
+
+        tl.fromTo($(".bottle"), { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.6)", immediateRender: false }, 0.05);
+        tl.fromTo($(".note"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, 0.15);
+        gsap.set([$(".bottle"), $(".note")], { opacity: 0 });
+
+        const tag1 = K.tag(ui, { text: "Only when prescribed", x: 700, y: 330, color: "crimson", size: 50 });
+        K.show(tl, tag1, at("only") - 0.1, 0.13);
+
+        // dose row: capsules get ticked off one after another
+        const doses = $(".doses");
+        const TICKS = [];
+        for (let i = 0; i < 5; i++) {
+          const g = K.g(doses, { transform: `translate(${-160 + i * 80},40)` });
+          K.el("path", { d: "M -22 -9 L 0 -9 L 0 9 L -22 9 A 9 9 0 0 1 -22 -9 Z", fill: "#ff9000" }, g);
+          K.el("path", { d: "M 0 -9 L 22 -9 A 9 9 0 0 1 22 9 L 0 9 Z", fill: "#ffd79a" }, g);
+          const tk = K.el("path", { d: "M -16 -36 L -4 -24 L 18 -50", fill: "none", stroke: "#2f8a5a", "stroke-width": 9, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0 }, g);
+          TICKS.push(tk);
+        }
+        const tEx = at("exactly");
+        TICKS.forEach((tk, i) => {
+          tl.set(tk, { opacity: 1, strokeDasharray: 60, strokeDashoffset: 60 }, tEx + i * 0.1);
+          tl.to(tk, { strokeDashoffset: 0, duration: 0.15, ease: "power2.out" }, tEx + i * 0.1);
+        });
+        const tag2 = K.tag(ui, { text: "Exactly as prescribed", x: 1250, y: 255, color: "teal", size: 50 });
+        K.show(tl, tag2, at("prescribed") + 0.15, 0.13);
+
+        // title card
+        const tT = DUR - 2.42;
+        K.hide(tl, tag1, tT - 0.1);
+        K.hide(tl, tag2, tT - 0.1);
+        K.camTo(tl, cam, tT - 0.3, { s: 1.12 }, 0.6, "power2.in");
+        tl.to($(".title"), { opacity: 1, duration: 0.35, ease: "power1.inOut" }, tT - 0.1);
+        tl.fromTo($(".t-small"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, tT + 0.1);
+        tl.fromTo($(".t-big"), { opacity: 0, filter: "blur(10px)", color: "#c8651a" }, { opacity: 1, filter: "blur(0px)", color: "#fff1d6", duration: 0.65, ease: "power2.out", immediateRender: false }, tT + 0.2);
+        tl.to($(".t-bar"), { scaleX: 1, duration: 0.7, ease: "power3.out" }, tT + 0.45);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["ending"] = tl;
+      })();
+    </script>
+  </div>
+</template>

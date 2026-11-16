@@ -1,0 +1,181 @@
+<template id="resistance-template">
+  <div data-composition-id="resistance" data-width="1920" data-height="1080" data-duration="8.24">
+    <style>
+      [data-composition-id="resistance"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0a1a2a; }
+      [data-composition-id="resistance"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="resistance"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <radialGradient id="res-bg" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#2a1a40" /><stop offset="1" stop-color="#0b0a1c" /></radialGradient>
+        </defs>
+        <g class="cam">
+          <rect x="-1000" y="-800" width="3920" height="2680" fill="url(#res-bg)" />
+          <g class="specks" fill="#b8a8e8"></g>
+          <path class="pilus" fill="none" stroke="#cdb8ff" stroke-width="7" stroke-linecap="round" opacity="0" />
+          <g class="norm"></g>
+          <g class="resi"></g>
+          <circle class="plasmid" r="13" fill="none" stroke="#cdb8ff" stroke-width="6" opacity="0" />
+          <g class="pops"></g>
+          <g class="drugs"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="resistance"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const T0 = K.scene("resistance").start, DUR = K.scene("resistance").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(707);
+        const tl = gsap.timeline({ paused: true });
+        for (let i = 0; i < 70; i++) K.el("circle", { cx: K.f(-300 + rnd() * 2500), cy: K.f(-200 + rnd() * 1500), r: K.f(1.5 + rnd() * 3.5), opacity: K.f(0.08 + rnd() * 0.2) }, $(".specks"));
+        const cam = K.camera($(".cam"), 960, 540, 1.0);
+        const ALL = [];
+
+        // ------------------------------------------------ resistant bacteria: pairs that will split later
+        const RES = [[520, 430, -15], [1180, 330, 20], [880, 760, 10], [1480, 700, -25]].map(([x, y, rot], i) => {
+          const g = K.g($(".resi"));
+          const a = K.g(g), b = K.g(g);
+          const ba = K.bacterium(a, { L: 120, r: 28, seed: 80 + i, shield: true, flagSide: -1 });
+          const bb = K.bacterium(b, { L: 120, r: 28, seed: 90 + i, shield: true, flagSide: 1 });
+          gsap.set(g, { svgOrigin: "0 0", x, y, rotation: rot });
+          gsap.set([a, b], { svgOrigin: "0 0" });
+          gsap.set([ba.ring, bb.ring, ba.badge, bb.badge], { opacity: 0 });
+          ALL.push(ba, bb);
+          return { g, a, b, ba, bb, x, y, rot };
+        });
+        // ------------------------------------------------ the rest of the swarm
+        const NORM = [];
+        for (let i = 0; i < 34; i++) {
+          let x, y, ok = false, tries = 0;
+          while (!ok && tries++ < 60) {
+            x = 150 + rnd() * 1620; y = 150 + rnd() * 780;
+            ok = RES.every((r) => Math.hypot(r.x - x, r.y - y) > 170) && NORM.every((n) => Math.hypot(n.x - x, n.y - y) > 120);
+          }
+          const b = K.bacterium($(".norm"), { L: 110, r: 26, seed: 120 + i, flagSide: i % 2 ? 1 : -1 });
+          gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rnd() * 360 });
+          NORM.push({ b, x, y });
+          ALL.push(b);
+        }
+        const ph = { p: 0 };
+        tl.fromTo(ph, { p: 0 }, { p: 40, duration: DUR, ease: "none", immediateRender: false, onUpdate: () => ALL.forEach((b, i) => { b.phase = ph.p + i * 0.7; b.update(); }) }, 0);
+        tl.fromTo([$(".norm"), $(".resi")], { scale: 0.92, svgOrigin: "960 540" }, { scale: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, 0);
+
+        // ------------------------------------------------ "And every time they're used," a wave of antibiotic
+        const tU = at("used") - 0.45, SWEEP = 1.5;
+        const drugs = $(".drugs");
+        for (let i = 0; i < 42; i++) {
+          const m = K.mol(drugs, "pen", 0.45 + rnd() * 0.3), y = 120 + rnd() * 840, x0 = -250 - rnd() * 300;
+          gsap.set(m, { svgOrigin: "0 0", x: x0, y, rotation: rnd() * 360 });
+          tl.to(m, { x: x0 + 2600, y: y + (rnd() - 0.5) * 160, rotation: "+=" + (rnd() * 300 - 150), duration: SWEEP + 0.5, ease: "none" }, tU);
+        }
+        const xFront = (t) => -250 + ((t - tU) / (SWEEP + 0.5)) * 2600;
+        NORM.forEach((n) => {
+          const tp = tU + ((n.x + 250) / 2600) * (SWEEP + 0.5) + 0.05;
+          tl.to(n.b.g, { scale: 1.25, duration: 0.07, ease: "power2.out" }, tp);
+          tl.set(n.b.g, { opacity: 0 }, tp + 0.08);
+          const star = K.el("polygon", { points: K.star(n.x, n.y, 9, 70, 30, rnd()), fill: "#fff3c0", opacity: 0 }, $(".pops"));
+          tl.fromTo(star, { opacity: 0.9, scale: 0.3, svgOrigin: `${n.x} ${n.y}` }, { scale: 1, duration: 0.1, ease: "power3.out", immediateRender: false }, tp + 0.07);
+          tl.to(star, { opacity: 0, duration: 0.15 }, tp + 0.17);
+          for (let k = 0; k < 4; k++) {
+            const a = rnd() * Math.PI * 2, f = K.el("circle", { cx: n.x, cy: n.y, r: K.f(6 + rnd() * 6), fill: k % 2 ? "#8aa446" : "#56702c", opacity: 0 }, $(".pops"));
+            tl.set(f, { opacity: 1 }, tp + 0.07);
+            tl.to(f, { attr: { cx: n.x + Math.cos(a) * 110, cy: n.y + Math.sin(a) * 90 }, duration: 0.45, ease: "power2.out" }, tp + 0.07);
+            tl.to(f, { opacity: 0, duration: 0.2 }, tp + 0.35);
+          }
+        });
+
+        // ------------------------------------------------ "bacteria that resist them survive,"
+        const tR = at("resist");
+        RES.forEach((r, i) => {
+          tl.fromTo([r.ba.ring, r.bb.ring], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, tR - 0.35 + i * 0.08);
+          tl.fromTo([r.ba.badge, r.bb.badge], { opacity: 0, scale: 0.4, svgOrigin: "0 0" }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, tR - 0.3 + i * 0.08);
+          // the passing drugs glance off them
+          const m = K.mol(drugs, "pen", 0.5), tb = at("survive") - 0.4 + i * 0.1;
+          gsap.set(m, { svgOrigin: "0 0", x: r.x - 330, y: r.y - 90, rotation: rnd() * 360, opacity: 0 });
+          tl.set(m, { opacity: 1 }, tb);
+          tl.to(m, { x: r.x - 95, y: r.y - 20, rotation: "+=120", duration: 0.32, ease: "power2.in" }, tb);
+          tl.to(m, { x: r.x - 300, y: r.y - 300, rotation: "+=-220", duration: 0.6, ease: "power2.out" }, tb + 0.32);
+          tl.to(m, { opacity: 0, duration: 0.2 }, tb + 0.75);
+          tl.to(r.g, { scale: 0.93, duration: 0.07, yoyo: true, repeat: 1 }, tb + 0.32);
+        });
+        const tagR = K.tag(ui, { text: "Resistant", x: 520, y: 330, color: "violet", size: 48 });
+        K.show(tl, tagR, tR);
+        K.hide(tl, tagR, at("multiply") - 0.3);
+
+        // ------------------------------------------------ "multiply"
+        const tM = at("multiply") - 0.2;
+        RES.forEach((r, i) => {
+          tl.to(r.a, { x: -64, duration: 0.45, ease: "power2.inOut" }, tM + i * 0.05);
+          tl.to(r.b, { x: 64, duration: 0.45, ease: "power2.inOut" }, tM + i * 0.05);
+          tl.to(r.a, { x: -80, y: -40, rotation: -25, duration: 0.6, ease: "sine.inOut" }, tM + 0.5 + i * 0.05);
+          tl.to(r.b, { x: 80, y: 40, rotation: 20, duration: 0.6, ease: "sine.inOut" }, tM + 0.5 + i * 0.05);
+        });
+
+        // ------------------------------------------------ "and share their defences."
+        const giver = RES[0];
+        const nc = K.bacterium($(".norm"), { L: 110, r: 26, seed: 199, shield: true, flagSide: 1 });
+        ALL.push(nc);
+        gsap.set([nc.ring, nc.badge], { opacity: 0 });
+        gsap.set(nc.g, { svgOrigin: "0 0", x: 260, y: 160, rotation: 30, opacity: 0 });
+        tl.to(nc.g, { opacity: 1, duration: 0.2 }, tM + 0.3);
+        tl.to(nc.g, { x: 330, y: 220, rotation: 15, duration: 0.9, ease: "power2.out" }, tM + 0.3);
+        const tS = at("share") - 0.15, tD = at("defences");
+        // tube from the giver (its left daughter, near 420,410) to the newcomer
+        const p0 = [giver.x - 100, giver.y - 60], p1 = [372, 248];
+        const pil = $(".pilus");
+        pil.setAttribute("d", `M ${p0[0]} ${p0[1]} Q ${(p0[0] + p1[0]) / 2 - 30} ${(p0[1] + p1[1]) / 2 - 40} ${p1[0]} ${p1[1]}`);
+        const plen = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) * 1.1;
+        tl.set(pil, { opacity: 1, strokeDasharray: plen, strokeDashoffset: plen }, tS);
+        tl.to(pil, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, tS);
+        const pl = $(".plasmid");
+        const pp = { u: 0 };
+        const placePl = () => {
+          const u = pp.u, mx = (p0[0] + p1[0]) / 2 - 30, my = (p0[1] + p1[1]) / 2 - 40;
+          const x = (1 - u) * (1 - u) * p0[0] + 2 * (1 - u) * u * mx + u * u * p1[0];
+          const y = (1 - u) * (1 - u) * p0[1] + 2 * (1 - u) * u * my + u * u * p1[1];
+          pl.setAttribute("cx", K.f(x)); pl.setAttribute("cy", K.f(y));
+        };
+        placePl();
+        tl.set(pl, { opacity: 1 }, tS + 0.25);
+        tl.fromTo(pp, { u: 0 }, { u: 1, duration: tD - tS - 0.2, ease: "power1.inOut", onUpdate: placePl, immediateRender: false }, tS + 0.25);
+        tl.set(pl, { opacity: 0 }, tD + 0.05);
+        tl.fromTo(nc.ring, { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, tD + 0.05);
+        tl.fromTo(nc.badge, { opacity: 0, scale: 0.4, svgOrigin: "0 0" }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, tD + 0.08);
+        tl.to(pil, { opacity: 0, duration: 0.3 }, tD + 0.4);
+        const tagS = K.tag(ui, { text: "Shared defence", x: 300, y: 120, color: "violet", size: 40 });
+        K.show(tl, tagS, tD - 0.1);
+        K.hide(tl, tagS, at("that's") - 0.15);
+
+        // ------------------------------------------------ "That's antibiotic resistance."
+        const tT = at("that's");
+        const ban = K.callout(ui, { text: "Antibiotic resistance", x: 960, y: 960, color: "crimson", size: 66 });
+        K.show(tl, ban, tT);
+        // the shielded colony keeps growing
+        const grow = [];
+        RES.forEach((r, i) => {
+          for (let k = 0; k < 3; k++) {
+            const a = (k / 3) * Math.PI * 2 + i, d = 170 + k * 25;
+            const b = K.bacterium($(".resi"), { L: 110, r: 26, seed: 300 + i * 5 + k, shield: true, flagSide: k % 2 ? 1 : -1 });
+            const x = r.x + Math.cos(a) * d, y = r.y + Math.sin(a) * d * 0.75;
+            gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rnd() * 360, scale: 0 });
+            tl.to(b.g, { scale: 1, duration: 0.3, ease: "back.out(2)" }, tT + 0.2 + rnd() * 1.0);
+            ALL.push(b);
+          }
+        });
+        K.camTo(tl, cam, 0, { s: 1.02 }, tT, "sine.inOut");
+        K.camTo(tl, cam, tT, { s: 1.12, py: 520 }, DUR - tT, "power1.inOut");
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["resistance"] = tl;
+      })();
+    </script>
+  </div>
+</template>

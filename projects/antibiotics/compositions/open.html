@@ -1,0 +1,326 @@
+<template id="open-template">
+  <div data-composition-id="open" data-width="1920" data-height="1080" data-duration="5.4">
+    <style>
+      [data-composition-id="open"] .stage { position: absolute; inset: 0; overflow: hidden; background: #14394a; }
+      [data-composition-id="open"] .shot { position: absolute; inset: 0; }
+      [data-composition-id="open"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="open"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <!-- SHOT A: the person takes the capsule -->
+      <div class="shot shotA">
+        <svg viewBox="0 0 1920 1080">
+          <defs>
+            <linearGradient id="op-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f4d5c" /><stop offset="1" stop-color="#143847" /></linearGradient>
+            <linearGradient id="op-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1838" /><stop offset="1" stop-color="#1e2d5e" /></linearGradient>
+            <radialGradient id="op-moon"><stop offset="0" stop-color="#fff4cf" stop-opacity="0.6" /><stop offset="1" stop-color="#fff4cf" stop-opacity="0" /></radialGradient>
+            <clipPath id="op-glass"><rect x="176" y="146" width="408" height="428" rx="10" /></clipPath>
+          </defs>
+          <g class="camA">
+            <rect x="-400" y="-300" width="2720" height="1680" fill="url(#op-wall)" />
+            <!-- moonlight patch on the wall -->
+            <path d="M 600 160 L 1500 520 L 1500 1000 L 600 600 Z" fill="#bfe6f0" opacity="0.05" />
+            <!-- window -->
+            <rect x="150" y="120" width="460" height="480" rx="22" fill="#2b6070" />
+            <g clip-path="url(#op-glass)">
+              <rect x="176" y="146" width="408" height="428" fill="url(#op-sky)" />
+              <g class="stars" fill="#dfe6ff"></g>
+              <circle cx="470" cy="236" r="120" fill="url(#op-moon)" />
+              <circle cx="470" cy="236" r="36" fill="#fff1c4" />
+              <path d="M 176 500 C 260 470, 330 486, 400 470 C 470 456, 530 470, 584 460 L 584 574 L 176 574 Z" fill="#16224a" />
+            </g>
+            <rect x="372" y="146" width="16" height="428" fill="#2b6070" />
+            <rect x="176" y="352" width="408" height="16" fill="#2b6070" />
+            <rect x="128" y="596" width="504" height="26" rx="8" fill="#367686" />
+            <!-- shelf -->
+            <rect x="1490" y="300" width="380" height="18" rx="6" fill="#2d6676" />
+            <g>
+              <rect x="1520" y="198" width="34" height="102" rx="5" fill="#6a5596" />
+              <rect x="1558" y="214" width="28" height="86" rx="5" fill="#3f8a8a" />
+              <rect x="1590" y="190" width="38" height="110" rx="5" fill="#d9cdb6" />
+              <rect x="1632" y="226" width="26" height="74" rx="5" fill="#8a5a7a" transform="rotate(-12 1645 300)" />
+              <path d="M 1760 300 L 1748 240 L 1812 240 L 1800 300 Z" fill="#b8806a" />
+              <path d="M 1780 242 C 1750 190, 1716 190, 1712 168 C 1748 170, 1770 196, 1780 236 C 1786 190, 1810 160, 1846 154 C 1834 190, 1806 210, 1784 242 Z" fill="#4f8a5a" />
+            </g>
+            <!-- person: body behind the table -->
+            <g class="person">
+              <path d="M 1040 900 C 1040 742, 1070 664, 1150 640 L 1330 640 C 1410 664, 1440 742, 1440 900 Z" fill="#ece2cf" />
+              <path d="M 1300 640 C 1380 660, 1440 742, 1440 900 L 1340 900 C 1350 780, 1340 700, 1300 640 Z" fill="#d3c4ab" />
+              <path d="M 1150 640 C 1070 664, 1040 742, 1040 900" fill="none" stroke="#bfe6ea" stroke-width="6" opacity="0.5" />
+              <path d="M 1180 640 L 1290 640 C 1280 668, 1250 680, 1235 680 C 1218 680, 1190 668, 1180 640 Z" fill="#a8603f" />
+              <g class="head">
+                <rect x="1196" y="540" width="70" height="110" rx="20" fill="#a8603f" />
+                <path class="face" d="M 1290 338 C 1330 362, 1348 420, 1336 470 C 1326 512, 1300 540, 1262 556 C 1222 572, 1176 570, 1150 552 C 1134 540, 1126 522, 1128 506 C 1122 498, 1122 488, 1126 482 C 1114 476, 1100 466, 1100 456 C 1100 444, 1112 432, 1122 424 C 1122 400, 1130 368, 1150 350 C 1180 324, 1244 316, 1290 338 Z" fill="#c47a58" />
+                <path d="M 1300 400 C 1330 440, 1328 500, 1290 534 C 1270 552, 1240 562, 1214 564 C 1260 520, 1280 470, 1300 400 Z" fill="#ad6448" />
+                <ellipse cx="1282" cy="452" rx="20" ry="30" fill="#b06a4e" />
+                <ellipse cx="1284" cy="454" rx="10" ry="17" fill="#965240" />
+                <path d="M 1102 458 C 1110 472, 1124 476, 1134 470 C 1128 466, 1120 462, 1118 452 Z" fill="#a9624a" />
+                <g class="eye"><ellipse cx="1150" cy="430" rx="9" ry="13" fill="#2a1430" /><circle cx="1153" cy="424" r="3" fill="#ffffff" /></g>
+                <path d="M 1132 400 C 1144 392, 1160 391, 1174 396" stroke="#3a1e4a" stroke-width="9" fill="none" stroke-linecap="round" />
+                <path class="mouthC" d="M 1124 506 C 1132 510, 1142 510, 1150 504" stroke="#6a2c2c" stroke-width="6" fill="none" stroke-linecap="round" />
+                <ellipse class="mouthO" cx="1136" cy="507" rx="14" ry="11" fill="#4a1626" />
+                <path d="M 1138 372 C 1150 320, 1210 296, 1268 300 C 1324 304, 1362 344, 1360 400 C 1358 446, 1340 470, 1316 476 C 1318 444, 1310 412, 1292 394 C 1266 376, 1236 380, 1210 372 C 1186 364, 1158 372, 1138 372 Z" fill="#3a1e4a" />
+                <path d="M 1138 372 C 1136 352, 1150 334, 1166 330 C 1162 346, 1166 362, 1176 372 C 1180 352, 1194 338, 1212 334 C 1206 350, 1210 366, 1222 376 Z" fill="#3a1e4a" />
+                <path d="M 1230 302 C 1252 280, 1286 278, 1304 290 C 1284 292, 1266 300, 1256 312 Z" fill="#3a1e4a" />
+                <path d="M 1300 420 C 1312 440, 1314 470, 1306 492 C 1296 476, 1292 446, 1300 420 Z" fill="#3a1e4a" />
+                <path d="M 1196 318 C 1240 302, 1300 312, 1330 348 C 1296 330, 1250 324, 1196 318 Z" fill="#5a3870" />
+                <path d="M 1150 354 C 1134 380, 1124 404, 1122 424 C 1112 434, 1100 444, 1100 456 C 1100 466, 1114 476, 1126 482 C 1122 490, 1122 500, 1128 506 C 1126 522, 1134 540, 1150 552" fill="none" stroke="#8fd3d6" stroke-width="5" stroke-linecap="round" opacity="0.55" />
+              </g>
+            </g>
+            <!-- table -->
+            <rect x="-400" y="842" width="2720" height="60" rx="10" fill="#5c3a52" />
+            <rect x="-400" y="842" width="2720" height="12" rx="6" fill="#71506a" />
+            <rect x="-400" y="896" width="2720" height="500" fill="#442b3f" />
+            <!-- props: pill bottle and water glass -->
+            <g class="bottle">
+              <rect x="590" y="690" width="100" height="156" rx="16" fill="#d9811e" opacity="0.93" />
+              <rect x="604" y="700" width="14" height="136" rx="7" fill="#f5b25a" opacity="0.6" />
+              <rect x="580" y="654" width="120" height="44" rx="10" fill="#f1ede4" />
+              <rect x="580" y="688" width="120" height="8" fill="#d9d4c8" />
+              <rect x="608" y="728" width="78" height="76" rx="8" fill="#f6f0e6" />
+              <text data-layout-ignore="true" x="647" y="768" font-family="Nunito, sans-serif" font-weight="900" font-size="30" text-anchor="middle" fill="#2a2a3a">Rx</text>
+              <rect x="620" y="780" width="54" height="5" rx="2.5" fill="#b9b2a6" /><rect x="620" y="790" width="36" height="5" rx="2.5" fill="#b9b2a6" />
+            </g>
+            <g class="glass">
+              <path d="M 776 690 L 870 690 L 860 846 L 786 846 Z" fill="#bfe8f0" opacity="0.22" />
+              <path d="M 781 752 L 865 752 L 860 846 L 786 846 Z" fill="#7fd0e0" opacity="0.45" />
+              <path d="M 776 690 L 870 690 L 860 846 L 786 846 Z" fill="none" stroke="#d8f4f8" stroke-width="4" opacity="0.6" />
+              <rect x="790" y="700" width="10" height="130" rx="5" fill="#ffffff" opacity="0.35" />
+            </g>
+            <!-- arm, hand and capsule (drawn per frame) -->
+            <g class="arm">
+              <path class="sleeve" fill="none" stroke="#ece2cf" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" />
+              <path class="sleeveShade" fill="none" stroke="#d3c4ab" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+              <g class="hand">
+                <path d="M -4 -24 C 20 -30, 44 -26, 52 -12 C 58 0, 54 20, 40 28 C 24 36, 2 32, -6 22 Z" fill="#c47a58" />
+                <g fill="#b8704f"><circle cx="50" cy="-4" r="11" /><circle cx="48" cy="12" r="10" /><circle cx="42" cy="25" r="9" /></g>
+                <g fill="#c47a58"><circle cx="47" cy="-6" r="10" /><circle cx="45" cy="10" r="9" /><circle cx="39" cy="23" r="8" /></g>
+                <path d="M 10 -22 C 26 -40, 48 -46, 62 -38 C 66 -34, 64 -28, 58 -27 C 46 -28, 32 -22, 22 -12 Z" fill="#c47a58" />
+                <path d="M 26 -22 C 36 -30, 48 -34, 58 -32" fill="none" stroke="#ad6448" stroke-width="4" stroke-linecap="round" />
+                <path d="M 38 -6 C 52 -16, 64 -24, 70 -32 C 72 -26, 66 -16, 54 -8 Z" fill="#b8704f" />
+                <ellipse cx="16" cy="12" rx="20" ry="11" fill="#ad6448" opacity="0.7" />
+                <g class="capsule" transform="translate(64,-30) rotate(-18) scale(1.45)">
+                  <path d="M -26 -11 L 0 -11 L 0 11 L -26 11 A 11 11 0 0 1 -26 -11 Z" fill="#ff9000" />
+                  <path d="M 0 -11 L 26 -11 A 11 11 0 0 1 26 11 L 0 11 Z" fill="#ffd79a" />
+                  <rect x="-30" y="-7" width="50" height="4" rx="2" fill="#ffffff" opacity="0.55" />
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <!-- SHOT B: inside the stomach, the capsule opens -->
+      <div class="shot shotB">
+        <svg viewBox="0 0 1920 1080">
+          <defs>
+            <radialGradient id="op-stom" cx="0.5" cy="0.45" r="0.75"><stop offset="0" stop-color="#5a1438" /><stop offset="1" stop-color="#260519" /></radialGradient>
+          </defs>
+          <g class="camB">
+            <rect x="-1500" y="-1000" width="3000" height="2000" fill="url(#op-stom)" />
+            <g class="folds"></g>
+            <g class="bubbles" fill="#f0a6c6" opacity="0.35"></g>
+            <g class="pills"></g>
+            <g class="halves">
+              <g class="halfL"><path d="M -1500 -650 L 0 -650 L 0 650 L -1500 650 A 650 650 0 0 1 -1500 -650 Z" fill="#ff9000" /><rect x="-1700" y="-420" width="1500" height="110" rx="55" fill="#ffffff" opacity="0.45" /></g>
+              <g class="halfR"><path d="M 0 -650 L 1500 -650 A 650 650 0 0 1 1500 650 L 0 650 Z" fill="#ffd79a" /><rect x="120" y="-420" width="1200" height="110" rx="55" fill="#ffffff" opacity="0.45" /></g>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <!-- SHOT C: through the gut wall into the bloodstream -->
+      <div class="shot shotC">
+        <svg viewBox="0 0 1920 1080">
+          <defs>
+            <linearGradient id="op-lumen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34081c" /><stop offset="0.5" stop-color="#4c1028" /><stop offset="1" stop-color="#34081c" /></linearGradient>
+          </defs>
+          <g class="camC">
+            <rect x="-1200" y="-300" width="7600" height="1680" fill="url(#op-lumen)" />
+            <g class="flowFar" opacity="0.55"></g>
+            <g class="wallTop"></g>
+            <g class="wallBot"></g>
+            <g class="cells"></g>
+            <g class="drugs"></g>
+          </g>
+        </svg>
+      </div>
+      <!-- gut wall that the camera passes through (covers the B to C switch) -->
+      <div class="shot shotGut"><svg viewBox="0 0 1920 1080"><g class="gut"></g></svg></div>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="open"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const rnd = K.rng(101);
+        const tl = gsap.timeline({ paused: true });
+        const ease = (n) => gsap.parseEase(n);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, u) => a + (b - a) * u;
+
+        // ===================================================== SHOT A
+        const stars = $(".stars");
+        for (let i = 0; i < 30; i++) K.el("circle", { cx: K.f(180 + rnd() * 400), cy: K.f(150 + rnd() * 300), r: K.f(0.8 + rnd() * 1.8), opacity: K.f(0.4 + rnd() * 0.5) }, stars);
+        const camA = K.camera($(".camA"));
+        const sleeve = $(".sleeve"), sleeveShade = $(".sleeveShade"), hand = $(".hand"), head = $(".head");
+        const mouthO = $(".mouthO"), mouthC = $(".mouthC"), eye = $(".eye");
+        const S = [1125, 690], LA = 175, LB = 165;
+        const H0 = [985, 575], H1 = [1090, 570];
+        const ik = (T) => {
+          const dx = T[0] - S[0], dy = T[1] - S[1];
+          const d = clamp(Math.hypot(dx, dy), Math.abs(LA - LB) + 1, LA + LB - 1);
+          const th = Math.atan2(dy, dx), al = Math.acos((LA * LA + d * d - LB * LB) / (2 * LA * d));
+          const e1 = [S[0] + LA * Math.cos(th + al), S[1] + LA * Math.sin(th + al)];
+          const e2 = [S[0] + LA * Math.cos(th - al), S[1] + LA * Math.sin(th - al)];
+          return e1[1] > e2[1] ? e1 : e2;
+        };
+        const capsuleWorld = (T, E) => {
+          const ph = Math.atan2(T[1] - E[1], T[0] - E[0]);
+          const lx = 64, ly = -30;
+          return [T[0] + lx * Math.cos(ph) - ly * Math.sin(ph), T[1] + lx * Math.sin(ph) + ly * Math.cos(ph)];
+        };
+        const moveE = ease("power2.inOut"), zoomE = ease("power3.in");
+        const T_MOVE0 = 0.85, T_MOVE1 = 1.6, T_Z0 = 1.15, T_Z1 = 2.05;
+        const drawA = (t) => {
+          const u = moveE(clamp((t - T_MOVE0) / (T_MOVE1 - T_MOVE0), 0, 1));
+          const bob = Math.sin(t * 5.2) * 3 * (1 - u);
+          const T = [lerp(H0[0], H1[0], u), lerp(H0[1], H1[1], u) + bob];
+          const E = ik(T);
+          const ph = Math.atan2(T[1] - E[1], T[0] - E[0]);
+          const W = [T[0] - 18 * Math.cos(ph), T[1] - 18 * Math.sin(ph)];
+          sleeve.setAttribute("d", `M ${S[0]} ${S[1]} L ${K.f(E[0])} ${K.f(E[1])} L ${K.f(W[0])} ${K.f(W[1])}`);
+          sleeveShade.setAttribute("d", `M ${S[0] + 10} ${S[1] + 18} L ${K.f(E[0] + 6)} ${K.f(E[1] + 16)}`);
+          hand.setAttribute("transform", `translate(${K.f(T[0])},${K.f(T[1])}) rotate(${K.f((ph * 180) / Math.PI)})`);
+          // head tilts back a little and the mouth opens as the capsule arrives
+          const hu = moveE(clamp((t - 1.15) / 0.45, 0, 1));
+          head.setAttribute("transform", `rotate(${K.f(-5 * hu)} 1230 600)`);
+          const mo = clamp((t - 1.2) / 0.22, 0, 1);
+          mouthO.setAttribute("transform", `translate(1136 507) scale(1 ${K.f(Math.max(0.01, mo))}) translate(-1136 -507)`);
+          mouthC.setAttribute("opacity", K.f(1 - mo));
+          const blink = Math.abs(t - 0.5) < 0.06 ? 0.12 : 1;
+          eye.setAttribute("transform", `translate(1150 430) scale(1 ${blink}) translate(-1150 -430)`);
+          // camera: slow push, then a fast dive into the capsule
+          const C = capsuleWorld(T, E);
+          let s = 1 + 0.1 * clamp(t / T_Z0, 0, 1);
+          if (t > T_Z0) s = 1.1 * Math.pow(51 / 1.1, zoomE(clamp((t - T_Z0) / (T_Z1 - T_Z0), 0, 1)));
+          const w = clamp((s - 1.05) / 1.6, 0, 1);
+          const w2 = clamp((s - 1.5) / 8, 0, 1);
+          camA.rot = -((ph * 180) / Math.PI - 18) * w2;
+          camA.s = s;
+          camA.px = lerp(960, C[0], w);
+          camA.py = lerp(540, C[1], w);
+          camA.apply();
+        };
+        const clockA = { t: 0 };
+        tl.fromTo(clockA, { t: 0 }, { t: T_Z1, duration: T_Z1, ease: "none", onUpdate: () => drawA(clockA.t) }, 0);
+        drawA(0);
+        tl.set($(".shotA"), { autoAlpha: 0 }, T_Z1);
+
+        // ===================================================== SHOT B (2.05 - 3.45)
+        const B0 = T_Z1;
+        tl.set($(".shotB"), { autoAlpha: 0 }, 0);
+        tl.set($(".shotB"), { autoAlpha: 1 }, B0);
+        const camB = K.camera($(".camB"), 0, 0, 1);
+        const folds = $(".folds");
+        [[-860, 520, "#6c1a42"], [-420, 640, "#5a1538"], [120, 560, "#6c1a42"], [640, 660, "#5a1538"], [-1200, 200, "#4c1030"], [900, 260, "#4c1030"]].forEach(([x, y, c], i) => {
+          K.el("path", { d: `M ${x - 520} ${y + 300} C ${x - 300} ${y - 60}, ${x - 120} ${y - 120}, ${x} ${y - 90} C ${x + 160} ${y - 60}, ${x + 320} ${y + 40}, ${x + 520} ${y + 300} Z`, fill: c }, folds);
+          K.el("path", { d: `M ${x - 300} ${y + 40} C ${x - 160} ${y - 50}, ${x + 40} ${y - 60}, ${x + 200} ${y - 10}`, stroke: "#8a2c56", "stroke-width": 10, fill: "none", "stroke-linecap": "round", opacity: 0.7 }, folds);
+        });
+        const bub = $(".bubbles"), BUB = [];
+        for (let i = 0; i < 26; i++) {
+          const c = K.el("circle", { cx: K.f((rnd() - 0.5) * 2000), cy: K.f(200 + rnd() * 500), r: K.f(6 + rnd() * 14) }, bub);
+          BUB.push(c);
+          tl.fromTo(c, { y: 0 }, { y: -220 - rnd() * 200, duration: 1.4, ease: "none", immediateRender: false }, B0);
+        }
+        const pills = $(".pills"), PILLS = [];
+        for (let i = 0; i < 64; i++) {
+          const m = K.mol(pills, "pen", 0.35 + rnd() * 0.75);
+          const a = rnd() * Math.PI * 2, d = 250 + rnd() * 820;
+          PILLS.push(m);
+          gsap.set(m, { svgOrigin: "0 0", x: (rnd() - 0.5) * 60, y: (rnd() - 0.5) * 40, rotation: rnd() * 360, scale: 0.2, opacity: 0 });
+          tl.to(m, { opacity: 1, duration: 0.08 }, B0 + 0.12);
+          tl.to(m, { x: Math.cos(a) * d, y: Math.sin(a) * d * 0.62 + 120, rotation: "+=" + (rnd() * 240 - 120), scale: 1, duration: 1.1, ease: "power3.out" }, B0 + 0.12 + rnd() * 0.12);
+          tl.to(m, { y: "+=" + (160 + rnd() * 120), duration: 0.6, ease: "power1.in" }, B0 + 1.0);
+        }
+        tl.to($(".halfL"), { x: -1500, rotation: -14, svgOrigin: "0 0", duration: 0.75, ease: "power2.in" }, B0 + 0.06);
+        tl.to($(".halfR"), { x: 1500, rotation: 12, svgOrigin: "0 0", duration: 0.75, ease: "power2.in" }, B0 + 0.06);
+        camB.s = 1.25; camB.apply();
+        K.camTo(tl, camB, B0, { s: 0.95 }, 1.4, "power2.out");
+
+        const tagStomach = K.tag(ui, { text: "Stomach", x: 330, y: 930, color: "crimson", size: 44 });
+        K.show(tl, tagStomach, B0 + 0.32);
+        K.hide(tl, tagStomach, B0 + 0.95);
+
+        // ===================================================== SHOT C (3.30 - 5.40)
+        const C0 = 3.42;
+        tl.set($(".shotC"), { autoAlpha: 0 }, 0);
+        tl.set($(".shotC"), { autoAlpha: 1 }, C0);
+        tl.set($(".shotB"), { autoAlpha: 0 }, C0);
+        // gut wall passes the camera from bottom to top
+        const gut = $(".gut");
+        K.el("rect", { x: -100, y: 120, width: 2120, height: 1400, fill: "#a24c6c" }, gut);
+        const villi = [];
+        for (let x = -60; x < 2000; x += 120) villi.push(`M ${x} 140 C ${x} 20, ${x + 100} 20, ${x + 100} 140`);
+        K.el("path", { d: villi.join(" ") + " Z", fill: "#a24c6c" }, gut);
+        for (let x = -60; x < 2000; x += 120) K.el("path", { d: `M ${x + 18} 140 C ${x + 18} 50, ${x + 82} 50, ${x + 82} 140`, fill: "#bb6284" }, gut);
+        for (let i = 0; i < 60; i++) K.el("rect", { x: K.f(rnd() * 1920 - 40), y: K.f(240 + rnd() * 1200), width: K.f(70 + rnd() * 60), height: K.f(34 + rnd() * 18), rx: 16, fill: "#8e3e5e", opacity: 0.8 }, gut);
+        tl.fromTo(gut, { y: 1150 }, { y: -1700, duration: 0.75, ease: "power1.inOut", immediateRender: false }, 3.05);
+        gsap.set(gut, { y: 1150 });
+
+        // vessel interior: walls scroll left, red cells flow, orange molecules ride along
+        const wallTop = $(".wallTop"), wallBot = $(".wallBot");
+        const wallPath = (top) => {
+          let d = top ? "M -1800 -2600 L -1800 150" : "M -1800 3600 L -1800 930";
+          for (let x = -1800; x <= 7400; x += 160) d += ` Q ${x + 80} ${top ? 190 : 890} ${x + 160} ${top ? 150 : 930}`;
+          return d + (top ? " L 7560 -2600 Z" : " L 7560 3600 Z");
+        };
+        K.el("path", { d: wallPath(true), fill: "#7a2448" }, wallTop);
+        K.el("path", { d: wallPath(false), fill: "#7a2448" }, wallBot);
+        for (let i = 0; i < 60; i++) {
+          K.el("ellipse", { cx: K.f(-1700 + i * 150 + rnd() * 40), cy: K.f(40 + rnd() * 70), rx: K.f(50 + rnd() * 20), ry: 16, fill: "#8e3056" }, wallTop);
+          K.el("ellipse", { cx: K.f(-1700 + i * 150 + rnd() * 40), cy: K.f(1000 + rnd() * 70), rx: K.f(50 + rnd() * 20), ry: 16, fill: "#8e3056" }, wallBot);
+        }
+        K.el("path", { d: wallPath(true), fill: "none", stroke: "#a84466", "stroke-width": 8 }, wallTop);
+        K.el("path", { d: wallPath(false), fill: "none", stroke: "#a84466", "stroke-width": 8 }, wallBot);
+        const far = $(".flowFar");
+        for (let i = 0; i < 24; i++) {
+          const c = K.rbc(far, 22 + rnd() * 10, rnd() * 0.9);
+          gsap.set(c, { svgOrigin: "0 0", x: -600 + rnd() * 3600, y: 250 + rnd() * 580 });
+        }
+        tl.to(far, { x: 1100, duration: 2.4, ease: "power1.inOut" }, C0);
+        const cells = $(".cells");
+        for (let i = 0; i < 30; i++) {
+          const r = 34 + rnd() * 34, c = K.rbc(cells, r, rnd() * 0.95), x0 = -500 + rnd() * 3400;
+          gsap.set(c, { svgOrigin: "0 0", x: x0, y: 220 + rnd() * 640, rotation: rnd() * 60 - 30 });
+          tl.to(c, { x: x0 + 1500 + rnd() * 500, rotation: "+=" + (rnd() * 60 - 30), duration: 2.4, ease: "none" }, C0);
+        }
+        const drugs = $(".drugs");
+        for (let i = 0; i < 9; i++) {
+          const m = K.mol(drugs, "pen", 0.8 + rnd() * 0.35), x0 = 300 + i * 190 + rnd() * 60, y0 = 300 + rnd() * 480;
+          gsap.set(m, { svgOrigin: "0 0", x: x0, y: y0, rotation: rnd() * 360 });
+          tl.to(m, { x: x0 + 1900, y: y0 + (rnd() - 0.5) * 120, rotation: "+=" + (rnd() * 200 - 100), duration: 2.4, ease: "none" }, C0);
+        }
+        const camC = K.camera($(".camC"), 960, 540, 1);
+        K.camTo(tl, camC, C0, { px: 960 + 1800 }, 2.4, "power1.inOut");
+        // heartbeat: walls pulse
+        [3.9, 4.12, 4.75, 4.97].forEach((t, i) => {
+          tl.to([wallTop, wallBot], { scaleY: i % 2 ? 1.03 : 1.05, svgOrigin: "960 540", duration: 0.08, ease: "power2.out" }, t);
+          tl.to([wallTop, wallBot], { scaleY: 1, svgOrigin: "960 540", duration: 0.16, ease: "power2.in" }, t + 0.08);
+        });
+        const tagBlood = K.tag(ui, { text: "Bloodstream", x: 960, y: 300, color: "crimson", size: 44 });
+        K.show(tl, tagBlood, C0 + 0.45);
+        K.hide(tl, tagBlood, 4.85);
+        // exit: pull back out of the vessel
+        K.camTo(tl, camC, 4.95, { s: 0.42, py: 560 }, 0.45, "power2.in");
+
+        tl.set({}, {}, 5.4);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["open"] = tl;
+      })();
+    </script>
+  </div>
+</template>

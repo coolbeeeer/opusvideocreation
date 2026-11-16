@@ -1,0 +1,73 @@
+<template id="outro-template">
+  <div data-composition-id="outro" data-width="1920" data-height="1080" data-duration="5">
+    <style>
+      [data-composition-id="outro"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0a1a2a; }
+      [data-composition-id="outro"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="outro"] .ui { position: absolute; inset: 0; }
+      [data-composition-id="outro"] .title { position: absolute; inset: 0; background: #050d18; opacity: 0; }
+      [data-composition-id="outro"] .t-small { position: absolute; left: 0; right: 0; top: 350px; text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 400; font-size: 76px; color: #9a6ae0; opacity: 0; }
+      [data-composition-id="outro"] .t-big { position: absolute; left: 0; right: 0; top: 425px; text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 700; font-size: 170px; letter-spacing: 0.04em; color: #fff1d6; opacity: 0;
+        text-shadow: 0 0 26px rgba(255, 144, 0, 0.6), 0 0 8px rgba(255, 176, 70, 0.75); }
+      [data-composition-id="outro"] .t-bar { position: absolute; left: 560px; width: 800px; top: 660px; height: 14px; border-radius: 7px; background: linear-gradient(90deg, #ff9000 0%, #ff9000 9%, #5a4a9a 22%, #2aa89a 100%); transform-origin: 0 50%; transform: scaleX(0); }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <radialGradient id="outro-bg" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#2a1a40" /><stop offset="1" stop-color="#0b0a1c" /></radialGradient>
+        </defs>
+        <g class="cam">
+          <rect x="-2000" y="-1500" width="5920" height="4080" fill="url(#outro-bg)" />
+          <g class="swarm"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+      <div class="title">
+        <div class="t-small">How</div>
+        <div class="t-big">BACTERIA MULTIPLY</div>
+        <div class="t-bar"></div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="outro"]');
+        const $ = (s) => R.querySelector(s);
+        const T0 = K.scene("outro").start, DUR = K.scene("outro").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(202);
+        const tl = gsap.timeline({ paused: true });
+
+        // "That is how one cell becomes millions."  -> the swarm pops in outward from the centre
+        const tM = at("millions");
+        const SW = [];
+        for (let i = 0; i < 90; i++) {
+          const ang = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * 820;
+          const x = 960 + Math.cos(ang) * d * 1.1, y = 540 + Math.sin(ang) * d * 0.55;
+          const b = K.bacterium($(".swarm"), { L: 80 + rnd() * 50, r: 18 + rnd() * 8, seed: 300 + i, flag: false });
+          // a few cells are already there at the cut (no empty first frame); the rest pop in outward
+          gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rnd() * 360, scale: d < 160 ? 1 : 0 });
+          if (d >= 160) tl.to(b.g, { scale: 1, duration: 0.25, ease: "back.out(2)" }, 0.1 + ((d - 160) / 660) * (tM + 0.3));
+          SW.push(b);
+        }
+        const ban = K.callout($(".ui"), { text: "Millions", x: 960, y: 170, color: "crimson", size: 66 });
+        K.show(tl, ban, tM - 0.05);
+
+        const cam = K.camera($(".cam"), 960, 540, 1.15);
+        K.camTo(tl, cam, 0, { s: 1.0 }, DUR, "sine.inOut");
+
+        // title card: hold at least 2 s (the checker flags shorter closing lines)
+        const tT = Math.max(tM + 0.6, DUR - 2.5);
+        K.hide(tl, ban, tT - 0.1);
+        tl.to($(".title"), { opacity: 1, duration: 0.35, ease: "power1.inOut" }, tT - 0.1);
+        tl.fromTo($(".t-small"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, tT + 0.1);
+        tl.fromTo($(".t-big"), { opacity: 0, filter: "blur(10px)", color: "#c8651a" }, { opacity: 1, filter: "blur(0px)", color: "#fff1d6", duration: 0.65, ease: "power2.out", immediateRender: false }, tT + 0.2);
+        tl.to($(".t-bar"), { scaleX: 1, duration: 0.7, ease: "power3.out" }, tT + 0.45);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["outro"] = tl;
+      })();
+    </script>
+  </div>
+</template>

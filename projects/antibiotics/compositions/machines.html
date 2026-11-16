@@ -1,0 +1,165 @@
+<template id="machines-template">
+  <div data-composition-id="machines" data-width="1920" data-height="1080" data-duration="7.11">
+    <style>
+      [data-composition-id="machines"] .stage { position: absolute; inset: 0; overflow: hidden; background: #0a2232; }
+      [data-composition-id="machines"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="machines"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <radialGradient id="mac-bg" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#123a4c" /><stop offset="1" stop-color="#071926" /></radialGradient>
+        </defs>
+        <g class="cam">
+          <rect x="-3000" y="-2000" width="7920" height="5080" fill="url(#mac-bg)" />
+          <g class="cell">
+            <path class="outer" fill="#4a6226" />
+            <path class="shade" fill="#6f8a34" />
+            <path class="body" fill="#8aa446" />
+            <g class="cyto" fill="#7a9640"></g>
+            <!-- protein factory (ribosome on a message strand) -->
+            <g class="ribo">
+              <path class="mrna" fill="none" stroke="#3e5a8a" stroke-width="10" stroke-linecap="round" />
+              <g class="ticks"></g>
+              <path class="chain" fill="none" stroke="#c9b6ff" stroke-width="0" />
+              <g class="beads"></g>
+              <g class="riboBody">
+                <ellipse cx="0" cy="18" rx="92" ry="44" fill="#7a5aa6" />
+                <ellipse cx="6" cy="26" rx="78" ry="30" fill="#674a92" />
+                <ellipse cx="0" cy="-44" rx="120" ry="66" fill="#9a7cc8" />
+                <ellipse cx="10" cy="-34" rx="100" ry="48" fill="#8a6cbc" />
+                <ellipse cx="-40" cy="-70" rx="34" ry="14" fill="#b9a2e2" />
+                <path d="M -18 -110 L 18 -110 L 12 -60 L -12 -60 Z" fill="#5e4290" />
+                <g class="riboTint" opacity="0"><ellipse cx="0" cy="18" rx="92" ry="44" fill="#55506e" /><ellipse cx="0" cy="-44" rx="120" ry="66" fill="#55506e" /></g>
+              </g>
+            </g>
+            <!-- DNA loop with its copying clamp -->
+            <g class="dna">
+              <path class="dnaA" fill="none" stroke="#5a7ad0" stroke-width="12" stroke-linecap="round" />
+              <path class="dnaB" fill="none" stroke="#c9b6ff" stroke-width="12" stroke-linecap="round" />
+              <path class="copy" fill="none" stroke="#e0d4ff" stroke-width="10" stroke-linecap="round" opacity="0.9" />
+              <g class="clamp">
+                <circle r="46" fill="none" stroke="#4aa3ad" stroke-width="30" />
+                <circle r="46" fill="none" stroke="#7cc7cf" stroke-width="8" stroke-dasharray="40 250" />
+              </g>
+              <circle class="clampTint" r="46" fill="none" stroke="#596a74" stroke-width="30" opacity="0" />
+            </g>
+          </g>
+          <g class="drugs"></g>
+        </g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT;
+        const R = document.querySelector('[data-composition-id="machines"]');
+        const $ = (s) => R.querySelector(s);
+        const ui = $(".ui");
+        const T0 = K.scene("machines").start, DUR = K.scene("machines").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(505);
+        const tl = gsap.timeline({ paused: true });
+        const C = [960, 560], L = 1600, RAD = 340;
+
+        // ------------------------------------------------ cell (cutaway)
+        const shape = { waist: 0 };
+        const drawCell = () => {
+          $(".outer").setAttribute("d", K.capsule(L, RAD, shape.waist));
+          $(".shade").setAttribute("d", K.capsule(L - 70, RAD - 35, shape.waist));
+          $(".body").setAttribute("d", K.capsule(L - 110, (RAD - 35) * 0.84, shape.waist * 0.9));
+        };
+        drawCell();
+        $(".outer").setAttribute("transform", `translate(${C[0]},${C[1]})`);
+        $(".shade").setAttribute("transform", `translate(${C[0]},${C[1]})`);
+        $(".body").setAttribute("transform", `translate(${C[0]},${C[1] - 28})`);
+        for (let i = 0; i < 40; i++) K.el("circle", { cx: K.f(260 + rnd() * 1400), cy: K.f(320 + rnd() * 470), r: K.f(5 + rnd() * 7) }, $(".cyto"));
+
+        // ------------------------------------------------ protein factory at (560, 600)
+        const RB = [560, 600];
+        const mrna = [];
+        for (let x = 200; x <= 940; x += 20) mrna.push([x, RB[1] + 40 + Math.sin(x / 50) * 8]);
+        $(".mrna").setAttribute("d", K.smooth(mrna, false));
+        const ticks = $(".ticks"), cols = ["#e0a040", "#5ab0b8", "#c96a8a", "#9ab452"];
+        for (let x = 300; x <= 930; x += 26) K.el("rect", { x: x - 4, y: RB[1] + 40 + Math.sin(x / 50) * 8 - 26, width: 8, height: 22, rx: 4, fill: cols[(x / 26 | 0) % 4] }, ticks);
+        const ribo = $(".riboBody");
+        gsap.set(ribo, { svgOrigin: "0 0", x: RB[0], y: RB[1] });
+        // the protein chain grows out of the top as beads
+        const beads = $(".beads"), BEADS = [];
+        for (let i = 0; i < 18; i++) {
+          const a = -Math.PI / 2 - 0.5 + Math.sin(i * 0.7) * 0.6, d = 70 + i * 26;
+          const x = RB[0] + Math.cos(a) * d * 0.35 + Math.sin(i * 0.9) * 26, y = RB[1] - 110 - i * 22;
+          const b = K.el("circle", { cx: K.f(x), cy: K.f(y), r: 12, fill: cols[i % 4], opacity: 0 }, beads);
+          BEADS.push(b);
+        }
+        const tFact = at("protein"), tBlock = at("block");
+        // working: ticks scroll through, beads appear one by one; a drug wedges in and everything stops
+        const tStop1 = at("factories") + 0.35;
+        tl.to(ticks, { x: -70, duration: tStop1, ease: "none" }, 0);
+        BEADS.forEach((b, i) => { const t = i * 0.16; if (t < tStop1) tl.set(b, { opacity: 1 }, t); });
+        tl.to(ribo, { y: RB[1] - 6, duration: 0.16, ease: "sine.inOut", repeat: Math.max(0, Math.floor(tStop1 / 0.16) - 1), yoyo: true }, 0);
+
+        // ------------------------------------------------ DNA loop at (1360, 540)
+        const DC = [1360, 540], DR = 190;
+        const loopPts = (r, ph, amp) => { const p = []; for (let i = 0; i <= 64; i++) { const a = (i / 64) * Math.PI * 2; const rr = r + Math.sin(a * 10 + ph) * amp; p.push([DC[0] + Math.cos(a) * rr, DC[1] + Math.sin(a) * rr * 0.82]); } return p; };
+        $(".dnaA").setAttribute("d", K.smooth(loopPts(DR, 0, 12), false));
+        $(".dnaB").setAttribute("d", K.smooth(loopPts(DR, Math.PI, 12), false));
+        const copyD = K.smooth(loopPts(DR + 40, 0.5, 6), false);
+        $(".copy").setAttribute("d", copyD);
+        const copyLen = 2 * Math.PI * (DR + 40) * 0.92;
+        gsap.set($(".copy"), { strokeDasharray: copyLen, strokeDashoffset: copyLen });
+        const clamp = $(".clamp"), clampTint = $(".clampTint");
+        const cl = { a: -1.2 };
+        const placeClamp = () => {
+          const x = DC[0] + Math.cos(cl.a) * DR, y = DC[1] + Math.sin(cl.a) * DR * 0.82;
+          clamp.setAttribute("transform", `translate(${K.f(x)},${K.f(y)}) rotate(${K.f(cl.a * 180 / Math.PI * 3)})`);
+          clampTint.setAttribute("transform", `translate(${K.f(x)},${K.f(y)})`);
+          const u = (cl.a + 1.2) / (Math.PI * 2);
+          $(".copy").setAttribute("stroke-dashoffset", K.f(copyLen * (1 - Math.max(0, u))));
+        };
+        placeClamp();
+        const tStop2 = at("dna") + 0.1;
+        tl.to(cl, { a: -1.2 + 2.8, duration: tStop2, ease: "none", onUpdate: placeClamp }, 0);
+
+        // ------------------------------------------------ drugs
+        const drugs = $(".drugs");
+        const tet = K.mol(drugs, "tet", 0.85), quin = K.mol(drugs, "quin", 0.85);
+        gsap.set(tet, { svgOrigin: "0 0", x: 60, y: 160, rotation: -30, opacity: 0 });
+        gsap.set(quin, { svgOrigin: "0 0", x: 1860, y: 140, rotation: 20, opacity: 0 });
+        tl.to(tet, { opacity: 1, duration: 0.15 }, tBlock - 0.1);
+        tl.to(tet, { x: RB[0] + 30, y: RB[1] - 14, rotation: 0, duration: tStop1 - tBlock + 0.1, ease: "power2.inOut" }, tBlock - 0.1);
+        tl.to(ribo, { scaleX: 1.06, scaleY: 0.94, duration: 0.07, yoyo: true, repeat: 1 }, tStop1 - 0.05);
+        tl.to($(".riboTint"), { opacity: 0.55, duration: 0.3 }, tStop1);
+        const qx = DC[0] + Math.cos(-1.2 + 2.8) * DR, qy = DC[1] + Math.sin(-1.2 + 2.8) * DR * 0.82;
+        tl.to(quin, { opacity: 1, duration: 0.15 }, at("stop") - 0.1);
+        tl.to(quin, { x: qx, y: qy - 6, rotation: 0, duration: tStop2 - at("stop") + 0.1, ease: "power2.inOut" }, at("stop") - 0.1);
+        tl.to(clampTint, { opacity: 0.6, duration: 0.25 }, tStop2);
+        tl.to(clamp, { scale: 0.9, svgOrigin: "0 0", duration: 0.06, yoyo: true, repeat: 1 }, tStop2);
+
+        const tagF = K.tag(ui, { text: "Protein factory", x: 560, y: 250, color: "violet", size: 48 });
+        K.show(tl, tagF, tFact - 0.1);
+        const tagD = K.tag(ui, { text: "DNA copying", x: 1360, y: 250, color: "teal", size: 48 });
+        K.show(tl, tagD, at("copying") - 0.1);
+
+        // ------------------------------------------------ "Either way, it can't multiply."
+        const cam = K.camera($(".cam"), 960, 560, 1.12);
+        K.camTo(tl, cam, 0, { s: 1.0, px: 960 }, at("either") - 0.2, "sine.inOut");
+        const tE = at("either");
+        K.hide(tl, tagF, tE - 0.25);
+        K.hide(tl, tagD, tE - 0.25);
+        K.camTo(tl, cam, tE - 0.2, { s: 0.62, py: 560 }, 0.7, "power2.inOut");
+        const tM = at("multiply");
+        // tries to pinch in two... and can't
+        tl.to(shape, { waist: 0.42, duration: 0.55, ease: "power2.inOut", onUpdate: drawCell }, tM - 0.55);
+        tl.to(shape, { waist: 0.0, duration: 0.45, ease: "back.out(2.5)", onUpdate: drawCell }, tM + 0.05);
+        const ban = K.callout(ui, { text: "Can't multiply", x: 960, y: 140, color: "crimson", size: 64 });
+        K.show(tl, ban, tM - 0.15);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["machines"] = tl;
+      })();
+    </script>
+  </div>
+</template>

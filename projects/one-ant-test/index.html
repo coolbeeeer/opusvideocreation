@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=block" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #1b1f4a;
+        --ink: #ffffff;
+        --font-display: "Nunito", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0; width: 1920px; height: 1080px; overflow: hidden;
+        background: var(--ground);
+      }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: var(--font-display); }
+      #scene { position: absolute; inset: 0; }
+      #camera { position: absolute; inset: 0; transform-origin: 960px 620px; }
+      svg { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      #title {
+        position: absolute; left: 0; right: 0; top: 150px;
+        display: flex; justify-content: center; gap: 34px;
+        color: var(--ink); font-size: 132px; font-weight: 900; letter-spacing: -0.01em;
+        text-shadow: 0 6px 0 rgba(10, 12, 40, 0.35);
+      }
+      #title .w { display: inline-block; opacity: 0; transform-origin: 50% 80%; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="scene" class="clip" data-start="0" data-duration="10" data-track-index="0">
+        <div id="camera">
+          <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#141a46" />
+                <stop offset="0.6" stop-color="#2d2f6e" />
+                <stop offset="1" stop-color="#4a3f86" />
+              </linearGradient>
+              <radialGradient id="moonGlow">
+                <stop offset="0" stop-color="#fff4c8" stop-opacity="0.55" />
+                <stop offset="0.35" stop-color="#ffe9a8" stop-opacity="0.18" />
+                <stop offset="1" stop-color="#ffe9a8" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="mound" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8a6a58" />
+                <stop offset="1" stop-color="#5a4458" />
+              </linearGradient>
+              <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#4b3a5c" />
+                <stop offset="1" stop-color="#2a2348" />
+              </linearGradient>
+            </defs>
+
+            <!-- sky -->
+            <rect width="1920" height="1080" fill="url(#sky)" />
+            <g id="stars" fill="#dfe3ff"></g>
+
+            <!-- moon: the only light source, so the only glow -->
+            <circle id="moonHalo" cx="1520" cy="230" r="260" fill="url(#moonGlow)" />
+            <circle cx="1520" cy="230" r="78" fill="#fff1c4" />
+            <circle cx="1496" cy="214" r="14" fill="#f1dfa8" />
+            <circle cx="1546" cy="252" r="9" fill="#f1dfa8" />
+
+            <!-- far hills (desaturated, low contrast = far away) -->
+            <path d="M0 760 C 260 640, 470 700, 700 690 C 960 680, 1120 600, 1380 640 C 1620 676, 1780 640, 1920 660 L1920 1080 L0 1080 Z" fill="#3a3a7a" />
+            <path d="M0 830 C 300 760, 520 800, 820 790 C 1100 780, 1300 740, 1560 770 C 1740 790, 1840 770, 1920 780 L1920 1080 L0 1080 Z" fill="#42407f" />
+
+            <!-- mid grass silhouettes -->
+            <g fill="#3b3a73" id="midGrass"></g>
+
+            <!-- ground -->
+            <path d="M0 880 C 400 868, 1500 868, 1920 884 L1920 1080 L0 1080 Z" fill="url(#soil)" />
+
+            <!-- mound with banding for form -->
+            <path id="moundShape" d="M300 900 C 620 900, 720 610, 960 610 C 1200 610, 1300 900, 1620 900 Z" fill="url(#mound)" />
+            <path d="M420 900 C 660 896, 760 680, 960 676 C 1160 680, 1260 896, 1500 900 Z" fill="#6f5560" opacity="0.55" />
+            <path d="M560 900 C 740 896, 820 760, 960 756 C 1100 760, 1180 896, 1360 900 Z" fill="#5e4a5e" opacity="0.6" />
+            <!-- rim light from moon on right shoulder -->
+            <path d="M960 610 C 1200 610, 1300 900, 1620 900 L1600 900 C 1290 896, 1190 624, 960 620 Z" fill="#c9a07a" opacity="0.55" />
+            <!-- entrance -->
+            <ellipse cx="960" cy="618" rx="46" ry="12" fill="#2a1f34" />
+            <!-- pebbles -->
+            <g fill="#a5806a">
+              <ellipse cx="760" cy="780" rx="14" ry="9" />
+              <ellipse cx="1180" cy="760" rx="11" ry="7" />
+              <ellipse cx="1060" cy="846" rx="16" ry="10" />
+              <ellipse cx="640" cy="872" rx="12" ry="7" />
+            </g>
+
+            <!-- walk path (invisible): ground then over the mound surface -->
+            <path id="walk" d="M-170 900 L300 900 C 620 900, 720 610, 960 610" fill="none" stroke="none" />
+
+            <!-- THE ANT: the one saturated warm colour in the frame -->
+            <g id="antMover">
+              <g id="ant" transform="scale(1.15)">
+                <!-- far legs (darker) -->
+                <g fill="none" stroke="#8e1f1c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                  <g transform="translate(-6,-46)"><path class="legB" d="M0 0 L-26 18 L-40 46" /></g>
+                  <g transform="translate(6,-46)"><path class="legA" d="M0 0 L8 22 L2 46" /></g>
+                  <g transform="translate(16,-46)"><path class="legB" d="M0 0 L30 18 L44 46" /></g>
+                </g>
+                <!-- abdomen -->
+                <ellipse cx="-62" cy="-58" rx="44" ry="30" fill="#d63a2f" />
+                <ellipse cx="-70" cy="-68" rx="24" ry="11" fill="#ef6a52" opacity="0.8" />
+                <path d="M-90 -52 Q -62 -40 -32 -52" stroke="#a52a22" stroke-width="4" fill="none" />
+                <!-- petiole -->
+                <ellipse cx="-16" cy="-54" rx="10" ry="8" fill="#c8352b" />
+                <!-- thorax -->
+                <ellipse cx="10" cy="-56" rx="26" ry="15" fill="#e2412f" />
+                <ellipse cx="4" cy="-62" rx="13" ry="5" fill="#f37a5c" opacity="0.8" />
+                <!-- head -->
+                <g id="head">
+                  <circle cx="52" cy="-66" r="22" fill="#e64532" />
+                  <ellipse cx="46" cy="-74" rx="10" ry="5" fill="#f58466" opacity="0.8" />
+                  <circle cx="60" cy="-70" r="6" fill="#1c1430" />
+                  <circle cx="62" cy="-72" r="2" fill="#ffffff" />
+                  <path d="M70 -56 Q 84 -54 82 -44" stroke="#8e1f1c" stroke-width="5" fill="none" stroke-linecap="round" />
+                  <g transform="translate(56,-84)"><path id="antL" d="M0 0 Q 10 -30 34 -40" stroke="#b92c24" stroke-width="5" fill="none" stroke-linecap="round" /></g>
+                  <g transform="translate(48,-86)"><path id="antR" d="M0 0 Q 4 -34 24 -48" stroke="#8e1f1c" stroke-width="5" fill="none" stroke-linecap="round" /></g>
+                </g>
+                <!-- near legs -->
+                <g fill="none" stroke="#b92c24" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+                  <g transform="translate(-2,-48)"><path class="legA" d="M0 0 L-30 16 L-46 46" /></g>
+                  <g transform="translate(10,-48)"><path class="legB" d="M0 0 L4 24 L-4 46" /></g>
+                  <g transform="translate(20,-48)"><path class="legA" d="M0 0 L32 16 L50 46" /></g>
+                </g>
+              </g>
+            </g>
+
+            <!-- foreground blades: darker, larger = closer -->
+            <g fill="#15173a" id="fgGrass"></g>
+          </svg>
+        </div>
+        <div id="title"><span class="w">One</span><span class="w">Ant</span></div>
+      </div>
+    </div>
+    <script>
+      // deterministic PRNG (seeded) for star and grass placement
+      let seed = 7;
+      const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const NS = "http://www.w3.org/2000/svg";
+      const stars = document.getElementById("stars");
+      for (let i = 0; i < 70; i++) {
+        const c = document.createElementNS(NS, "circle");
+        c.setAttribute("cx", (rnd() * 1920).toFixed(1));
+        c.setAttribute("cy", (rnd() * 560).toFixed(1));
+        c.setAttribute("r", (0.8 + rnd() * 2).toFixed(2));
+        c.setAttribute("opacity", (0.25 + rnd() * 0.5).toFixed(2));
+        stars.appendChild(c);
+      }
+      const blade = (g, x, base, h, w, lean) => {
+        const p = document.createElementNS(NS, "path");
+        p.setAttribute("d", `M${x - w} ${base} Q ${x + lean * 0.4} ${base - h * 0.6} ${x + lean} ${base - h} Q ${x + lean * 0.3} ${base - h * 0.5} ${x + w} ${base} Z`);
+        g.appendChild(p);
+      };
+      const mid = document.getElementById("midGrass");
+      for (let i = 0; i < 60; i++) blade(mid, rnd() * 1920, 884, 30 + rnd() * 50, 4 + rnd() * 3, -10 + rnd() * 20);
+      const fg = document.getElementById("fgGrass");
+      for (let i = 0; i < 26; i++) {
+        const x = rnd() < 0.5 ? rnd() * 380 : 1540 + rnd() * 380;
+        blade(fg, x, 1090, 140 + rnd() * 160, 10 + rnd() * 8, -40 + rnd() * 80);
+      }
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+
+      // walk: 0s to 6s along the ground and up the mound.
+      // Position and slope are computed from the path so the feet stay on the surface
+      // and rotation pivots at the feet (the ant's local 0,0).
+      const walk = document.getElementById("walk");
+      const mover = document.getElementById("antMover");
+      const L = walk.getTotalLength();
+      const pose = { p: 0, level: 0 };
+      const place = () => {
+        const s = pose.p * L;
+        const a = walk.getPointAtLength(Math.max(0, s - 6));
+        const b = walk.getPointAtLength(Math.min(L, s + 6));
+        const pt = walk.getPointAtLength(s);
+        const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI * (1 - pose.level);
+        mover.setAttribute("transform", `translate(${pt.x.toFixed(2)},${pt.y.toFixed(2)}) rotate(${ang.toFixed(2)})`);
+      };
+      tl.fromTo(pose, { p: 0 }, { p: 1, duration: 6, ease: "none", onUpdate: place }, 0);
+      // settle level on the summit
+      tl.fromTo(pose, { level: 0 }, { level: 1, duration: 0.4, ease: "power2.inOut", onUpdate: place, immediateRender: false }, 6);
+      place();
+
+      // tripod gait, 0.18 s per half step, deterministic repeats
+      tl.fromTo(".legA", { rotation: -16, svgOrigin: "0 0" }, { rotation: 16, duration: 0.18, ease: "sine.inOut", repeat: 32, yoyo: true }, 0);
+      tl.fromTo(".legB", { rotation: 16, svgOrigin: "0 0" }, { rotation: -16, duration: 0.18, ease: "sine.inOut", repeat: 32, yoyo: true }, 0);
+      tl.to([".legA", ".legB"], { rotation: 0, duration: 0.2 }, 6);
+
+      // antennae: idle sway while walking, quick twitches on top
+      tl.fromTo("#antL", { rotation: -6, svgOrigin: "0 0" }, { rotation: 8, duration: 0.5, ease: "sine.inOut", repeat: 11, yoyo: true }, 0);
+      tl.fromTo("#antR", { rotation: 6, svgOrigin: "0 0" }, { rotation: -8, duration: 0.6, ease: "sine.inOut", repeat: 9, yoyo: true }, 0);
+      tl.to("#antL", { rotation: -22, duration: 0.12, repeat: 3, yoyo: true, ease: "power1.inOut" }, 6.6);
+      tl.to("#antR", { rotation: 20, duration: 0.14, repeat: 3, yoyo: true, ease: "power1.inOut" }, 6.7);
+      tl.to("#head", { rotation: -8, svgOrigin: "34 -60", duration: 0.3, ease: "back.out(2)" }, 7.4);
+
+      // camera: slow push, then a gentle settle on the summit
+      tl.fromTo("#camera", { scale: 1, x: 0, y: 0 }, { scale: 1.12, y: 20, duration: 6, ease: "sine.inOut" }, 0);
+      tl.to("#camera", { scale: 1.32, y: 60, duration: 3.5, ease: "power2.inOut" }, 6);
+
+      // moon glow breathes softly
+      tl.fromTo("#moonHalo", { opacity: 0.85 }, { opacity: 1, duration: 2.5, repeat: 3, yoyo: true, ease: "sine.inOut" }, 0);
+
+      // title pops in word by word
+      tl.fromTo("#title .w", { opacity: 0, scale: 0.4, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "back.out(2.4)", stagger: 0.28 }, 7.0);
+
+      tl.set({}, {}, 10);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
