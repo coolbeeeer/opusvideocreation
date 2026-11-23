@@ -134,3 +134,22 @@ Motion, measured frame by frame at 30 fps:
 - Depth: far chambers dim and close to the soil colour. Foreground roots and pebbles dark and cropped by the frame edge.
   The camera drifts slowly even when nothing else moves.
 - Size check before rendering: ants must read at a glance at 1080p (the tutorial's ants started too faint).
+
+---
+
+## Deep-sea variant (projects/ocean-glow-short)
+
+Used for the vertical bioluminescence film. Same rules, different water.
+
+- **Water:** vertical gradients from navy to near-black, `#0b3263` -> `#061c40` -> `#030c22` in the twilight, down to
+  `#020a1c` in the midnight zone. Sunlit water `#55d8ef` -> `#1585bf`. Day sky `#ffe9b8` -> `#bff1ff`.
+- **The focus colour is the light the animals make:** cyan `#7ff6ff` and blue `#4fb6ff`. Green `#6bffcf` only for the
+  anglerfish lure, red `#ff3b30` only for the dragonfish's searchlight. Saturated pixels stay under 7 % in every dark
+  scene; the sunlit surface (a day scene) runs near 27 %.
+- **Glow rules hold:** only light organs glow (white core, coloured ring, soft halo); the bodies around them get a flat
+  lit rim on the side facing their own light.
+- **Cast palettes** (`lib/kit-ocean.js` `KO.C`): lanternfish `#3c5582`, anglerfish `#3b2a52`, hatchetfish silver
+  `#9fb5d2` with a `#4c6286` back, Atolla jellyfish `#8a2544`, shrimp `#d0493c`, dragonfish `#0c0f1d` with a `#3d4a78` rim.
+- **Depth:** marine snow in two layers moving at different speeds, out-of-focus dots in front, distant silhouettes behind.
+- **Text:** captions in Nunito 900 at 58 px, white with a dark outline, the spoken word in cyan. The end title uses the
+  repo's title face in cream `#fff1d6` with a cyan glow instead of orange.

@@ -1,0 +1,163 @@
+<template id="colours-template">
+  <!-- "Most of this light is blue, because blue travels farthest in water. But one dragonfish cheats, with red light its prey can't see."
+       Blue lights everywhere; five beams race down and the water swallows them one colour at a time, blue last. Then a
+       stoplight loosejaw (a dragonfish) switches on a red searchlight. The red shrimp is invisible in blue light (it looks
+       black) and shows up in red light, which it cannot see. -->
+  <div data-composition-id="colours" data-width="1080" data-height="1920" data-duration="8.69">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN;
+        const ID = "colours", R = document.querySelector('[data-composition-id="colours"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, rnd = K.rng(71);
+        const S = KO.scene(R, ID, { bg: ["#061a3e", "#040f28", "#020814"], pool: { x: 540, y: 820, rx: 760, ry: 900, color: "#1b4f9a", a: 0.4 } });
+
+        // ---------------------------------------------------------------- "Most of this light is blue": blue lights all around
+        const sp = KO.sparks(S.far, { n: 50, p: S.p, seed: 72, colors: ["blue", "cyan"], x0: -200, x1: 1280, y0: -100, y1: 2000, rmin: 10, rmax: 30, k: 0 });
+        KO.snow(S.mid, { n: 120, seed: 73, a: 0.32 });
+        const blues = [];
+        [[150, 560, 0.42], [930, 760, 0.36], [170, 1180, 0.32]].forEach(([x, y, sc], i) => {
+          const w = K.g(S.mid, { transform: `translate(${x},${y}) scale(${sc})` });
+          const j = KO.jelly(w, { r: 150, p: S.p });
+          blues.push({ kind: "j", a: j, i });
+        });
+        [[880, 360], [900, 1210]].forEach(([x, y], i) => {
+          const w = K.g(S.mid, { transform: `translate(${x},${y})` });
+          const a = KO.fish(w, { L: 150, pal: KO.C.dim, p: S.p, photo: 6, photoColor: "blue", photoR: 0.13, photoK: 0, seed: 70 + i });
+          blues.push({ kind: "f", a, i });
+        });
+        const schoolG = K.g(S.act), school = [];
+        for (let i = 0; i < 7; i++) {
+          const x = 300 + (i % 4) * 150 + rnd() * 50, y = 560 + Math.floor(i / 4) * 210 + (i % 2) * 70 + rnd() * 40;
+          const g = K.g(schoolG, { transform: `translate(${f(x)},${f(y)})` });
+          const halo = KO.glow(g, { r: 170, color: "blue", p: S.p, core: 0, k: 0 });
+          school.push({ a: KO.fish(g, { L: 170, pal: KO.C.dim, p: S.p, photo: 6, photoColor: "blue", photoR: 0.13, photoK: 0, seed: 90 + i }), halo, ph: rnd() * 6 });
+        }
+        tl.to(schoolG, { x: -260, duration: at("because") + 0.3, ease: "none" }, 0);
+        tl.to(schoolG, { opacity: 0, duration: 0.35, ease: "power1.in" }, at("because") - 0.25);
+        // more far-off blue life for the dark second half
+        [[220, 1420, 0.3], [860, 1500, 0.34]].forEach(([x, y, sc], i) => {
+          const w = K.g(S.mid, { transform: `translate(${x},${y}) scale(${sc})` });
+          blues.push({ kind: "j", a: KO.jelly(w, { r: 150, p: S.p }), i: i + 3 });
+        });
+        const blueOn = { k: 0 };
+        tl.to(blueOn, { k: 1, duration: 0.6, ease: "power2.out" }, 0.1);
+        tl.to(blueOn, { k: 1.35, duration: 0.15, ease: "power2.out" }, at("blue") - 0.05);
+        tl.to(blueOn, { k: 1, duration: 0.4, ease: "power2.inOut" }, at("blue") + 0.15);
+        tl.to(blueOn, { k: 0.55, duration: 0.5, ease: "power2.inOut" }, at("because") - 0.1);
+
+        // ---------------------------------------------------------------- "because blue travels farthest in water": the beams
+        const BEAMS = [["#ff4a3d", "red", 120], ["#ff9b3d", "warm", 195], ["#ffe14d", "warm", 305], ["#5df08a", "green", 470], ["#4fb6ff", "blue", 660]];
+        const TOP = 380, X0 = 300, DX = 120, SPEED = 760, tGo = at("because") + 0.02;
+        const beamG = K.g(S.act), tips = [];
+        const lamp = K.el("rect", { x: X0 - 70, y: TOP - 34, width: DX * 4 + 140, height: 34, rx: 17, fill: "#f4fbff", opacity: 0 }, beamG);
+        const lampGlow = KO.glow(beamG, { x: 540, y: TOP - 17, r: 420, color: "white", p: S.p, core: 0, k: 0 });
+        BEAMS.forEach(([col, glowName, len], i) => {
+          const lg = K.el("linearGradient", { id: `${S.p}-bm${i}`, x1: 0, y1: 0, x2: 0, y2: 1 }, S.defs);
+          K.el("stop", { offset: 0, "stop-color": col, "stop-opacity": 0.95 }, lg);
+          K.el("stop", { offset: 0.75, "stop-color": col, "stop-opacity": 0.6 }, lg);
+          K.el("stop", { offset: 1, "stop-color": col, "stop-opacity": 0 }, lg);
+          const x = X0 + i * DX, r = K.el("rect", { x: x - 40, y: TOP, width: 80, height: 0, rx: 40, fill: `url(#${S.p}-bm${i})` }, beamG);
+          const tip = KO.glow(beamG, { x, y: TOP, r: 90, color: glowName, p: S.p, core: 7, k: 0 });
+          const dur = len / SPEED;
+          tl.to(r, { attr: { height: len }, duration: dur, ease: "none" }, tGo);
+          tl.fromTo(tip, { k: 0 }, { k: 1, duration: 0.05, onUpdate: tip.update, immediateRender: false }, tGo);
+          const pos = { y: TOP };
+          tl.to(pos, { y: TOP + len, duration: dur, ease: "none", onUpdate: () => tip.g.setAttribute("transform", `translate(${x},${f(pos.y)})`) }, tGo);
+          tl.to(tip, { k: i === 4 ? 1.2 : 0, duration: i === 4 ? 0.2 : 0.25, ease: "power2.out", onUpdate: tip.update }, tGo + dur);
+          tips.push({ tip, x, len });
+        });
+        tl.fromTo([lamp], { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: false }, tGo - 0.15);
+        tl.to(lampGlow, { k: 0.8, duration: 0.25, onUpdate: lampGlow.update }, tGo - 0.15);
+        const tagF = S.cam.pin(K.tag(S.ui, { text: "Farthest", x: 0, y: 0, color: "ocean", size: 54, pointer: false }), X0 + 4 * DX - 200, TOP + 660 + 10);
+        K.show(tl, tagF, at("farthest") - 0.02);
+        // everything from part 1 clears for the dragonfish
+        const tBut = at("but") - 0.05;
+        tl.to(beamG, { opacity: 0, duration: 0.35, ease: "power2.in" }, tBut);
+        K.hide(tl, tagF, tBut);
+        tl.to(blueOn, { k: 0.4, duration: 0.4 }, tBut);
+
+        // ---------------------------------------------------------------- the dragonfish and its red searchlight
+        const SX = 660, SY = 950;
+        const shrimpFilt = K.el("filter", { id: `${S.p}-shr`, "color-interpolation-filters": "sRGB" }, S.defs);
+        const ct = K.el("feComponentTransfer", {}, shrimpFilt);
+        const fR = K.el("feFuncR", { type: "linear", slope: 0.13 }, ct), fG = K.el("feFuncG", { type: "linear", slope: 0.13 }, ct), fB = K.el("feFuncB", { type: "linear", slope: 0.2 }, ct);
+        const redPool = KO.glow(S.act, { x: SX, y: SY, r: 330, color: "red", p: S.p, core: 0, k: 0 });
+        const dw = K.g(S.act), dbob = K.g(dw);
+        const drag = KO.dragon(dbob, { s: 0.95, p: S.p, defs: S.defs });
+        gsap.set(dw, { x: -700, y: 920, svgOrigin: "0 0" });
+        const sw = K.g(S.act, { transform: `translate(${SX},${SY})`, filter: `url(#${S.p}-shr)` }), sbob = K.g(sw);
+        const shrimp = KO.shrimp(sbob, { s: 1.15, p: S.p });
+        shrimp.eye.lid = 0.35; shrimp.eye.lx = 0.6; shrimp.eye.update();
+        gsap.set(sw, { opacity: 0 });                    // keep the beam diagram clean; the shrimp arrives with the dragonfish
+        tl.to(sw, { opacity: 1, duration: 0.4, ease: "power1.out" }, tBut + 0.1);
+        const tIn = tBut + 0.05;
+        tl.to(dw, { x: 230, duration: 0.85, ease: "power2.out" }, tIn);
+        const tagD = S.cam.pin(K.tag(S.ui, { text: "Dragonfish", x: 0, y: 0, color: "violet", size: 54 }), 345, 830);
+        K.show(tl, tagD, at("dragonfish") + 0.05);
+        K.hide(tl, tagD, at("with") - 0.15);
+        KP.eyeTo(tl, drag.eye, at("cheats") - 0.1, { lid: 0.5, lx: 1, ly: 0.2 }, 0.2);
+        KP.blink(tl, drag.eye, at("cheats") + 0.35);
+        // red light on: the shrimp appears, lit red
+        const tRed = at("red") - 0.05, beam = { v: 0 };
+        tl.to(beam, { v: 0.85, duration: 0.3, ease: "power2.out", onUpdate: () => { drag.beam = beam.v; drag.update(); redPool.k = beam.v * 0.55; redPool.update(); } }, tRed);
+        tl.to(fR, { attr: { slope: 1.25 }, duration: 0.3, ease: "power2.out" }, tRed + 0.05);
+        tl.to(fG, { attr: { slope: 0.62 }, duration: 0.3, ease: "power2.out" }, tRed + 0.05);
+        tl.to(fB, { attr: { slope: 0.62 }, duration: 0.3, ease: "power2.out" }, tRed + 0.05);
+        // its prey can't see: the shrimp carries on, humming
+        const notes = ["\u266A", "\u266B"].map((n, i) => {
+          const el = document.createElement("div");
+          el.textContent = n;
+          el.style.cssText = "position:absolute;font:900 64px Nunito,sans-serif;color:#ffd0c8;text-shadow:0 5px 0 #4a0d10;opacity:0;";
+          S.ui.appendChild(el);
+          gsap.set(el, { xPercent: -50, yPercent: -50 });
+          S.cam.pin(el, SX + 100 + i * 55, SY - 195 - i * 40);
+          tl.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: -10, duration: 0.3, ease: "power2.out", immediateRender: false }, at("prey") - 0.1 + i * 0.25);
+          tl.to(el, { y: -50, opacity: 0, duration: 0.5, ease: "power1.in" }, at("see") + 0.05 + i * 0.1);
+          return el;
+        });
+        const tagC = S.cam.pin(K.tag(S.ui, { text: "Can't see red", x: 0, y: 0, color: "red", size: 50 }), SX - 120, SY - 100);
+        K.show(tl, tagC, at("can't") - 0.05);
+        K.hide(tl, tagC, at("see") + 0.45);
+        // the loosejaw lives up to its name
+        const jaw = { v: 0.35 }, tSnap = DUR - 0.4;
+        tl.to(jaw, { v: 1.6, duration: 0.25, ease: "power2.out", onUpdate: () => { drag.jaw = jaw.v; drag.update(); } }, tSnap - 0.3);
+        tl.to(dw, { x: 520, duration: 0.14, ease: "power3.in" }, tSnap - 0.05);
+        tl.to(jaw, { v: 0.2, duration: 0.07, ease: "power3.in", onUpdate: () => { drag.jaw = jaw.v; drag.update(); } }, tSnap + 0.05);
+        tl.set(sw, { opacity: 0 }, tSnap + 0.1);
+        tl.to(redPool, { k: 0, duration: 0.2, onUpdate: redPool.update }, tSnap + 0.1);
+        K.shake(tl, S.cam, tSnap + 0.1, 20, 6, 0.04);
+
+        // ---------------------------------------------------------------- clock
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          blues.forEach((b) => {
+            if (b.kind === "j") { const j = b.a; j.phase = t * 2 + b.i; j.pulse = 0.4 + 0.4 * Math.sin(t * 2.8 + b.i); j.spin = t * (1.4 + b.i * 0.3); j.flash = blueOn.k; j.update(); }
+            else { b.a.phase = t * 5 + b.i; b.a.update(); b.a.light(blueOn.k); }
+          });
+          school.forEach((F, i) => { F.a.phase = t * 6 + F.ph; F.a.update(); F.a.light(blueOn.k * 1.1); F.halo.k = blueOn.k * 0.45; F.halo.update(); });
+          sp.list.forEach((s, i) => { const on = Math.min(1, Math.max(0, (t - (i % 10) * 0.05) / 0.4)); s.glow.k = on * blueOn.k * (0.5 + 0.35 * Math.sin(t * s.sp * 2 + s.ph)); s.glow.update(); });
+          drag.phase = t * 3.5; drag.update();
+          dbob.setAttribute("transform", `translate(0,${f(Math.sin(t * 1.3) * 8)})`);
+          shrimp.phase = t * 3; shrimp.update();
+          sbob.setAttribute("transform", `translate(0,${f(Math.sin(t * 2.1) * 6)})`);
+        };
+        // redraw after every tween has rendered: a clock tween would run first on a forward seek and read stale values
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, tBut, "sine.inOut");
+        K.camTo(tl, S.cam, tBut + 0.2, { s: 1.3, px: 580, py: 930 }, at("red") - tBut - 0.2, "power2.inOut");
+        K.camTo(tl, S.cam, at("red"), { s: 1.36, px: 590 }, DUR - at("red"), "sine.inOut");
+        S.stage.insertBefore(KP.vignette(S.stage, 0.6, "2,6,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

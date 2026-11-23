@@ -1,0 +1,273 @@
+<template id="resistance-template">
+  <!-- Style v2 of the antibiotics "resistance" scene. Same beats and word cues as v1; new: parallax depth layers,
+       out-of-focus foreground and background, light pool + vignette + grain, rim-lit bacteria with eyes,
+       debris that stays after the wave, a camera push onto the survivors, labels pinned to world points. -->
+  <div data-composition-id="resistance" data-width="1920" data-height="1080" data-duration="8.24">
+    <style>
+      [data-composition-id="resistance"] .stage { position: absolute; inset: 0; overflow: hidden; background: #120c26; }
+      [data-composition-id="resistance"] svg { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+      [data-composition-id="resistance"] .ui { position: absolute; inset: 0; }
+    </style>
+    <div class="stage">
+      <svg viewBox="0 0 1920 1080">
+        <defs>
+          <linearGradient id="rv2-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d1b4f" /><stop offset="1" stop-color="#110a24" /></linearGradient>
+          <radialGradient id="rv2-pool" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#5e3d92" stop-opacity="0.7" /><stop offset="1" stop-color="#5e3d92" stop-opacity="0" /></radialGradient>
+          <radialGradient id="rv2-soft" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#d9ccff" stop-opacity="1" /><stop offset="0.5" stop-color="#d9ccff" stop-opacity="0.45" /><stop offset="1" stop-color="#d9ccff" stop-opacity="0" /></radialGradient>
+          <radialGradient id="rv2-flash" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff6d0" stop-opacity="1" /><stop offset="0.35" stop-color="#ffd27a" stop-opacity="0.6" /><stop offset="1" stop-color="#ff9a3c" stop-opacity="0" /></radialGradient>
+          <filter id="rv2-blur-far" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="8" /></filter>
+          <filter id="rv2-blur-mid" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2" /></filter>
+          <filter id="rv2-blur-near" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14" /></filter>
+        </defs>
+        <rect x="0" y="0" width="1920" height="1080" fill="url(#rv2-bg)" />
+        <g filter="url(#rv2-blur-far)"><g class="L-far"><g class="drift-far"></g></g></g>
+        <g filter="url(#rv2-blur-mid)"><g class="L-mid"><g class="drift-mid"></g></g></g>
+        <g class="L-act">
+          <g class="husks"></g>
+          <path class="pilus" fill="none" stroke="#cdb8ff" stroke-width="8" stroke-linecap="round" opacity="0" />
+          <g class="norm"></g>
+          <g class="resi"></g>
+          <circle class="plasmid" r="14" fill="none" stroke="#e2d6ff" stroke-width="7" opacity="0" />
+          <g class="pops"></g>
+          <g class="drugs"></g>
+        </g>
+        <g class="L-dust"><g class="drift-dust"></g></g>
+        <g filter="url(#rv2-blur-near)"><g class="L-near"></g></g>
+      </svg>
+      <div class="ui"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS;
+        const R = document.querySelector('[data-composition-id="resistance"]');
+        const $ = (s) => R.querySelector(s);
+        const stage = $(".stage"), ui = $(".ui");
+        const T0 = K.scene("resistance").start, DUR = K.scene("resistance").dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const rnd = K.rng(707);
+        const tl = gsap.timeline({ paused: true });
+        const PFX = "rv2";
+
+        // ================================================================ environment (depth layers)
+        // far: soft light pool and out-of-focus tissue cells, kept away from the middle so the subject reads
+        const far = $(".drift-far");
+        K.el("ellipse", { cx: 1000, cy: 560, rx: 1050, ry: 640, fill: "url(#rv2-pool)" }, far);
+        const rf = K.rng(911);
+        [[-120, 120, 230], [330, -40, 170], [1650, 40, 250], [2060, 520, 210], [1500, 1130, 260], [420, 1140, 220], [-260, 700, 200], [960, -190, 180]].forEach(([x, y, r], i) => {
+          K.el("path", { d: K.blob(r, 0.07, i * 1.7, 11, 40 + i), fill: "#38255d", transform: `translate(${x},${y})` }, far);
+          K.el("path", { d: K.blob(r * 0.38, 0.1, i, 9, 60 + i), fill: "#432d6e", transform: `translate(${x + r * 0.18 * (rf() - 0.5) * 2},${y + r * 0.15})` }, far);
+        });
+        // mid: tissue fibres with a lit upper edge, plus small specks
+        const mid = $(".drift-mid");
+        [[[-200, 260], [400, 170], [900, 240], [1300, 120], [2100, 210]], [[-200, 980], [500, 900], [1100, 1010], [1700, 930], [2150, 990]],
+         [[1750, -120], [1650, 300], [1880, 640], [2150, 820]], [[-150, 470], [120, 600], [60, 900], [250, 1250]]].forEach((pts, i) => {
+          const d = K.smooth(pts, false), wdt = 26 - i * 3;
+          K.el("path", { d, fill: "none", stroke: "#3a285f", "stroke-width": wdt, "stroke-linecap": "round" }, mid);
+          K.el("path", { d, fill: "none", stroke: "#4d387c", "stroke-width": 4, "stroke-linecap": "round", transform: `translate(0,${-wdt * 0.3})`, opacity: 0.9 }, mid);
+        });
+        for (let i = 0; i < 46; i++) K.el("circle", { cx: K.f(-300 + rnd() * 2500), cy: K.f(-200 + rnd() * 1500), r: K.f(1.5 + rnd() * 3.5), fill: "#b8a8e8", opacity: K.f(0.1 + rnd() * 0.25) }, mid);
+        // near dust: soft out-of-focus dots without filter cost
+        const dust = $(".drift-dust"), rd = K.rng(515);
+        for (let i = 0; i < 16; i++) KP.softDot(dust, -200 + rd() * 2300, -100 + rd() * 1300, 8 + rd() * 16, "rv2-soft", 0.06 + rd() * 0.12);
+        // foreground: big dark blurred shapes cropped by the frame edge
+        const near = $(".L-near");
+        K.el("path", { d: K.blob(330, 0.05, 1, 12, 77), fill: "#0b061a", transform: "translate(-60,1110)" }, near);
+        K.el("path", { d: "M 1380 -180 Q 1720 120 2240 160", fill: "none", stroke: "#0b061a", "stroke-width": 120, "stroke-linecap": "round" }, near);
+        K.el("path", { d: K.blob(120, 0.08, 2, 10, 78), fill: "#0d0820", transform: "translate(2010,1000)" }, near);
+
+        const cam = KP.rig([
+          { g: $(".L-far"), d: 0.35 }, { g: $(".L-mid"), d: 0.65 }, { g: $(".L-act"), d: 1 },
+          { g: $(".L-dust"), d: 1.3 }, { g: $(".L-near"), d: 1.75 },
+        ]);
+        tl.to(far, { x: 40, duration: DUR, ease: "none" }, 0);
+        tl.to(mid, { x: -50, duration: DUR, ease: "none" }, 0);
+        tl.to(dust, { x: 90, y: -30, duration: DUR, ease: "none" }, 0);
+
+        // ================================================================ cast
+        const ALL = [], EYES = [];
+        const RES = [[520, 430, -15], [1180, 330, 20], [880, 700, 10], [1480, 700, -25]].map(([x, y, rot], i) => {
+          const g = K.g($(".resi")), a = K.g(g), b = K.g(g);
+          const ba = KP.bact(a, { L: 150, r: 34, seed: 80 + i, shield: true, flagSide: -1, rot, prefix: PFX });
+          const bb = KP.bact(b, { L: 150, r: 34, seed: 90 + i, shield: true, flagSide: 1, rot, prefix: PFX });
+          gsap.set(g, { svgOrigin: "0 0", x, y, rotation: rot });
+          gsap.set([a, b], { svgOrigin: "0 0" });
+          ALL.push(ba, bb);
+          return { g, a, b, ba, bb, x, y, rot };
+        });
+        // placement has its own PRNG, so audio/js_events.cjs can replay it without mirroring the rest of the scene
+        const rpos = K.rng(708), NORM = [];
+        for (let i = 0; i < 30; i++) {
+          let x, y, ok = false, tries = 0;
+          while (!ok && tries++ < 80) {
+            x = 160 + rpos() * 1600; y = 150 + rpos() * 780;
+            ok = RES.every((r) => Math.hypot(r.x - x, r.y - y) > 230) && NORM.every((n) => Math.hypot(n.x - x, n.y - y) > 195);
+          }
+          if (!ok) continue;                       // v1 kept the last failed try, which stacked cells on top of each other
+          const rot = rpos() * 360;
+          const b = KP.bact($(".norm"), { L: 136, r: 31, seed: 120 + i, flagSide: i % 2 ? 1 : -1, rot, prefix: PFX });
+          gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rot });
+          NORM.push({ b, x, y });
+          ALL.push(b);
+        }
+        const ph = { p: 0 };
+        tl.fromTo(ph, { p: 0 }, { p: 40, duration: DUR, ease: "none", immediateRender: false, onUpdate: () => ALL.forEach((b, i) => { b.phase = ph.p + i * 0.7; b.update(); }) }, 0);
+        tl.fromTo([$(".norm"), $(".resi")], { scale: 0.94, svgOrigin: "960 540" }, { scale: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, 0);
+
+        // everyone glances toward the incoming wave
+        const tU = at("used") - 0.45, SWEEP = 1.5;
+        ALL.forEach((b, i) => KP.eyeTo(tl, b.eyes, Math.max(0.05, tU - 0.35 + (i % 5) * 0.04), { lx: -0.9, ly: 0.1 }, 0.22));
+
+        // ================================================================ the wave of antibiotic
+        const drugs = $(".drugs");
+        for (let i = 0; i < 42; i++) {
+          const m = K.mol(drugs, "pen", 0.45 + rnd() * 0.3), y = 120 + rnd() * 840, x0 = -250 - rnd() * 300;
+          gsap.set(m, { svgOrigin: "0 0", x: x0, y, rotation: rnd() * 360 });
+          tl.to(m, { x: x0 + 2600, y: y + (rnd() - 0.5) * 160, rotation: "+=" + (rnd() * 300 - 150), duration: SWEEP + 0.5, ease: "none" }, tU);
+        }
+        const rh = K.rng(4242);
+        NORM.forEach((n) => {
+          const tp = tU + ((n.x + 250) / 2600) * (SWEEP + 0.5) + 0.05;
+          const e = n.b.eyes;
+          KP.eyeTo(tl, e, Math.max(tU, tp - 0.5), { fear: 1 }, 0.3);
+          if (tp > 1.2) KP.blink(tl, e, 0.25 + rh() * (tp - 1.0));
+          tl.to(n.b.g, { scale: 1.25, duration: 0.07, ease: "power2.out" }, tp);
+          tl.set(n.b.g, { opacity: 0 }, tp + 0.08);
+          const glow = K.el("circle", { cx: n.x, cy: n.y, r: 120, fill: "url(#rv2-flash)", opacity: 0 }, $(".pops"));
+          tl.fromTo(glow, { opacity: 0.85 }, { opacity: 0, duration: 0.32, ease: "power2.out", immediateRender: false }, tp + 0.07);
+          const star = K.el("polygon", { points: K.star(n.x, n.y, 9, 70, 30, rnd()), fill: "#fff3c0", opacity: 0 }, $(".pops"));
+          tl.fromTo(star, { opacity: 0.95, scale: 0.3, svgOrigin: `${n.x} ${n.y}` }, { scale: 1, duration: 0.1, ease: "power3.out", immediateRender: false }, tp + 0.07);
+          tl.to(star, { opacity: 0, duration: 0.15 }, tp + 0.17);
+          for (let k = 0; k < 4; k++) {
+            const a = rnd() * Math.PI * 2, f = K.el("circle", { cx: n.x, cy: n.y, r: K.f(6 + rnd() * 6), fill: k % 2 ? "#8aa446" : "#56702c", opacity: 0 }, $(".pops"));
+            tl.set(f, { opacity: 1 }, tp + 0.07);
+            tl.to(f, { attr: { cx: n.x + Math.cos(a) * 110, cy: n.y + Math.sin(a) * 90 }, duration: 0.45, ease: "power2.out" }, tp + 0.07);
+            tl.to(f, { opacity: 0, duration: 0.2 }, tp + 0.35);
+          }
+          // husks: what is left of the cell drifts on, so the field never goes empty
+          {
+            // one deflated husk per cell: a squashed, wrinkled capsule in a muted olive close to the background
+            const a = rh() * Math.PI * 2, hs = K.g($(".husks"));
+            K.el("path", { d: K.blob(14, 0.24, rh() * 6, 9, 500 + Math.floor(rh() * 50), 2.5, 0.8), fill: "#4a4f3a" }, hs);
+            K.el("path", { d: `M -20 -1 l 8 -4 l 7 5 l 8 -5 l 8 4`, fill: "none", stroke: "#3b3f2f", "stroke-width": 3.5, "stroke-linecap": "round", "stroke-linejoin": "round" }, hs);
+            gsap.set(hs, { svgOrigin: "0 0", x: n.x, y: n.y, opacity: 0, rotation: rh() * 360 });
+            tl.set(hs, { opacity: 0.7 }, tp + 0.08);
+            tl.to(hs, { x: n.x + Math.cos(a) * (40 + rh() * 40), y: n.y + Math.sin(a) * (30 + rh() * 30), rotation: "+=" + (rh() * 70 - 35), duration: DUR - tp, ease: "power2.out" }, tp + 0.08);
+            tl.to(hs, { opacity: 0.3, duration: 1.6, ease: "power1.in" }, tp + 0.6);
+          }
+        });
+        // a few molecules linger after the wave: the drug is still there, it just cannot touch the survivors
+        // lanes run above and below the survivors' bands (their daughters span y 286-474 and 656-744)
+        [120, 170, 850, 875, 900].forEach((y, i) => {
+          const m = K.mol($(".drugs"), "pen", 0.38 + rnd() * 0.12), x0 = -200 - i * 170;
+          gsap.set(m, { svgOrigin: "0 0", x: x0, y, rotation: rnd() * 360, opacity: 0.9 });
+          tl.to(m, { x: x0 + 1700 + rnd() * 400, y: y + (rnd() - 0.5) * 50, rotation: "+=" + (rnd() * 200 - 100), duration: DUR - tU - 0.6, ease: "none" }, tU + 0.6);
+        });
+
+        // ================================================================ survivors
+        const tR = at("resist");
+        RES.forEach((r, i) => {
+          [r.ba, r.bb].forEach((b) => {
+            tl.fromTo(b.ring, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, tR - 0.35 + i * 0.08);
+            tl.fromTo(b.aura, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power2.out", immediateRender: false }, tR - 0.35 + i * 0.08);
+            tl.to(b.aura, { opacity: 0.45, duration: 0.6, ease: "power2.inOut" }, tR - 0.1 + i * 0.08);
+            KP.eyeTo(tl, b.eyes, tR - 0.35 + i * 0.08, { fear: 0.45, lx: -0.2, ly: -0.2 }, 0.18);
+            KP.eyeTo(tl, b.eyes, at("survive") + i * 0.06, { fear: 0, lid: 0.42, lx: 0.55, ly: -0.25 }, 0.3);
+            KP.blink(tl, b.eyes, at("share") + 0.25 + i * 0.13);
+          });
+          // the passing drugs glance off; each bounces away from the other survivors
+          // (v1 sent all four up-left, so the fourth faded out right on top of the second survivor)
+          const bv = [[-215, -290], [-215, -290], [-215, 260], [-215, 260]][i];
+          const m = K.mol(drugs, "pen", 0.5), tb = at("survive") - 0.4 + i * 0.1;
+          gsap.set(m, { svgOrigin: "0 0", x: r.x - 330, y: r.y - 90, rotation: rnd() * 360, opacity: 0 });
+          tl.set(m, { opacity: 1 }, tb);
+          tl.to(m, { x: r.x - 105, y: r.y - 20, rotation: "+=120", duration: 0.32, ease: "power2.in" }, tb);
+          tl.to(m, { x: r.x - 105 + bv[0], y: r.y - 20 + bv[1], rotation: "+=-220", duration: 0.6, ease: "power2.out" }, tb + 0.32);
+          tl.to(m, { opacity: 0, duration: 0.2 }, tb + 0.75);
+          tl.to(r.g, { scale: 0.93, duration: 0.07, yoyo: true, repeat: 1 }, tb + 0.32);
+        });
+        const tagR = cam.pin(K.tag(ui, { text: "Resistant", x: 0, y: 0, color: "violet", size: 50 }), 520, 372);
+        K.show(tl, tagR, tR);
+        K.hide(tl, tagR, at("multiply") - 0.3);
+
+        // ================================================================ "multiply"
+        const tM = at("multiply") - 0.2;
+        RES.forEach((r, i) => {
+          tl.to(r.a, { x: -80, duration: 0.45, ease: "power2.inOut" }, tM + i * 0.05);
+          tl.to(r.b, { x: 80, duration: 0.45, ease: "power2.inOut" }, tM + i * 0.05);
+          tl.to(r.a, { x: -98, y: -44, rotation: -22, duration: 0.6, ease: "sine.inOut" }, tM + 0.5 + i * 0.05);
+          tl.to(r.b, { x: 98, y: 44, rotation: 18, duration: 0.6, ease: "sine.inOut" }, tM + 0.5 + i * 0.05);
+        });
+
+        // ================================================================ "and share their defences."
+        const giver = RES[0];
+        const nc = KP.bact($(".norm"), { L: 136, r: 31, seed: 199, shield: true, flagSide: 1, rot: 15, prefix: PFX });
+        ALL.push(nc);
+        gsap.set(nc.g, { svgOrigin: "0 0", x: 250, y: 170, rotation: 30, opacity: 0 });
+        tl.to(nc.g, { opacity: 1, duration: 0.2 }, tM + 0.3);
+        tl.to(nc.g, { x: 320, y: 228, rotation: 15, duration: 0.9, ease: "power2.out" }, tM + 0.3);
+        KP.eyeTo(tl, nc.eyes, tM + 0.35, { lx: 0.6, ly: 0.5 }, 0.3);
+        const tS = at("share") - 0.15, tD = at("defences");
+        const p0 = [giver.x - 118, giver.y - 66], p1 = [366, 262];
+        const pil = $(".pilus");
+        pil.setAttribute("d", `M ${p0[0]} ${p0[1]} Q ${(p0[0] + p1[0]) / 2 - 30} ${(p0[1] + p1[1]) / 2 - 40} ${p1[0]} ${p1[1]}`);
+        const plen = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) * 1.15;
+        tl.set(pil, { opacity: 1, strokeDasharray: plen, strokeDashoffset: plen }, tS);
+        tl.to(pil, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, tS);
+        const pl = $(".plasmid"), pp = { u: 0 };
+        const placePl = () => {
+          const u = pp.u, mx = (p0[0] + p1[0]) / 2 - 30, my = (p0[1] + p1[1]) / 2 - 40;
+          pl.setAttribute("cx", K.f((1 - u) * (1 - u) * p0[0] + 2 * (1 - u) * u * mx + u * u * p1[0]));
+          pl.setAttribute("cy", K.f((1 - u) * (1 - u) * p0[1] + 2 * (1 - u) * u * my + u * u * p1[1]));
+        };
+        placePl();
+        tl.set(pl, { opacity: 1 }, tS + 0.25);
+        tl.fromTo(pp, { u: 0 }, { u: 1, duration: tD - tS - 0.2, ease: "power1.inOut", onUpdate: placePl, immediateRender: false }, tS + 0.25);
+        tl.set(pl, { opacity: 0 }, tD + 0.05);
+        tl.fromTo(nc.ring, { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, tD + 0.05);
+        tl.fromTo(nc.aura, { opacity: 0 }, { opacity: 0.5, duration: 0.3, immediateRender: false }, tD + 0.05);
+        KP.eyeTo(tl, nc.eyes, tD + 0.1, { lid: 0.42, lx: 0.5, ly: -0.3 }, 0.3);
+        tl.to(pil, { opacity: 0, duration: 0.3 }, tD + 0.4);
+        const tagS = cam.pin(K.tag(ui, { text: "Shared defence", x: 0, y: 0, color: "violet", size: 42 }), 455, 182);
+        K.show(tl, tagS, tD - 0.1);
+        K.hide(tl, tagS, at("that's") - 0.15);
+
+        // ================================================================ "That's antibiotic resistance."
+        const tT = at("that's");
+        const ban = K.callout(ui, { text: "Antibiotic resistance", x: 960, y: 975, color: "crimson", size: 66 });
+        K.show(tl, ban, tT);
+        // keep new colony members out of the banner and off cells that are already there
+        const taken = RES.flatMap((r) => [[r.x - 98, r.y - 44], [r.x + 98, r.y + 44]]).concat([[320, 228]]);
+        RES.forEach((r, i) => {
+          for (let k = 0; k < 3; k++) {
+            const a = (k / 3) * Math.PI * 2 + i, d = 190 + k * 25, rot = rnd() * 360;
+            const x = r.x + Math.cos(a) * d, y = r.y + Math.sin(a) * d * 0.75;
+            if ((y > 760 && Math.abs(x - 962) < 450) || taken.some(([tx, ty]) => Math.hypot(tx - x, ty - y) < 150)) continue;
+            taken.push([x, y]);
+            const b = KP.bact($(".resi"), { L: 136, r: 31, seed: 300 + i * 5 + k, shield: true, flagSide: k % 2 ? 1 : -1, rot, prefix: PFX });
+            b.ring.setAttribute("opacity", 1);
+            b.aura.setAttribute("opacity", 0.45);
+            b.eyes.lid = 0.42; b.eyes.lx = rnd() - 0.5; b.eyes.update();
+            gsap.set(b.g, { svgOrigin: "0 0", x, y, rotation: rot, scale: 0 });
+            tl.to(b.g, { scale: 1, duration: 0.3, ease: "back.out(2)" }, tT + 0.2 + rnd() * 1.0);
+            ALL.push(b);
+          }
+        });
+
+        // ================================================================ camera: drift, push onto the survivors, ease back out
+        K.camTo(tl, cam, 0, { px: 985, s: 1.03 }, tR - 0.2, "sine.inOut");
+        K.camTo(tl, cam, tR - 0.2, { px: 975, py: 505, s: 1.22 }, 1.5, "power2.inOut");
+        K.camTo(tl, cam, tR + 1.3, { px: 962, s: 1.25 }, tT - tR - 1.3, "sine.inOut");
+        K.camTo(tl, cam, tT, { px: 960, py: 520, s: 1.1 }, DUR - tT, "power1.inOut");
+
+        // ================================================================ finish: vignette above the art, grain above everything
+        stage.insertBefore(KP.vignette(stage, 0.62), ui);
+        KP.grain(stage, tl, DUR, { opacity: 0.35, seed: 31 });
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["resistance"] = tl;
+      })();
+    </script>
+  </div>
+</template>

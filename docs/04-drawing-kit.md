@@ -73,3 +73,14 @@ tl.set(bact, { autoAlpha: 0 }, at("bursts"));
 - **Crowds that arrive in a wave:** delay each element by its distance from the source (`t0 + d / maxD * spread`).
 - **Machines stop when jammed:** schedule their work loop only up to the jam time, then a grey tint overlay at
   ~55 % opacity reads as "frozen" without redrawing.
+
+## Add-on kits
+Load them after `kit.js` in the root `<head>`; each file's header lists its API.
+
+| File | Global | What it adds |
+|---|---|---|
+| `lib/kit-plus.js` | `window.KITPLUS` (`KP`) | `KP.rig(layers)` parallax camera (one state, several depth layers, `cam.pin()` for labels), `KP.eyes` + `KP.eyeTo` + `KP.blink`, `KP.bact` (rim-lit bacterium with eyes and a shield aura), `KP.softDot`, `KP.vignette`, `KP.grain` |
+| `lib/kit-ocean.js` | `window.OCEAN` (`KO`) | `KO.scene()` stage builder, `KO.glow` light sources, marine snow, twinkling lights, sunbeams, a depth gauge, and a deep-sea cast: lanternfish, anglerfish, hatchetfish, Atolla-style jellyfish, shrimp, dragonfish, fuel and enzyme characters |
+
+Every creature returns an API object: set its numbers (`phase`, `jaw`, `flash`, `k`, ...) and call `update()`.
+Redraw from the timeline's `onUpdate` (see `docs/09-pitfalls.md`) so tweened values are current when you draw.

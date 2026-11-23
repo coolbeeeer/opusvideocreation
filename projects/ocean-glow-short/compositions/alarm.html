@@ -1,0 +1,131 @@
+<template id="alarm-template">
+  <!-- "Grab certain jellyfish, and they flash like a burglar alarm, likely calling in something bigger to eat the attacker."
+       A small fish bites an Atolla-style jellyfish; its ring of lights spins like a siren; the light draws a much bigger
+       fish out of the dark, and the attacker becomes dinner. ("likely": the burglar-alarm idea is the leading hypothesis.) -->
+  <div data-composition-id="alarm" data-width="1080" data-height="1920" data-duration="7.31">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN;
+        const ID = "alarm", R = document.querySelector('[data-composition-id="alarm"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, rnd = K.rng(61);
+        const JX = 590, JY = 600;
+        const S = KO.scene(R, ID, { bg: ["#071a3e", "#040f28", "#020814"], pool: { x: JX, y: JY + 60, rx: 760, ry: 760, color: "#1b4f9a", a: 0.42 } });
+
+        const far = KO.sparks(S.far, { n: 26, p: S.p, seed: 62, x0: -200, x1: 1280, y0: -100, y1: 2000, rmin: 8, rmax: 24, k: 0.4 });
+        // distant life: faint jellies and a drifting school, so the open water around the scene isn't empty
+        const farJ = [[140, 300, 0.32], [960, 260, 0.26], [900, 1280, 0.3], [120, 1450, 0.24]].map(([x, y, sc], i) => {
+          const g = K.g(S.far, { transform: `translate(${x},${y}) scale(${sc})`, opacity: 0.55 });
+          const j = KO.jelly(g, { r: 150, p: S.p });
+          j.flash = 0.5; j.update();
+          return j;
+        });
+        const school = K.g(S.mid, { opacity: 0.35 });
+        for (let i = 0; i < 9; i++) KO.fish(K.g(school, { transform: `translate(${K.f(-60 + (i % 5) * 120 + rnd() * 40)},${K.f(1520 + Math.floor(i / 5) * 70 + rnd() * 30)})` }), { L: 90, pal: KO.C.dim, p: S.p, eyeR: 8, seed: 160 + i });
+        tl.to(school, { x: 160, duration: DUR, ease: "none" }, 0);
+        KO.snow(S.mid, { n: 160, seed: 63, a: 0.36 });
+        for (let i = 0; i < 6; i++) KP.softDot(S.near, rnd() * 1080, rnd() * 1920, 30 + rnd() * 50, `${S.p}-gl-blue`, 0.1 + rnd() * 0.12);
+
+        // ---------------------------------------------------------------- cast (z: attacker < big fish < jellyfish)
+        const aw = K.g(S.act);
+        const att = KO.fish(aw, { L: 210, p: S.p, teeth: true, eyeR: 20, seed: 4 });
+        const A0 = [-180, JY + 30], A1 = [JX - 150 - 102, JY + 30], A2 = [250, 900];
+        gsap.set(aw, { x: A0[0], y: A0[1], svgOrigin: "0 0" });
+        att.eye.lid = 0.3; att.eye.lx = 0.8; att.eye.update();
+        const bw = K.g(S.act, { opacity: 0 }), bwi = K.g(bw, { transform: "scale(-1,1)" });
+        const BL = 580, big = KO.fish(bwi, { L: BL, pal: KO.C.big, p: S.p, teeth: true, eyeR: 46, seed: 9 });
+        big.eye.lid = 1; big.eye.lx = 0.7; big.eye.update();
+        const B0 = [1400, 1080], B1 = [930, 1030], B2 = [A2[0] + BL * 0.45, A2[1] + 8];
+        gsap.set(bw, { x: B0[0], y: B0[1], svgOrigin: "0 0" });
+        const ringG = K.g(S.act, { fill: "none", stroke: "#4fb6ff", "stroke-linecap": "round" });
+        const jw = K.g(S.act, { transform: `translate(${JX},${JY})` }), jb = K.g(jw);
+        const jel = KO.jelly(jb, { r: 150, p: S.p, glowR: 0.55, halo: 3.4 });
+        const jst = { flash: 0, squash: 0 };
+
+        // ---------------------------------------------------------------- "Grab certain jellyfish"
+        const tG = at("grab");
+        tl.to(aw, { x: A1[0], y: A1[1], duration: tG - 0.15, ease: "power2.out" }, 0.1);
+        KP.eyeTo(tl, att.eye, tG - 0.2, { lid: 0.45, lx: 1 }, 0.15);
+        tl.to(aw, { x: A1[0] + 22, duration: 0.08, ease: "power3.out" }, tG);
+        tl.to(jst, { squash: 1, duration: 0.08, ease: "power3.out" }, tG + 0.02);
+        tl.to(jst, { squash: 0, duration: 0.4, ease: "elastic.out(1,0.4)" }, tG + 0.1);
+        jel.eyes.forEach((e, i) => { KP.eyeTo(tl, e, tG + 0.05, { fear: 1, lx: -0.8, ly: 0.2 }, 0.12); });
+        const tagJ = S.cam.pin(K.tag(S.ui, { text: "Atolla jellyfish", x: 0, y: 0, color: "red", size: 50 }), JX + 30, JY - 175);
+        K.show(tl, tagJ, at("jellyfish") - 0.05);
+        K.hide(tl, tagJ, at("flash") - 0.25);
+
+        // ---------------------------------------------------------------- "they flash like a burglar alarm"
+        const tF = at("flash") - 0.05;
+        tl.to(jst, { flash: 1.25, duration: 0.15, ease: "power2.out" }, tF);
+        jel.eyes.forEach((e) => KP.eyeTo(tl, e, tF + 0.1, { fear: 0, lid: 0.45, lx: -0.6, ly: 0.1 }, 0.15));
+        KP.eyeTo(tl, att.eye, tF + 0.08, { fear: 1, lid: 0, lx: 0.4, ly: -0.6 }, 0.12);
+        for (let i = 0; i < 6; i++) {
+          const c = K.el("circle", { cx: JX, cy: JY - 20, r: 150, "stroke-width": 14, opacity: 0 }, ringG);
+          const t = tF + i * 0.42;
+          tl.fromTo(c, { attr: { r: 150 }, opacity: 0.85 }, { attr: { r: 640 }, opacity: 0, duration: 1.1, ease: "power1.out", immediateRender: false }, t);
+        }
+        const ban = K.callout(S.ui, { text: "Burglar alarm", x: 540, y: 350, color: "red", size: 70 });
+        K.show(tl, ban, at("burglar") - 0.05);
+        K.hide(tl, ban, at("something") - 0.2);
+
+        // ---------------------------------------------------------------- "likely calling in something bigger"
+        const tL = at("likely");
+        tl.to(aw, { x: A2[0], y: A2[1], rotation: -12, duration: 0.7, ease: "power2.out" }, tL);   // lets go and backs off
+        tl.to(aw, { rotation: 0, duration: 0.4, ease: "sine.inOut" }, tL + 0.7);
+        K.camTo(tl, S.cam, tL - 0.1, { s: 0.94, px: 600, py: 980 }, 1.1, "power2.inOut");
+        tl.to(bw, { opacity: 1, duration: 0.9, ease: "power1.in" }, at("calling") - 0.2);
+        tl.to(bw, { x: B1[0], y: B1[1], duration: 1.4, ease: "power2.out" }, at("calling") - 0.2);
+        KP.eyeTo(tl, big.eye, at("something") - 0.05, { lid: 0, lx: 0.6, ly: 0.2 }, 0.25);
+        const tagB = S.cam.pin(K.tag(S.ui, { text: "Something bigger", x: 0, y: 0, color: "violet", size: 50 }), B1[0] - 280, B1[1] - 215);
+        K.show(tl, tagB, at("bigger") - 0.05);
+        K.hide(tl, tagB, at("eat") - 0.15);
+        KP.eyeTo(tl, att.eye, at("bigger") + 0.1, { lx: 0.95, ly: 0.2, fear: 1 }, 0.15);
+
+        // ---------------------------------------------------------------- "to eat the attacker"
+        const tE = at("eat") - 0.2, tA = at("attacker") + 0.05;
+        KP.eyeTo(tl, big.eye, tE - 0.1, { lid: 0.35 }, 0.12);
+        tl.to(bw, { x: B1[0] + 50, duration: 0.2, ease: "power2.out" }, tE - 0.2);
+        tl.to(bw, { x: B2[0], y: B2[1], duration: tA - tE, ease: "power3.in" }, tE);
+        tl.set(aw, { opacity: 0 }, tA);
+        K.shake(tl, S.cam, tA, 24, 7, 0.04);
+        tl.to(bw, { x: B2[0] - 90, y: B2[1] + 40, duration: DUR - tA, ease: "power2.out" }, tA + 0.02);
+        KP.eyeTo(tl, big.eye, tA + 0.15, { lid: 0.55, lx: 0.2 }, 0.25);
+        jel.eyes.forEach((e) => KP.eyeTo(tl, e, tA + 0.2, { lid: 0.2, lx: -0.3, ly: 0.5 }, 0.25));
+        tl.to(jst, { flash: 0.6, duration: 0.6, ease: "power2.out" }, tA + 0.1);
+
+        // ---------------------------------------------------------------- clock
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          att.phase = t * 10; att.update();
+          big.phase = t * 4; big.update();
+          jel.phase = t * 2.2; jel.pulse = 0.35 + 0.35 * Math.sin(t * 3.2) + jst.squash * 0.9; jel.flash = jst.flash;
+          jel.spin = spinIntegral(t); jel.update();
+          jb.setAttribute("transform", `translate(${f(Math.sin(t * 0.9) * 10)},${f(Math.sin(t * 1.4) * 14 - jst.squash * 10)})`);
+          far.list.forEach((s) => { s.glow.k = 0.3 + 0.25 * Math.sin(t * s.sp * 2 + s.ph); s.glow.update(); });
+          farJ.forEach((j, i) => { j.phase = t * 1.6 + i; j.pulse = 0.4 + 0.4 * Math.sin(t * 2.2 + i); j.spin = t * (1 + i * 0.3); j.update(); });
+        };
+        // the siren spins slowly, speeds up on "flash" and slows after the attacker is eaten. The angle is the integral
+        // of that speed, precomputed once on a private paused timeline, so any frame can be rendered on its own.
+        const spinTl = gsap.timeline({ paused: true }), sv = { v: 0.6 };
+        spinTl.to(sv, { v: 13, duration: 0.3, ease: "power2.in" }, tF);
+        spinTl.to(sv, { v: 3, duration: 0.6, ease: "power2.out" }, tA + 0.1);
+        spinTl.set({}, {}, DUR);
+        const STEP = 1 / 120, SPIN = [0];
+        for (let i = 1; i * STEP <= DUR + STEP; i++) { spinTl.seek((i - 0.5) * STEP, false); SPIN.push(SPIN[i - 1] + sv.v * STEP); }
+        const spinIntegral = (t) => { const x = t / STEP, i = Math.min(SPIN.length - 2, Math.floor(x)); return SPIN[i] + (SPIN[i + 1] - SPIN[i]) * (x - i); };
+        // redraw after every tween has rendered: a clock tween would run first on a forward seek and read stale values
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.6, "2,6,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

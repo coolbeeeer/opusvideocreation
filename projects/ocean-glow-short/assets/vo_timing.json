@@ -1,0 +1,57 @@
+{
+ "film": 54.2,
+ "open": 0.3,
+ "source": "tts",
+ "voice": "af_heart",
+ "speed": 0.95,
+ "lines": [
+  {
+   "line": 1,
+   "text": "Three out of four animals in the open ocean can make their own light. Why?",
+   "start": 0.3,
+   "end": 4.813
+  },
+  {
+   "line": 2,
+   "text": "Dive in, and sunlight fades fast. By two hundred metres, it's twilight. Below a thousand, it's night. Forever.",
+   "start": 5.513,
+   "end": 12.668
+  },
+  {
+   "line": 3,
+   "text": "So life makes its own, by mixing a chemical fuel with an enzyme.",
+   "start": 13.468,
+   "end": 17.394
+  },
+  {
+   "line": 4,
+   "text": "An anglerfish dangles a glowing lure. Something curious swims closer. Bad idea.",
+   "start": 17.894,
+   "end": 23.146
+  },
+  {
+   "line": 5,
+   "text": "A hatchetfish lights up its belly to match the faint glow from above. Seen from below, its silhouette vanishes.",
+   "start": 23.846,
+   "end": 30.556
+  },
+  {
+   "line": 6,
+   "text": "Grab certain jellyfish, and they flash like a burglar alarm, likely calling in something bigger to eat the attacker.",
+   "start": 31.056,
+   "end": 37.753
+  },
+  {
+   "line": 7,
+   "text": "Most of this light is blue, because blue travels farthest in water. But one dragonfish cheats, with red light its prey can't see.",
+   "start": 38.253,
+   "end": 46.292
+  },
+  {
+   "line": 8,
+   "text": "Sunlight never reaches most of the ocean. So its residents brought their own.",
+   "start": 46.992,
+   "end": 51.355
+  }
+ ]
+}
