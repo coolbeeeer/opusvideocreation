@@ -2,7 +2,9 @@
 
 usage: python frame_stats.py film.mp4        (needs ffmpeg on PATH and numpy)
 
-The film is decoded at 10 fps and scaled to 480x270. For one frame per second it reports:
+The film is decoded at 10 fps and scaled so its long side is 480 px, keeping the aspect ratio (480x270 for 16:9,
+270x480 for a vertical 9:16 film; squashing a vertical film into 480x270 would make every block 27x85 px).
+For one frame per second it reports:
   flat%    share of 12x12-pixel blocks (48x48 px at 1080p) whose luma std-dev is under 3:
            empty, untextured background. Seconds above 70 % are flagged "mostly empty".
   detail%  share of blocks with an edge in them (std-dev over 12)
@@ -19,7 +21,10 @@ import sys
 import numpy as np
 
 mp4 = sys.argv[1]
-W, H, B = 480, 270, 12
+probe = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", mp4],
+                       capture_output=True, text=True).stdout.strip().split(",")
+src_w, src_h = int(probe[0]), int(probe[1])
+W, H, B = (480, round(480 * src_h / src_w / 2) * 2, 12) if src_w >= src_h else (round(480 * src_w / src_h / 2) * 2, 480, 12)
 raw = subprocess.run(["ffmpeg", "-v", "error", "-i", mp4, "-vf", f"fps=10,scale={W}:{H}", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
                      capture_output=True).stdout
 fr = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3).astype(np.float32)

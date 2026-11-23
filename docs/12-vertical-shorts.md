@@ -1,8 +1,9 @@
 # 12 · Vertical films for YouTube Shorts and Instagram Reels
 
-`projects/ocean-glow-short/` is the worked example: 54 s, 1080x1920, 30 fps, burned-in captions, -14 LUFS.
-Its `build.py`, `vo.py`, `align.py`, `compositions/captions.html` and `audio/mix.py` are vertical-aware and can be
-copied into a new project as they are.
+Worked examples: `projects/ocean-glow-short/` (54 s) and `projects/mitochondria-short/` (50.6 s, a walking person and
+a dive into the body), both 1080x1920, 30 fps, burned-in captions, -14 LUFS. Their `build.py`, `vo.py`, `align.py`,
+`compositions/captions.html` and `audio/mix.py` are vertical-aware and can be copied into a new project as they are;
+the newest `vo.py` (in `mitochondria-short`) also takes one recorded clip per line (`--clips`).
 
 ## Format
 | Setting | Value | Where |
@@ -27,6 +28,13 @@ So put captions near y 1185 centred on x 468, keep banners below y 290, and keep
 The bottom quarter can hold scenery but nothing anyone needs to read. Mark deliberate exceptions with
 `data-layout-allow-safe-zone`.
 
+- TikTok's band below y 840 ends at x 780 (its buttons), so a label lower than that must fit in x 120-780: centre it
+  near x 450 rather than 540. Only text is checked, so a banner's background may extend a little past the line.
+- The default check measures the safe areas at only 9 moments. A tag that is on screen for two seconds can slip
+  between them: before you render, also run `npx hyperframes check --samples=150 --no-craft --no-contrast` (about a
+  minute for a 50 s film). In the mitochondria film it found five problems the default run missed.
+- Labels pinned to a moving point (a zoom) can drift out of the safe area: clamp their screen position.
+
 ## Captions
 Most people scroll with the sound off, so burn captions in. `build.py` cuts the measured words into chunks of up to
 4 words (breaking at punctuation and pauses, never ending a chunk on "the", "of", "with" ...), writes them to
@@ -36,7 +44,13 @@ Most people scroll with the sound off, so burn captions in. `build.py` cuts the 
 ## Narration
 - One TTS call per line and a pause per line (`film.json` `lines[].pause`): the voice keeps its phrasing across
   sentences, and a longer pause before a punchline gives it room ("Something curious swims closer. Bad idea.").
-- `vo.py` trims the silence Kokoro leaves at both ends of a clip, so the pauses are exactly what `film.json` says.
+- `vo.py` trims the silence at both ends of each line, so the pauses are exactly what `film.json` says. It finds
+  speech by loudness (RMS frames), so a recording's room noise is trimmed too.
+- Your own voice: `python vo.py --clips DIR` (one file per line: 01.wav, 02.wav, ...) or `--recording take.wav`
+  (one continuous take). Clips are never time-stretched; with `film: "auto"` the film takes the length they need.
+  Steps: `projects/mitochondria-short/NOTES.md`, question 5.
+- Rule of thumb for pauses: about 0.5 s inside a thought, 0.6-0.8 s after a punchline, at a topic change or before
+  a transition, 0 after the last line (NOTES.md question 2).
 - `film.json` `speed` sets the base reading speed (0.95 for this film); a fixed film length may raise it up to `max_speed`.
 - About 130 words fill 50 s at 0.95x with these pauses.
 
@@ -53,6 +67,8 @@ Most people scroll with the sound off, so burn captions in. `build.py` cuts the 
   `fish` (lanternfish with photophores), `angler`, `hatchet` (with a full silhouette for counter-illumination),
   `jelly` (Atolla-style, with a spinning ring of lights), `shrimp`, `dragon` (stoplight loosejaw with a red beam),
   `fuel`, `enzyme`. Model sheet: render each once on a test stage before building scenes.
+- `lib/kit-human.js` and `lib/kit-cell.js`, and `KP.zoomChain` for dives through scales: `docs/04-drawing-kit.md`.
+- Dark scenes need something alive behind the subject: `KC.cytoplasm` (cell interior), `KO.snow` (marine snow).
 
 ## Checks that caught real problems here
 - `template_literal_selector` (error): ``querySelector(`[data-composition-id="${ID}"]`)`` crashes the HTML bundler's
@@ -60,3 +76,7 @@ Most people scroll with the sound off, so burn captions in. `build.py` cuts the 
 - `outside_safe_zone` (warning): see the table above.
 - `content_overlap`: a moving label passing over a fixed one (the depth chip over "1,000 m").
 - A stale-value seek bug that no checker catches: see `docs/09-pitfalls.md`, "a clock tween reads stale values".
+- `rotation_pivot_drift` / `off_pivot_rotation`: things that spin while they fly, and dial hands in a big scene SVG.
+  See `docs/09-pitfalls.md`.
+- `tools/frame_stats.py` keeps the aspect ratio now (it used to squash vertical films into 480x270). Re-measured,
+  the ocean film has 26 of 54 seconds over 70 % flat background, not 15.

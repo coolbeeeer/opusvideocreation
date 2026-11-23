@@ -1,0 +1,150 @@
+<template id="origin-template">
+  <!-- "Roughly two billion years ago, a bigger cell swallowed a bacterium. But it wasn't digested. It moved in."
+       Match cut: the walk ends on one mitochondrion under a closing vignette; this scene opens on its ancestor, an orange
+       bacterium, at the same size and angle, and the vignette opens on an ancient sea. A bigger cell makes a pocket and
+       swallows it; digestive enzymes try and give up; the guest puts down its suitcase. -->
+  <div data-composition-id="origin" data-width="1080" data-height="1920" data-duration="7.415">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KC = window.CELL;
+        const ID = "origin", R = document.querySelector('[data-composition-id="origin"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x)), rnd = K.rng(51);
+        const S = KO.scene(R, "org", { bg: ["#3d7a6c", "#24524d", "#143330"], pool: { x: 540, y: 820, rx: 760, ry: 900, color: "#6fb59a", a: 0.35 } });
+
+        // ---------------------------------------------------------------- the ancient sea: drifting specks, other microbes, a rocky floor with stromatolites
+        KO.snow(S.mid, { n: 150, seed: 52, a: 0.32, color: "#cfeadb" });
+        const microbes = [];
+        for (let i = 0; i < 9; i++) {
+          const g = K.g(S.far, { transform: `translate(${f(-100 + rnd() * 1280)},${f(200 + rnd() * 1300)}) rotate(${f(rnd() * 180)}) scale(${f(0.5 + rnd() * 0.5)})`, opacity: 0.45 });
+          K.el("path", { d: i % 2 ? K.capsule(90, 22) : K.blob(30, 0.2, i, 8, 70 + i), fill: i % 3 ? "#8fb7a2" : "#a7c2a0" }, g);
+          microbes.push(g);
+        }
+        const floor = K.g(S.mid);
+        let fp = "M -600 1700";
+        for (let x = -600; x <= 1800; x += 120) fp += ` Q ${x + 60} ${1640 - rnd() * 90} ${x + 120} ${1680 + rnd() * 30}`;
+        K.el("path", { d: fp + " L 1800 2400 L -600 2400 Z", fill: "#1c3f3a" }, floor);
+        [[120, 1650, 1], [300, 1660, 0.7], [860, 1640, 1.2], [1000, 1670, 0.8]].forEach(([x, y, s]) => {
+          const g = K.g(floor, { transform: `translate(${x},${y}) scale(${s})` });
+          [[0, 0, 70], [-30, -40, 50], [24, -70, 44], [-6, -110, 34]].forEach(([cx, cy, r], k) => K.el("ellipse", { cx, cy, rx: r, ry: r * 0.62, fill: k % 2 ? "#2f5e56" : "#285149" }, g));
+        });
+        for (let i = 0; i < 6; i++) KP.softDot(S.near, rnd() * 1080, rnd() * 1920, 40 + rnd() * 60, `${S.p}-gl-green`, 0.08 + rnd() * 0.08);
+
+        // ---------------------------------------------------------------- cast: the host (behind), the guest (in front, so it shows inside the host)
+        const hw = K.g(S.act), host = KC.host(hw, { R: 330, prefix: "orgh", seed: 6 });
+        const HX0 = 1500, HX1 = 760, HY = 930;
+        gsap.set(hw, { x: HX0, y: HY });
+        const vac = K.el("ellipse", { rx: 150, ry: 92, fill: "#a493d1", stroke: "#d9cff3", "stroke-width": 8, opacity: 0 }, S.act);
+        const gw = K.g(S.act), gb = K.g(gw);
+        const guest = KC.guest(gb, { prefix: "orgg", seed: 4, flagSide: -1 });
+        const suit = K.g(S.act, { opacity: 0 });
+        K.el("rect", { x: -34, y: -26, width: 68, height: 50, rx: 10, fill: "#8a5a3c" }, suit);
+        K.el("rect", { x: -34, y: -26, width: 68, height: 14, rx: 7, fill: "#a2704c" }, suit);
+        K.el("path", { d: "M -14 -26 L -14 -38 L 14 -38 L 14 -26", fill: "none", stroke: "#6b4430", "stroke-width": 7, "stroke-linejoin": "round" }, suit);
+        K.el("rect", { x: -4, y: -8, width: 8, height: 12, rx: 2, fill: "#f3d27a" }, suit);
+        // digestive enzymes (acid green, so they read against the lavender host); they come from inside the host,
+        // below and right of the guest, which keeps them clear of the host's eyes
+        const ENZ_A = [-0.15, 0.6, 1.3];
+        const enzG = K.g(S.act, { "data-layout-allow-orbit": "" }), enz = ENZ_A.map((a, i) => {   // they fly off spinning: an intended orbit for the checker
+          const w = K.g(enzG), wi = K.g(w, { transform: "scale(-1,1)" });
+          const e = KO.enzyme(wi, { r: 58, p: "orge" + i });
+          e.g.querySelectorAll("path").forEach((pth, k) => { if (k < 2) pth.setAttribute("fill", k ? "#a6d64a" : "#6f9a2c"); });
+          const spark = K.g(enzG, { opacity: 0 });
+          for (let k = 0; k < 5; k++) { const b = -1.1 + k * 0.55; K.el("path", { d: `M ${f(Math.cos(b) * 16)} ${f(Math.sin(b) * 16)} L ${f(Math.cos(b) * 40)} ${f(Math.sin(b) * 40)}`, stroke: "#ffffff", "stroke-width": 7, "stroke-linecap": "round" }, spark); }
+          return { w, e, a, spark };
+        });
+
+        // ---------------------------------------------------------------- choreography (tweened numbers; frame() draws them)
+        const st = { gx: 540, gy: 960, grot: 90, vig: 1, hx: HX0, pocket: 0, pull: 0, vacA: 0, fear: 0, enzIn: 0, chomp: 0, bounce: 0, suit: 0, calm: 0 };
+        tl.to(st, { vig: 0, duration: 0.9, ease: "power2.out" }, 0.05);
+        tl.to(st, { gx: 360, gy: 900, duration: 1.7, ease: "power2.inOut" }, 0.1);
+        tl.to(st, { grot: -8, duration: 1.4, ease: "power2.inOut" }, 0.15);
+        const tB = at("bigger"), tSw = at("swallowed"), tBa = at("bacterium");
+        /* camera keys [t, scale, x, y]: locked on the guest (matching the mitochondrion), a first pull-back that keeps
+           it big, a second one on "bigger" that reveals the host, then a push-in for "it wasn't digested" */
+        const CK = [[0, 3.9, 540, 960], [1.55, 1.75, 420, 900], [Math.max(1.6, tB - 0.7), 1.75, 420, 900], [tB + 0.35, 1.0, 540, 960],
+                    [tBa - 0.1, 1.0, 540, 960], [tBa + 0.8, 1.35, 520, 1060], [DUR, 1.38, 520, 1060]];
+        const camAt = (t) => {
+          for (let i = 0; i < CK.length - 1; i++) if (t <= CK[i + 1][0]) { const u = sm(clamp((t - CK[i][0]) / (CK[i + 1][0] - CK[i][0]))); return [1, 2, 3].map((k) => CK[i][k] + (CK[i + 1][k] - CK[i][k]) * u); }
+          return CK[CK.length - 1].slice(1);
+        };
+        tl.to(st, { hx: HX1, duration: 1.0, ease: "power2.out" }, tB - 0.55);
+        tl.to(st, { pocket: 1, duration: 0.35, ease: "power2.out" }, tSw - 0.2);
+        tl.to(st, { hx: 610, duration: 0.5, ease: "power2.in" }, tSw - 0.05);
+        tl.to(st, { fear: 1, duration: 0.15 }, tSw);
+        tl.to(st, { pull: 1, duration: 0.55, ease: "power2.inOut" }, tSw + 0.3);
+        tl.to(st, { pocket: 0, duration: 0.45, ease: "power2.inOut" }, tBa - 0.05);
+        tl.to(st, { vacA: 1, duration: 0.3, ease: "power2.out" }, tBa + 0.1);
+        const tBut = at("but"), tDig = at("digested");
+        tl.to(st, { enzIn: 1, duration: 0.6, ease: "power2.out" }, tBut - 0.35);
+        tl.to(st, { chomp: 1, duration: 0.12, ease: "power3.in" }, tDig - 0.05);
+        tl.to(st, { bounce: 1, duration: 0.7, ease: "power2.out" }, tDig + 0.12);
+        tl.to(st, { fear: 0, calm: 1, duration: 0.3 }, tDig + 0.3);
+        tl.to(st, { suit: 1, duration: 0.35, ease: "back.out(2.2)" }, at("moved") - 0.1);
+
+        const ban = K.callout(S.ui, { text: "~2 billion years ago", x: 540, y: 360, color: "violet", size: 66 });
+        K.show(tl, ban, at("billion") - 0.1);
+        K.hide(tl, ban, tB + 0.6);
+        const heart = K.el("path", { d: "M 0 14 C -32 -8 -24 -38 0 -22 C 24 -38 32 -8 0 14 Z", fill: "#ff8fb1", opacity: 0 }, S.act);
+        const vig = document.createElement("div");
+        vig.style.cssText = "position:absolute;inset:0;pointer-events:none;";
+        S.stage.appendChild(vig);
+
+        // ---------------------------------------------------------------- one redraw per frame, after every tween
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          const [cs, cx, cy] = camAt(t);
+          S.cam.s = cs; S.cam.px = cx; S.cam.py = cy;
+          S.cam.apply();
+          // host drifts in, makes a pocket toward the guest
+          host.phase = t * 1.4;
+          host.pocket = { a: Math.PI + 0.12, depth: 0.85 * st.pocket, width: 0.62 };
+          host.update();
+          hw.setAttribute("transform", `translate(${f(st.hx)},${f(HY + Math.sin(t * 0.9) * 8)})`);
+          host.eyes.lx = -0.8; host.eyes.ly = 0.2; host.eyes.lid = 0.25 * st.calm; host.eyes.update();
+          // guest: swims, then is pulled from the pocket to its place inside the host
+          const inside = [st.hx - 150, HY + 30];
+          const gx = st.gx + (inside[0] - st.gx) * sm(st.pull);
+          const gy = st.gy + (inside[1] - st.gy) * sm(st.pull);
+          gw.setAttribute("transform", `translate(${f(gx)},${f(gy + Math.sin(t * 2.2) * 6 * (1 - st.pull))}) rotate(${f(st.grot + Math.sin(t * 1.7) * 4 * (1 - st.pull))})`);
+          guest.phase = t * 8; guest.amp = 1 - 0.7 * st.pull; guest.len = 1 - 0.85 * sm(st.pull); guest.update();
+          guest.eyes.fear = st.fear; guest.eyes.lid = 0.4 * st.calm; guest.eyes.lx = st.fear > 0.5 ? 0.8 : 0.2; guest.eyes.update();
+          // the vacuole: the bubble of membrane around the swallowed guest
+          vac.setAttribute("cx", f(gx)); vac.setAttribute("cy", f(gy)); vac.setAttribute("opacity", f(st.vacA * 0.9));
+          // digestive enzymes come in, bite, and give up
+          const tBite = at("digested") + 0.07;
+          enz.forEach((E, i) => {
+            const a = E.a, d0 = 300, d1 = 190 + st.chomp * -30 + st.bounce * 160;
+            const d = d0 + (d1 - d0) * sm(st.enzIn), ex = gx + Math.cos(a) * d * 1.05, ey = gy + Math.sin(a) * d * 0.9;
+            E.w.setAttribute("transform", `translate(${f(ex)},${f(ey)}) rotate(${f((a * 180) / Math.PI + st.bounce * 160 * (i % 2 ? 1 : -1))})`);
+            E.w.setAttribute("opacity", f(clamp(st.enzIn * 1.5) * (1 - clamp((st.bounce - 0.6) * 2.5))));
+            E.e.open = 0.9 - 0.85 * st.chomp * (1 - st.bounce); E.e.update();
+            // a "clank" where the bite meets the guest's wall
+            const us = clamp((t - tBite - i * 0.03) / 0.32), sp = Math.sin(Math.PI * us);
+            const sx = gx + Math.cos(a) * 128, sy = gy + Math.sin(a) * 92;
+            E.spark.setAttribute("transform", `translate(${f(sx)},${f(sy)}) rotate(${f((a * 180) / Math.PI)}) scale(${f(0.5 + 0.8 * us)})`);
+            E.spark.setAttribute("opacity", f(us > 0 && us < 1 ? sp : 0));
+          });
+          // the suitcase: it moved in
+          suit.setAttribute("transform", `translate(${f(gx + 118)},${f(gy + 50)}) scale(${f(1.3 * (0.4 + 0.6 * st.suit))})`);
+          suit.setAttribute("opacity", f(st.suit));
+          heart.setAttribute("transform", `translate(${f(gx + 10)},${f(gy - 130 - 40 * st.suit)}) scale(${f(st.suit)})`);
+          heart.setAttribute("opacity", f(st.suit * (1 - clamp((t - at("moved") - 0.6) * 2))));
+          const v = st.vig;
+          vig.style.background = v <= 0.001 ? "none" : `radial-gradient(ellipse ${f(300 + 1200 * (1 - v))}px ${f(460 + 1500 * (1 - v))}px at 50% 50%, rgba(12,6,20,0) 0%, rgba(12,6,20,0) 62%, rgba(12,6,20,${f(0.97 * v)}) 100%)`;
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.45, "8,24,22"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

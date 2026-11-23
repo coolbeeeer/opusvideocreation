@@ -1,0 +1,57 @@
+{
+ "film": 50.6,
+ "open": 0.6,
+ "source": "tts",
+ "voice": "af_heart",
+ "speed": 0.95,
+ "lines": [
+  {
+   "line": 1,
+   "text": "Every step you take is powered by bacteria. Well, former bacteria.",
+   "start": 0.6,
+   "end": 4.9
+  },
+  {
+   "line": 2,
+   "text": "Dive into your leg, into a muscle cell, and there they are: thousands of mitochondria.",
+   "start": 5.7,
+   "end": 10.85
+  },
+  {
+   "line": 3,
+   "text": "Roughly two billion years ago, a bigger cell swallowed a bacterium. But it wasn't digested. It moved in.",
+   "start": 11.55,
+   "end": 18.25
+  },
+  {
+   "line": 4,
+   "text": "The guest got shelter and food. The host got energy. Lots of it.",
+   "start": 19.05,
+   "end": 23.12
+  },
+  {
+   "line": 5,
+   "text": "The proof: mitochondria still carry their own DNA, wear a double wall, and split in two, just like bacteria.",
+   "start": 23.72,
+   "end": 30.54
+  },
+  {
+   "line": 6,
+   "text": "Today they turn food and oxygen into ATP, your cells' fuel. You recycle about your own body weight of it every single day.",
+   "start": 31.14,
+   "end": 39.04
+  },
+  {
+   "line": 7,
+   "text": "And every one of yours came from your mother. Thanks, Mom.",
+   "start": 39.74,
+   "end": 42.8
+  },
+  {
+   "line": 8,
+   "text": "So every step you take runs on a deal made about two billion years ago.",
+   "start": 43.6,
+   "end": 47.75
+  }
+ ]
+}

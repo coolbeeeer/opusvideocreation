@@ -13,12 +13,16 @@ Everything here was produced by an AI agent working only with code and a rendere
 > **Vertical (YouTube Shorts / Instagram Reels):** [`projects/ocean-glow-short/renders/ocean-glow-v3.mp4`](projects/ocean-glow-short/renders/ocean-glow-v3.mp4)
 > "Why most animals in the open ocean glow" (54 s, 1080×1920, 30 fps, burned-in captions, -14 LUFS).
 > Contact sheet: `projects/ocean-glow-short/renders/ocean-glow-v3-contact.jpg`.
+>
+> **Vertical, with a walking human and a dive into the body:** [`projects/mitochondria-short/renders/mitochondria-v2.mp4`](projects/mitochondria-short/renders/mitochondria-v2.mp4)
+> "The bacteria that moved into your cells" (50.6 s, 1080×1920, 30 fps, -14 LUFS). How it was made, question by
+> question: `projects/mitochondria-short/NOTES.md`.
 
 ## Start here
 1. **`docs/AGENT_PLAYBOOK.md`**: the step-by-step recipe with its approval gates.
 2. **`templates/new-film/`**: a tested starter project (9.8 s example render included). Copy it, edit `film.json`,
-   write one HTML file per scene. For a vertical Short or Reel, start from **`projects/ocean-glow-short/`** instead
-   (`docs/12-vertical-shorts.md`).
+   write one HTML file per scene. For a vertical Short or Reel, start from **`projects/mitochondria-short/`** instead
+   (the newest; its `vo.py --clips` takes your own voice clips) or `projects/ocean-glow-short/` (`docs/12-vertical-shorts.md`).
 3. The references below when you need detail. `docs/11-style-upgrade.md` lists what makes a frame look closer to
    Kurzgesagt and what was measured.
 
@@ -42,12 +46,17 @@ Everything here was produced by an AI agent working only with code and a rendere
 | `lib/kit.js`, `lib/sound_effects.py` | Canonical shared libraries (projects carry copies) |
 | `lib/kit-plus.js` | Parallax camera rig, eyes, vignette, grain, rim-lit bacteria |
 | `lib/kit-ocean.js` | Deep-sea stage builder, glows, depth gauge and a cast with eyes (lanternfish, anglerfish, hatchetfish, jellyfish, shrimp, dragonfish) |
+| `lib/kit-human.js` | An articulated person with a procedural walk cycle (planted feet, IK knees, speed changes without sliding); runs in Node too |
+| `lib/kit-cell.js` | Cell-biology cast: mitochondria, the ancestral bacterium, a host cell that swallows, tissue levels for a dive, ATP, a balance, a cytoplasm backdrop |
+| `docs/walk-cycle.svg` | Diagram of the walk cycle (key poses, a strobe with footprints, foot and pelvis curves), drawn by `tools/walk_cycle_svg.cjs` |
 | `tools/verify_render.py` | Checks an MP4: specs, loudness, peak, audio sync vs stems, black frames, saturation, contact sheet |
 | `tools/measure_style.py` | Measures a reference video's palette and saturation; verifies timestamps first |
 | `tools/frame_stats.py` | Per second of an MP4: empty-background share, detail, motion, saturation, brightness |
+| `tools/walk_cycle_svg.cjs` | Draws `docs/walk-cycle.svg` from `lib/kit-human.js` |
 | `templates/new-film/` | Config-driven starter project (`film.json`), tested end to end |
 | `projects/antibiotics/` | The full 60 s film: script, scenes, audio pipeline, review notes, render |
 | `projects/ocean-glow-short/` | The 54 s vertical film: script with sources, 8 scenes + captions, audio, two review passes, render, cover |
+| `projects/mitochondria-short/` | The 50.6 s vertical film: a walking person, a dive into the leg's cells, 7 scenes; NOTES.md answers how the human, walk, dive, pauses, grain, empty frames, voice clips and reviews work |
 | `projects/ant-fight/` | 4 s style clip with sound (steps 4–5) and its review notes |
 | `projects/one-ant-test/` | The 10 s setup test (step 2) |
 
@@ -83,4 +92,4 @@ straight after cloning. HyperFrames needs FFmpeg; see `docs/01-environment.md` i
 - The method follows the RandomAI tutorial "Claude Opus 5.5 Can Now Make Kurzgesagt-Style Animations (Full Tutorial)".
 - Fonts (Nunito, Yanone Kaffeesatz) load from Google Fonts (SIL Open Font License); GSAP from jsDelivr;
   HyperFrames is a third-party renderer. All music and sound effects are synthesised in code.
-- The narration in both sample films is a local TTS voice (Kokoro `af_heart`), a stand-in for a human recording.
+- The narration in the sample films is a local TTS voice (Kokoro `af_heart`), a stand-in for a human recording.

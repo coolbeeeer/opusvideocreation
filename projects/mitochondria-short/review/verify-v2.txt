@@ -1,0 +1,36 @@
+video  1080x1920 @ 30 fps, 1518 frames, 50.600 s
+audio  48000 Hz x2, -14.0 LUFS integrated, peak -1.6 dBFS
+sync   MP4 audio vs stems: 0.0 ms
+black  0 black stretch(es)
+satur  share of pixels with saturation>0.75 and brightness>170:
+        0.5s  0.0%
+        2.2s  0.5%
+        3.9s  0.4%
+        5.6s  0.0%
+        7.2s  0.0%
+        8.9s  6.9%
+       10.6s  8.1% <-- over 7%
+       12.3s  2.6%
+       14.0s  0.5%
+       15.7s  1.0%
+       17.4s  1.2%
+       19.1s  0.9%
+       20.7s  1.0%
+       22.4s  4.4%
+       24.1s  2.5%
+       25.8s  2.5%
+       27.5s  2.3%
+       29.2s  4.9%
+       30.9s  3.4%
+       32.5s  3.3%
+       34.2s  5.8%
+       35.9s  0.0%
+       37.6s  3.7%
+       39.3s  3.2%
+       41.0s  0.3%
+       42.7s  0.0%
+       44.4s  0.0%
+       46.0s  0.0%
+       47.7s  0.0%
+       49.4s  0.2%
+RESULT PASS

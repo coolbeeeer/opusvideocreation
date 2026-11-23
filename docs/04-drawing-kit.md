@@ -81,6 +81,32 @@ Load them after `kit.js` in the root `<head>`; each file's header lists its API.
 |---|---|---|
 | `lib/kit-plus.js` | `window.KITPLUS` (`KP`) | `KP.rig(layers)` parallax camera (one state, several depth layers, `cam.pin()` for labels), `KP.eyes` + `KP.eyeTo` + `KP.blink`, `KP.bact` (rim-lit bacterium with eyes and a shield aura), `KP.softDot`, `KP.vignette`, `KP.grain` |
 | `lib/kit-ocean.js` | `window.OCEAN` (`KO`) | `KO.scene()` stage builder, `KO.glow` light sources, marine snow, twinkling lights, sunbeams, a depth gauge, and a deep-sea cast: lanternfish, anglerfish, hatchetfish, Atolla-style jellyfish, shrimp, dragonfish, fuel and enzyme characters |
+| `lib/kit-human.js` | `window.HUMAN` (`KH`) | An articulated person and a procedural walk cycle (below). The maths half also loads in Node with `require` |
+| `lib/kit-cell.js` | `window.CELL` (`KC`) | `KC.mito` (mitochondrion: double wall that can part, folds, DNA ring, eyes), `KC.guest` (the orange ancestral bacterium), `KC.host` (a wobbling cell that opens a pocket to swallow), `KC.thighSection` / `KC.fascicle` / `KC.fiber` (three tissue levels for a dive, each drawn around 0,0 and returning its bundles, fibres or mitochondria), `KC.atp`, `KC.sugar`, `KC.o2`, `KC.egg`, `KC.sperm`, `KC.balance` (dishes ride on the beam), `KC.cytoplasm` (out-of-focus cell interior for dark backgrounds; `update(t)` drifts it) |
 
 Every creature returns an API object: set its numbers (`phase`, `jaw`, `flash`, `k`, ...) and call `update()`.
 Redraw from the timeline's `onUpdate` (see `docs/09-pitfalls.md`) so tweened values are current when you draw.
+`KP.bact` and `KC.guest` also take `len` (flagellum length, 1 = full, 0 = retracted).
+
+## The walking person (`lib/kit-human.js`)
+Worked example and a long explanation: `projects/mitochondria-short/NOTES.md`, question 1. Diagram:
+`docs/walk-cycle.svg` (`node tools/walk_cycle_svg.cjs` redraws it).
+
+| Call | Returns | Notes |
+|---|---|---|
+| `KH.walkPose(phase, gait?)` | joint positions (y-up body frame) | pure maths; phase in cycles, any real number |
+| `KH.standPose()`, `KH.armTo(pose, arm, a1, a2)` | a pose | angles in degrees from hanging down, + = forward; arm 0 is the near arm |
+| `KH.human(parent, { look })` | `{ g, setPose(pose), pose }` | the figure, facing +x, feet on y = 0; `look` overrides `KH.LOOK` colours and `hairStyle` |
+| `KH.walker(parent, { x0, y0, look })` | `{ at(phase), x(phase), thighPoint(u) }` | a human plus its walk; `x(phase)` moves it exactly as far as a planted foot slides, so feet never skate |
+| `KH.phaseTable(keys, t1)` | `phase(t)`, plus `.rate(t)` and `.strikes(ta, tb)` | speed keys `[[t, rate], ...]` eased and integrated: slow-motion without foot sliding; strikes for footstep sounds |
+
+Use the same speed keys in the scene and in the audio script that places footsteps (`audio/js_events.cjs`).
+
+## Dives through scales (`KP.zoomChain` in `lib/kit-plus.js`)
+`KP.zoomChain(parent, levels, { prefix, W, H })` nests worlds: `levels[0] = { draw }`, and each next level
+`{ draw, at, r, mag, fade?, ringOpacity? }` sits in a circular lens of radius `r` around `at` (a point or a function,
+in the parent level's units) and is `mag` times more detailed. Drive it with `zc.set(Z, F)` (screen px per level-0
+unit, and the level-0 point at the screen centre), open lenses with `zc.lens[i]`, and aim with `zc.point(i, p)`.
+Key the zoom in log space so each tenfold step takes the same time. Each level gets one transform and levels that
+are too small, too big or covered by a deeper lens are hidden, so a 3,370x dive renders as fast as a still.
+Worked example: `projects/mitochondria-short/assets/world.js` and `compositions/walk.html`; NOTES.md question 6.

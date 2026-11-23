@@ -1,0 +1,110 @@
+<template id="proof-template">
+  <!-- "The proof: mitochondria still carry their own DNA, wear a double wall, and split in two, just like bacteria."
+       A mitochondrion and a bacterium side by side; a checklist ticks off each shared trait as it is named, and each
+       trait is shown on both: the DNA rings light up, the double walls pull apart, both divide. Then "=". -->
+  <div data-composition-id="proof" data-width="1080" data-height="1920" data-duration="7.215">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KC = window.CELL;
+        const ID = "proof", R = document.querySelector('[data-composition-id="proof"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x)), rnd = K.rng(71);
+        const S = KO.scene(R, "prf", { bg: ["#3a2f63", "#271f48", "#171230"], pool: { x: 540, y: 700, rx: 700, ry: 700, color: "#6b55b0", a: 0.35 } });
+        const cyto = KC.cytoplasm(S.far, { tint: "#b9a8ff", seed: 73 });   // the inside of a cell, out of focus, so the frame is never an empty field
+        KO.snow(S.far, { n: 80, seed: 72, a: 0.22, color: "#d9cff3" });
+        for (let i = 0; i < 6; i++) KP.softDot(S.near, rnd() * 1080, rnd() * 1920, 40 + rnd() * 60, `${S.p}-gl-blue`, 0.07 + rnd() * 0.07);
+
+        // layout for 9:16: the pair is big and sits in the upper middle, the checklist below it ends ~60 px above the captions
+        const MX = 280, BX = 800, CY = 620, ML = 320, MR = 86, BL = 320, BR = 78;
+        // pairs of copies so each can divide (two identical overlapping copies slide apart, one up and one down)
+        const mk = (x, make) => { const outer = K.g(S.act, { transform: `translate(${x},${CY})` }), a = K.g(outer), b = K.g(outer); return { outer, a, b, A: make(a, 0), B: make(b, 1) }; };
+        const mito = mk(MX, (g, i) => KC.mito(g, { L: ML, r: MR, prefix: "prfm" + i, seed: 3 }));
+        const bact = mk(BX, (g, i) => KC.guest(g, { L: BL, r: BR, prefix: "prfb" + i, seed: 4, flagSide: 1 }));
+        // the bacterium's DNA ring and its second wall (drawn by this scene on both copies)
+        const bExtras = [bact.a, bact.b].map((g) => ({
+          ring: K.el("circle", { cx: f(-BL * 0.3), cy: f(BR * 0.2), r: f(BR * 0.2), fill: "none", stroke: "#fff1d6", "stroke-width": f(BR * 0.07), opacity: 0.95 }, g),
+          wall: K.el("path", { d: K.capsule(BL + 30, BR + 15), fill: "none", stroke: "#ffd08a", "stroke-width": 8, opacity: 0 }, g),
+        }));
+        [bact.a, bact.b].forEach((g) => g.insertBefore(g.lastChild, g.firstChild));   // second wall behind the body
+        const dnaGlowM = KO.glow(S.act, { x: MX - ML * 0.22, y: CY + MR * 0.28, r: 150, color: "white", p: S.p, core: 0, k: 0 });
+        const dnaGlowB = KO.glow(S.act, { x: BX - BL * 0.3, y: CY + BR * 0.2, r: 150, color: "white", p: S.p, core: 0, k: 0 });
+        const eq = K.g(S.act, { transform: `translate(540,${CY})`, opacity: 0 });
+        K.el("rect", { x: -40, y: -30, width: 80, height: 20, rx: 10, fill: "#fff1d6" }, eq);
+        K.el("rect", { x: -40, y: 10, width: 80, height: 20, rx: 10, fill: "#fff1d6" }, eq);
+
+        // the banner sits where the checklist will be and hands over to it: it leaves just before the first row arrives
+        const ban = K.callout(S.ui, { text: "The proof", x: 540, y: 935, color: "violet", size: 74 });
+        K.show(tl, ban, at("proof") - 0.1);
+        K.hide(tl, ban, at("dna") - 0.25);
+        // tags sit a little inward of their characters so they stay inside every app's safe area (TikTok left, Shorts right)
+        const tagM = K.tag(S.ui, { text: "Mitochondrion", x: MX + 55, y: CY - MR - 40, color: "crimson", size: 44 });
+        const tagB = K.tag(S.ui, { text: "Bacterium", x: BX - 75, y: CY - BR - 48, color: "green", size: 44 });
+        K.show(tl, tagM, at("mitochondria") - 0.02);
+        K.show(tl, tagB, at("mitochondria") + 0.28);
+        K.hide(tl, tagM, at("split") - 0.2);
+        K.hide(tl, tagB, at("split") - 0.2);
+
+        // the checklist
+        const rows = [["Own DNA", at("dna") - 0.05], ["Double wall", at("wall") - 0.05], ["Splits in two", at("two") - 0.05]];
+        const list = rows.map(([txt, t0], i) => {
+          const el = document.createElement("div");
+          el.style.cssText = `position:absolute;left:300px;top:${865 + i * 88}px;display:flex;align-items:center;gap:22px;opacity:0;font:900 56px Nunito,sans-serif;color:#ffffff;text-shadow:0 4px 0 rgba(10,6,30,0.6);`;
+          el.innerHTML = `<div class="box" style="width:62px;height:62px;border-radius:16px;background:#3d7a2c;box-shadow:0 6px 0 #234a18;display:flex;align-items:center;justify-content:center"><svg width="40" height="40" viewBox="-20 -20 40 40"><path class="ck" d="M -12 0 L -4 9 L 13 -10" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/></svg></div><span>${txt}</span>`;
+          S.ui.appendChild(el);
+          tl.fromTo(el, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.25, ease: "power2.out", immediateRender: false }, t0);
+          tl.to(el.querySelector(".ck"), { attr: { "stroke-dashoffset": 0 }, duration: 0.25, ease: "power2.out" }, t0 + 0.15);
+          return el;
+        });
+
+        const st = { dna: 0, wall: 0, split: 0, eq: 0, happy: 0 };
+        tl.to(st, { dna: 1, duration: 0.3, ease: "power2.out" }, at("dna") - 0.1);
+        tl.to(st, { dna: 0.25, duration: 0.6 }, at("dna") + 0.7);
+        tl.to(st, { wall: 1, duration: 0.45, ease: "back.out(1.8)" }, at("wall") - 0.15);
+        tl.to(st, { wall: 0.35, duration: 0.5 }, at("split") - 0.1);
+        tl.to(st, { split: 1, duration: 0.85, ease: "power2.inOut" }, at("split") - 0.1);
+        tl.to(st, { eq: 1, duration: 0.3, ease: "back.out(2.5)" }, at("like") - 0.1);
+        tl.to(st, { happy: 1, duration: 0.3 }, at("bacteria") - 0.05);
+        K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, DUR, "sine.inOut");
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          cyto.update(t);
+          // division: waist pinches as the halves slide apart
+          const sp = sm(st.split);
+          [mito, bact].forEach((P) => {
+            P.a.setAttribute("transform", `translate(${f(-36 * sp)},${f(-96 * sp)}) rotate(${f(-7 * sp)})`);
+            P.b.setAttribute("transform", `translate(${f(36 * sp)},${f(96 * sp)}) rotate(${f(7 * sp)})`);
+          });
+          const ringK = 1 + 0.7 * st.dna;                                       // the DNA rings swell while "own DNA" is said
+          [mito.A, mito.B].forEach((m, i) => {
+            m.gap = st.wall; m.waist = 0; m.phase = t * 2 + i; m.update();
+            m.dna.setAttribute("r", f(MR * 0.2 * ringK)); m.dna.setAttribute("stroke-width", f(MR * 0.07 * (1 + 0.4 * st.dna)));
+            m.eyes.fear = 0.3 * st.dna; m.eyes.lid = 0.35 * st.happy; m.eyes.lx = 0.4; m.eyes.update();
+          });
+          [bact.A, bact.B].forEach((b, i) => {
+            b.phase = t * 7 + i; b.update();
+            b.eyes.fear = 0.3 * st.dna; b.eyes.lid = 0.35 * st.happy; b.eyes.lx = -0.4; b.eyes.update();
+            bExtras[i].ring.setAttribute("r", f(BR * 0.2 * ringK)); bExtras[i].ring.setAttribute("stroke-width", f(BR * 0.07 * (1 + 0.4 * st.dna)));
+            bExtras[i].wall.setAttribute("opacity", f(clamp(st.wall * 1.5)));
+            bExtras[i].wall.setAttribute("d", K.capsule(BL + 30 * st.wall + 8, BR + 15 * st.wall + 4));
+          });
+          mito.B.g.parentNode.setAttribute("opacity", f(sp > 0.02 ? 1 : 0));
+          bact.B.g.parentNode.setAttribute("opacity", f(sp > 0.02 ? 1 : 0));
+          dnaGlowM.k = st.dna; dnaGlowM.update(); dnaGlowB.k = st.dna; dnaGlowB.update();
+          eq.setAttribute("opacity", f(st.eq)); eq.setAttribute("transform", `translate(540,${CY}) scale(${f(0.4 + 0.6 * st.eq)})`);
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.5, "10,6,30"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

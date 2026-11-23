@@ -1,0 +1,43 @@
+<template id="captions-template">
+  <!-- Burned-in captions for Shorts / Reels (many viewers watch muted). Chunks and word times come from
+       build.py (window.VO.caps), so they follow the voice exactly. film.json "captions": false turns them off.
+       Placed in the area YouTube Shorts and Instagram Reels keep clear (x 65-888, y 288-1248): centred at x 480, y 1185. -->
+  <div data-composition-id="captions" data-width="1080" data-height="1920" data-duration="50.6">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const ID = "captions", R = document.querySelector('[data-composition-id="captions"]');
+        const DUR = window.VO.film, CX = 468, CY = 1185;
+        const tl = gsap.timeline({ paused: true });
+        const layer = document.createElement("div");
+        layer.style.cssText = "position:absolute;inset:0;pointer-events:none;";
+        R.appendChild(layer);
+        const ink = "#041026";
+        const shadow = `-4px -4px 0 ${ink}, 4px -4px 0 ${ink}, -4px 4px 0 ${ink}, 4px 4px 0 ${ink}, 0 -4px 0 ${ink}, 0 4px 0 ${ink}, -4px 0 0 ${ink}, 4px 0 0 ${ink}, 0 8px 18px rgba(0,0,0,0.55)`;
+        (window.VO.caps || []).forEach((c, i) => {
+          const el = document.createElement("div");
+          el.style.cssText = `position:absolute;left:${CX}px;top:${CY}px;white-space:nowrap;font:900 58px/1 Nunito,sans-serif;color:#ffffff;text-shadow:${shadow};opacity:0;display:flex;gap:16px;`;
+          const spans = c.words.map(([w]) => {
+            const s = document.createElement("span");
+            s.textContent = w;
+            s.style.cssText = "display:inline-block;transform-origin:50% 70%;";
+            el.appendChild(s);
+            return s;
+          });
+          layer.appendChild(el);
+          gsap.set(el, { xPercent: -50, yPercent: -50 });
+          tl.set(el, { opacity: 1 }, c.start);
+          tl.fromTo(el, { scale: 0.9 }, { scale: 1, duration: 0.12, ease: "back.out(2)", immediateRender: false }, c.start);
+          c.words.forEach(([w, t], k) => {
+            tl.set(spans[k], { color: "#7ff6ff" }, Math.max(c.start, t - 0.03));
+            if (k > 0) tl.set(spans[k - 1], { color: "#ffffff" }, Math.max(c.start, t - 0.03));
+          });
+          tl.set(el, { opacity: 0 }, c.end);
+        });
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>
