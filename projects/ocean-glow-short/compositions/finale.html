@@ -1,0 +1,112 @@
+<template id="finale-template">
+  <!-- "Sunlight never reaches most of the ocean. So its residents brought their own."
+       Pull back from the dark to a cross-section of the whole ocean, drawn to scale for an average depth of ~3,700 m:
+       a thin sunlit strip, a twilight band to 1,000 m, and below it the dark that fills most of the water.
+       Then its lights come on, and the title. -->
+  <div data-composition-id="finale" data-width="1080" data-height="1920" data-duration="7.65">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN;
+        const ID = "finale", R = document.querySelector('[data-composition-id="finale"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, rnd = K.rng(81);
+        const S = KO.scene(R, ID, { bg: ["#020a1c", "#020a1c"], layers: [0.5, 0.8, 1, 1.3] });
+
+        // ---------------------------------------------------------------- the ocean in cross-section (0.25 px per metre)
+        const SURF = 330, Ym = (d) => SURF + d * 0.25, FLOOR = Ym(3700);
+        const w = S.act;
+        const sky = K.el("linearGradient", { id: `${S.p}-sky`, x1: 0, y1: -400, x2: 0, y2: SURF, gradientUnits: "userSpaceOnUse" }, S.defs);
+        [[0, "#ffe6b0"], [0.5, "#bff1ff"], [1, "#e8fbff"]].forEach(([o, c]) => K.el("stop", { offset: o, "stop-color": c }, sky));
+        K.el("rect", { x: -1200, y: -1200, width: 3480, height: 1200 + SURF, fill: `url(#${S.p}-sky)` }, w);
+        KO.glow(w, { x: 860, y: 120, r: 260, color: "warm", p: S.p, core: 0, k: 1 });
+        K.el("circle", { cx: 860, cy: 120, r: 46, fill: "#fff4d0" }, w);
+        const sea = K.el("linearGradient", { id: `${S.p}-sea`, x1: 0, y1: SURF, x2: 0, y2: FLOOR, gradientUnits: "userSpaceOnUse" }, S.defs);
+        [[0, "#58d6ef"], [200, "#1886c4"], [400, "#0b4f8c"], [1000, "#05214e"], [1300, "#030f2c"], [3700, "#020a1c"]].forEach(([d, c]) =>
+          K.el("stop", { offset: f((Ym(d) - SURF) / (FLOOR - SURF)), "stop-color": c }, sea));
+        K.el("rect", { x: -1200, y: SURF, width: 3480, height: FLOOR - SURF + 40, fill: `url(#${S.p}-sea)` }, w);
+        let wave = `M -1200 ${SURF}`;
+        for (let x = -1200; x <= 2280; x += 40) wave += ` Q ${x + 20} ${x % 80 ? SURF - 6 : SURF + 6} ${x + 40} ${SURF}`;
+        K.el("path", { d: wave, fill: "none", stroke: "#ffffff", "stroke-width": 5, opacity: 0.9 }, w);
+        // sea floor with hills, then rock strata underneath
+        const floorPts = [];
+        for (let x = -1300; x <= 2400; x += 110) floorPts.push([x, FLOOR - 10 + Math.sin(x * 0.006) * 26 + Math.sin(x * 0.017 + 1) * 12 + (rnd() - 0.5) * 10]);
+        const floorD = K.smooth(floorPts, false) + ` L 2400 3400 L -1300 3400 Z`;
+        K.el("path", { d: floorD, fill: "#160b22" }, w);
+        K.el("path", { d: K.smooth(floorPts, false), fill: "none", stroke: "#2c1a44", "stroke-width": 10 }, w);
+        [["#1d0e2c", 90], ["#170a24", 230], ["#11071b", 420]].forEach(([c, dy], i) => {
+          const pts = floorPts.map(([x, y]) => [x, y + dy + Math.sin(x * 0.01 + i) * 14]);
+          K.el("path", { d: K.smooth(pts, false) + " L 2400 3400 L -1300 3400 Z", fill: c }, w);
+        });
+        for (let i = 0; i < 40; i++) K.el("circle", { cx: f(-200 + rnd() * 1480), cy: f(FLOOR + 60 + rnd() * 600), r: f(3 + rnd() * 7), fill: "#2f1d47", opacity: 0.8 }, w);
+
+        // ---------------------------------------------------------------- the lights of the deep (they come on later)
+        const lights = KO.sparks(w, { n: 190, p: S.p, seed: 82, colors: ["cyan", "blue", "green", "blue"], x0: -80, x1: 1160, y0: Ym(260), y1: FLOOR - 30, rmin: 7, rmax: 20, core: 0.12, k: 0 });
+        lights.list.forEach((s) => { s.on = 0; });
+        const early = KO.sparks(w, { n: 26, p: S.p, seed: 83, colors: ["cyan", "blue"], x0: 340, x1: 740, y0: 760, y1: 1240, rmin: 10, rmax: 24, k: 0 });
+        KO.snow(S.mid, { n: 140, seed: 84, x0: -400, x1: 1480, y0: 620, y1: 2300, a: 0.28 });
+
+        // ---------------------------------------------------------------- pull back from the dark to the whole ocean
+        gsap.set(S.cam, { px: 540, py: 980, s: 2.7 }); S.cam.apply();
+        K.camTo(tl, S.cam, 0.05, { px: 540, py: 1000, s: 1.0 }, at("ocean") + 0.1, "power2.inOut");
+        K.camTo(tl, S.cam, at("ocean") + 0.15, { py: 990, s: 1.03 }, DUR - at("ocean") - 0.15, "sine.inOut");
+
+        // the dark part, bracketed and labelled
+        const br = K.el("path", { d: `M 96 ${Ym(1000)} L 70 ${Ym(1000)} L 70 ${FLOOR - 30} L 96 ${FLOOR - 30}`, fill: "none", stroke: "#ffffff", "stroke-width": 7, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0 }, w);
+        const brLen = 26 * 2 + (FLOOR - 30 - Ym(1000));
+        const tBr = at("most") - 0.05;
+        tl.fromTo(br, { opacity: 0.95, strokeDasharray: brLen, strokeDashoffset: brLen }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, tBr);
+        const ban = S.cam.pin(K.callout(S.ui, { text: "No sunlight", x: 0, y: 0, color: "violet", size: 66 }), 560, Ym(2100));
+        K.show(tl, ban, at("never") - 0.05);
+        const tag = S.cam.pin(K.tag(S.ui, { text: "Sunlit zone", x: 0, y: 0, color: "ocean", size: 40 }), 380, SURF + 30);
+        K.show(tl, tag, at("reaches") + 0.05);
+        K.hide(tl, tag, at("so") - 0.25);
+        K.hide(tl, ban, at("so") - 0.2);
+        tl.to(br, { opacity: 0, duration: 0.3 }, at("so") - 0.2);
+
+        // ---------------------------------------------------------------- "So its residents brought their own": the lights come on
+        const tOn = at("so") + 0.05, SPREAD = at("own") - tOn + 0.2;
+        lights.list.forEach((s) => { s.t0 = tOn + ((FLOOR - s.y) / (FLOOR - Ym(260))) * SPREAD * 0.8 + rnd() * SPREAD * 0.2; });
+
+        // ---------------------------------------------------------------- title
+        const tT = at("own") + 0.4;
+        const card = document.createElement("div");
+        card.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0;pointer-events:none;";
+        card.innerHTML =
+          `<div style="position:absolute;left:50%;top:860px;width:1000px;height:520px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center, rgba(2,8,22,0.78) 0%, rgba(2,8,22,0.55) 45%, rgba(2,8,22,0) 72%);"></div>` +
+          `<div class="sub" style="position:absolute;left:50%;top:696px;transform:translate(-50%,-50%);white-space:nowrap;font:800 44px Nunito,sans-serif;letter-spacing:0.02em;color:#7ff6ff;text-shadow:0 0 18px rgba(127,246,255,0.6)">why most open-ocean animals</div>` +
+          `<div class="big" style="position:absolute;left:50%;top:880px;transform:translate(-50%,-50%);white-space:nowrap;font:700 270px/1 'Yanone Kaffeesatz',sans-serif;color:#fff1d6;letter-spacing:0.04em;text-shadow:0 0 30px rgba(127,246,255,0.85),0 0 80px rgba(79,182,255,0.6)">GLOW</div>` +
+          `<div class="bar" style="position:absolute;left:50%;top:1030px;width:420px;height:12px;border-radius:6px;transform:translate(-50%,-50%);background:linear-gradient(90deg,#7ff6ff,#4fb6ff 50%,#8a6cff)"></div>`;
+        S.ui.appendChild(card);
+        const sub = card.querySelector(".sub"), big = card.querySelector(".big"), bar = card.querySelector(".bar");
+        tl.set(card, { opacity: 1 }, tT);
+        tl.fromTo(card.firstChild, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out", immediateRender: false }, tT);
+        tl.fromTo(big, { opacity: 0, filter: "blur(18px)", scale: 1.12 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.7, ease: "power2.out", immediateRender: false }, tT);
+        tl.fromTo(sub, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, tT + 0.35);
+        tl.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, tT + 0.45);
+        gsap.set([sub, big, bar], { opacity: 0 });
+
+        // ---------------------------------------------------------------- clock
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          lights.list.forEach((s) => {
+            const on = Math.min(1, Math.max(0, (t - s.t0) / 0.35));
+            s.glow.k = on * (0.55 + 0.4 * Math.sin(t * s.sp * 2.2 + s.ph)); s.glow.update();
+          });
+          early.list.forEach((s) => { const fade = 1 - Math.min(1, Math.max(0, (t - 1.6) / 0.8)); s.glow.k = fade * (0.5 + 0.35 * Math.sin(t * s.sp * 2 + s.ph)); s.glow.update(); });
+        };
+        // redraw after every tween has rendered: a clock tween would run first on a forward seek and read stale values
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.45, "2,6,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

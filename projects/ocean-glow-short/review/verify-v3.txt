@@ -1,0 +1,37 @@
+video  1080x1920 @ 30 fps, 1626 frames, 54.200 s
+audio  48000 Hz x2, -14.0 LUFS integrated, peak -1.6 dBFS
+sync   MP4 audio vs stems: 0.0 ms
+black  0 black stretch(es)
+satur  share of pixels with saturation>0.75 and brightness>170:
+        0.5s  0.0%
+        2.3s  0.0%
+        4.1s  0.0%
+        5.9s 25.6% <-- over 7%
+        7.7s 27.9% <-- over 7%
+        9.5s  4.6%
+       11.3s  0.1%
+       13.1s  0.0%
+       15.0s  0.0%
+       16.8s  0.6%
+       18.6s  0.0%
+       20.4s  0.0%
+       22.2s  0.0%
+       24.0s  1.1%
+       25.8s  1.4%
+       27.6s  0.0%
+       29.4s  0.0%
+       31.2s  0.0%
+       33.0s  0.1%
+       34.8s  2.5%
+       36.6s  0.0%
+       38.4s  0.0%
+       40.2s  0.0%
+       42.1s  0.8%
+       43.9s  0.0%
+       45.7s  1.8%
+       47.5s  0.0%
+       49.3s  2.7%
+       51.1s  1.9%
+       52.9s  1.9%
+sheet  projects/ocean-glow-short/renders/ocean-glow-v3-contact.jpg (one frame every 1.5 s)
+RESULT PASS

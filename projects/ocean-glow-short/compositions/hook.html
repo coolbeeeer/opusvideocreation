@@ -1,0 +1,89 @@
+<template id="hook-template">
+  <!-- "Three out of four animals in the open ocean can make their own light. Why?"
+       Four lanternfish in the dark; three light up one after another, the fourth stays dark and looks around. -->
+  <div data-composition-id="hook" data-width="1080" data-height="1920" data-duration="5.05">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN;
+        const ID = "hook", R = document.querySelector('[data-composition-id="hook"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const S = KO.scene(R, ID, { bg: ["#0b3263", "#061c40", "#030c22"], pool: { x: 540, y: 820, rx: 760, ry: 860, color: "#1d5a9a", a: 0.55 } });
+        const rnd = K.rng(11);
+
+        // ---------------------------------------------------------------- environment
+        const sp = KO.sparks(S.far, { n: 46, p: S.p, seed: 12, x0: -200, x1: 1280, y0: -100, y1: 2000, rmin: 10, rmax: 30, k: 0 });
+        const snow = KO.snow(S.mid, { n: 120, seed: 13, a: 0.4 });
+        tl.to(snow, { y: 60, duration: DUR, ease: "none" }, 0);
+        for (let i = 0; i < 7; i++) KP.softDot(S.near, -100 + rnd() * 1280, -100 + rnd() * 2100, 26 + rnd() * 40, `${S.p}-gl-blue`, 0.18 + rnd() * 0.2);
+
+        // ---------------------------------------------------------------- the four fish (D never lights up)
+        const SPOTS = [[320, 460], [740, 640], [300, 850], [720, 1015]];
+        const fish = SPOTS.map(([x, y], i) => {
+          const w = K.g(S.act, { transform: `translate(${x},${y})` }), bob = K.g(w);
+          const halo = i < 3 ? KO.glow(bob, { r: 380, color: "cyan", p: S.p, core: 0, k: 0 }) : null;
+          const a = KO.fish(bob, { L: 300, pal: KO.C.dim, p: S.p, photo: i < 3 ? 8 : 0, photoR: 0.11, photoK: 0, seed: i + 2 });
+          return { x, y, w, bob, halo, a, ph: rnd() * 6 };
+        });
+        const D = fish[3];
+        const tOn = [0.15, at("three") + 0.1, at("four") + 0.02];
+        fish.slice(0, 3).forEach((F, i) => {
+          const st = { k: 0 };
+          tl.to(st, { k: 1.25, duration: 0.35, ease: "power2.out", onUpdate: () => { F.a.light(st.k); F.halo.k = st.k * 0.7; F.halo.update(); } }, tOn[i]);
+          KP.eyeTo(tl, F.a.eye, tOn[i] + 0.05, { fear: 0.25 }, 0.12);
+          KP.eyeTo(tl, F.a.eye, tOn[i] + 0.3, { fear: 0 }, 0.3);
+        });
+        // the dark one notices it is the odd one out
+        KP.eyeTo(tl, D.a.eye, at("animals") + 0.1, { lx: -0.5, ly: -0.7 }, 0.25);
+        KP.blink(tl, D.a.eye, at("open") + 0.05);
+        KP.eyeTo(tl, D.a.eye, at("ocean") + 0.2, { lx: -0.8, ly: -0.2 }, 0.3);
+        KP.eyeTo(tl, D.a.eye, at("own") - 0.1, { lx: 0.15, ly: 0.1, lid: 0.35 }, 0.3);
+
+        // ---------------------------------------------------------------- labels
+        const ban = K.callout(S.ui, { text: "3 out of 4", x: 500, y: 362, color: "teal", size: 72 });
+        K.show(tl, ban, at("four") - 0.02);
+        K.hide(tl, ban, at("why") - 0.2);
+        const q = document.createElement("div");
+        q.textContent = "?";
+        q.style.cssText = "position:absolute;left:540px;top:420px;transform:translate(-50%,-50%);font:900 240px Nunito,sans-serif;color:#fff1d6;text-shadow:0 0 30px rgba(255,170,80,0.7),0 10px 0 #0a2a50;opacity:0;";
+        S.ui.appendChild(q);
+        tl.fromTo(q, { opacity: 0, scale: 0.3, rotation: -20 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, at("why") - 0.04);
+        fish.forEach((F, i) => KP.eyeTo(tl, F.a.eye, at("why") + 0.02 + i * 0.03, { lx: 0.1, ly: -0.9, lid: 0 }, 0.2));
+
+        // ---------------------------------------------------------------- camera and the lift toward the light
+        const tUp = DUR - 0.38;
+        K.camTo(tl, S.cam, 0, { s: 1.06, py: 900 }, tUp, "sine.inOut");
+        K.camTo(tl, S.cam, tUp, { py: 560, s: 1.1 }, DUR - tUp, "power3.in");
+        tl.to(q, { y: 300, opacity: 0, duration: DUR - tUp, ease: "power3.in" }, tUp);
+        const lift = document.createElement("div");
+        lift.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;background:linear-gradient(#d9fbff 0%,#8fe2f5 35%,rgba(60,180,225,0.6) 70%,rgba(30,120,190,0) 100%);opacity:0;";
+        S.stage.appendChild(lift);
+        tl.fromTo(lift, { opacity: 0, y: -1920 }, { opacity: 1, y: 0, duration: DUR - tUp, ease: "power2.in", immediateRender: false }, tUp);
+
+        // ---------------------------------------------------------------- one clock for swimming, bobbing and twinkling
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          fish.forEach((F, i) => {
+            F.a.phase = t * 5.5 + F.ph; F.a.update();
+            F.bob.setAttribute("transform", `translate(${K.f(Math.sin(t * 0.9 + F.ph) * 10)},${K.f(Math.sin(t * 1.3 + F.ph) * 12)})`);
+          });
+          sp.list.forEach((s, i) => {
+            const on = Math.min(1, Math.max(0, (t - 0.1 - (i % 9) * 0.12) / 0.4));
+            s.glow.k = on * (0.45 + 0.35 * Math.sin(t * s.sp * 2 + s.ph)); s.glow.update();
+          });
+        };
+        // redraw after every tween has rendered: a clock tween would run first on a forward seek and read stale values
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.6, "2,6,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

@@ -77,13 +77,22 @@ cd audio && python sfx_cues.py && python music.py && python mix.py && cd .. && p
 ## Phase 7: render and verify (docs/08-review-loop.md)
 ```bash
 npx hyperframes render --fps 60 --quality delivery -o renders/film.mp4
+python ../../tools/frame_stats.py renders/film.mp4      # empty-background and motion per second
 ```
 - Verify on the **MP4**: ffprobe (frames = fps × duration), ebur128 loudness/peak, audio sync by
   cross-correlating the MP4 audio with the stem sum (expect 0 ms), blackdetect, a contact sheet every 1.5–2 s,
   frames around every scene cut, saturated-pixel share per scene.
+- Look at every second `frame_stats.py` flags as more than 70 % flat background; fill it or explain it in REVIEW.md.
 - Do one more review pass on the rendered frames, fix, re-render (v2). Write `REVIEW.md` with both passes,
   the measurements, and every failed or open check.
 - **Gate:** the human approves the film.
+
+---
+
+## Vertical films (YouTube Shorts, Instagram Reels)
+Follow the same phases with `projects/ocean-glow-short/` as the starter instead of `templates/new-film/`:
+1080x1920 at 30 fps, burned-in captions, -14 LUFS, and `npx hyperframes check` must pass with no
+`outside_safe_zone` warnings. The rules are in `docs/12-vertical-shorts.md`; the style upgrades in `docs/11-style-upgrade.md`.
 
 ---
 

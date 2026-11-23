@@ -1,0 +1,34 @@
+{
+  "title": "Why Most Animals in the Open Ocean Glow",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "film": "auto",
+  "open": 0.3,
+  "tail": 2.8,
+  "voice": "af_heart",
+  "lang": "en-us",
+  "speed": 0.95,
+  "max_speed": 1.1,
+  "captions": true,
+  "lines": [
+    { "text": "Three out of four animals in the open ocean can make their own light. Why?", "pause": 0.7 },
+    { "text": "Dive in, and sunlight fades fast. By two hundred metres, it's twilight. Below a thousand, it's night. Forever.", "pause": 0.8 },
+    { "text": "So life makes its own, by mixing a chemical fuel with an enzyme.", "pause": 0.5 },
+    { "text": "An anglerfish dangles a glowing lure. Something curious swims closer. Bad idea.", "pause": 0.7 },
+    { "text": "A hatchetfish lights up its belly to match the faint glow from above. Seen from below, its silhouette vanishes.", "pause": 0.5 },
+    { "text": "Grab certain jellyfish, and they flash like a burglar alarm, likely calling in something bigger to eat the attacker.", "pause": 0.5 },
+    { "text": "Most of this light is blue, because blue travels farthest in water. But one dragonfish cheats, with red light its prey can't see.", "pause": 0.7 },
+    { "text": "Sunlight never reaches most of the ocean. So its residents brought their own.", "pause": 0.0 }
+  ],
+  "scenes": [
+    { "id": "hook", "lines": [1], "mood": "wonder" },
+    { "id": "descent", "lines": [2], "mood": "deep" },
+    { "id": "chemistry", "lines": [3], "mood": "glow" },
+    { "id": "angler", "lines": [4], "mood": "tense" },
+    { "id": "hatchet", "lines": [5], "mood": "glow" },
+    { "id": "alarm", "lines": [6], "mood": "tense" },
+    { "id": "colours", "lines": [7], "mood": "wonder" },
+    { "id": "finale", "lines": [8], "mood": "resolve" }
+  ]
+}

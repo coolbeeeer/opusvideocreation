@@ -9,12 +9,18 @@ Everything here was produced by an AI agent working only with code and a rendere
 
 > **The quality bar:** [`projects/antibiotics/renders/antibiotics-v2.mp4`](projects/antibiotics/renders/antibiotics-v2.mp4)
 > (60 s, 1920×1080, 60 fps, voice + sound effects + music). Contact sheet: `projects/antibiotics/renders/antibiotics-v2-contact.jpg`.
+>
+> **Vertical (YouTube Shorts / Instagram Reels):** [`projects/ocean-glow-short/renders/ocean-glow-v3.mp4`](projects/ocean-glow-short/renders/ocean-glow-v3.mp4)
+> "Why most animals in the open ocean glow" (54 s, 1080×1920, 30 fps, burned-in captions, -14 LUFS).
+> Contact sheet: `projects/ocean-glow-short/renders/ocean-glow-v3-contact.jpg`.
 
 ## Start here
 1. **`docs/AGENT_PLAYBOOK.md`**: the step-by-step recipe with its approval gates.
 2. **`templates/new-film/`**: a tested starter project (9.8 s example render included). Copy it, edit `film.json`,
-   write one HTML file per scene.
-3. The references below when you need detail.
+   write one HTML file per scene. For a vertical Short or Reel, start from **`projects/ocean-glow-short/`** instead
+   (`docs/12-vertical-shorts.md`).
+3. The references below when you need detail. `docs/11-style-upgrade.md` lists what makes a frame look closer to
+   Kurzgesagt and what was measured.
 
 ## Contents
 | Path | What it is |
@@ -30,12 +36,18 @@ Everything here was produced by an AI agent working only with code and a rendere
 | `docs/08-review-loop.md` | Stills, contact sheets, the faint/small/wrong critique, MP4 verification, REVIEW.md |
 | `docs/09-pitfalls.md` | Every failure hit during the build and its fix |
 | `docs/10-making-of.md` | How this video was made: the brief, each step, decisions and lessons |
+| `docs/11-style-upgrade.md` | What separates the sample from a Kurzgesagt frame (measured), the upgrades, and a v1/v2 demo (`docs/style-v2/`) |
+| `docs/12-vertical-shorts.md` | Vertical films: format, safe areas for Shorts / Reels / TikTok, captions, narration pacing |
 | `style/STYLE.md` | The measured style guide |
 | `lib/kit.js`, `lib/sound_effects.py` | Canonical shared libraries (projects carry copies) |
+| `lib/kit-plus.js` | Parallax camera rig, eyes, vignette, grain, rim-lit bacteria |
+| `lib/kit-ocean.js` | Deep-sea stage builder, glows, depth gauge and a cast with eyes (lanternfish, anglerfish, hatchetfish, jellyfish, shrimp, dragonfish) |
 | `tools/verify_render.py` | Checks an MP4: specs, loudness, peak, audio sync vs stems, black frames, saturation, contact sheet |
 | `tools/measure_style.py` | Measures a reference video's palette and saturation; verifies timestamps first |
+| `tools/frame_stats.py` | Per second of an MP4: empty-background share, detail, motion, saturation, brightness |
 | `templates/new-film/` | Config-driven starter project (`film.json`), tested end to end |
 | `projects/antibiotics/` | The full 60 s film: script, scenes, audio pipeline, review notes, render |
+| `projects/ocean-glow-short/` | The 54 s vertical film: script with sources, 8 scenes + captions, audio, two review passes, render, cover |
 | `projects/ant-fight/` | 4 s style clip with sound (steps 4–5) and its review notes |
 | `projects/one-ant-test/` | The 10 s setup test (step 2) |
 
@@ -71,4 +83,4 @@ straight after cloning. HyperFrames needs FFmpeg; see `docs/01-environment.md` i
 - The method follows the RandomAI tutorial "Claude Opus 5.5 Can Now Make Kurzgesagt-Style Animations (Full Tutorial)".
 - Fonts (Nunito, Yanone Kaffeesatz) load from Google Fonts (SIL Open Font License); GSAP from jsDelivr;
   HyperFrames is a third-party renderer. All music and sound effects are synthesised in code.
-- The narration in the sample film is a local TTS voice (Kokoro `af_heart`), a stand-in for a human recording.
+- The narration in both sample films is a local TTS voice (Kokoro `af_heart`), a stand-in for a human recording.

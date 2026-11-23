@@ -52,3 +52,22 @@
 ## Repository hygiene
 - **Never commit reference material** (frames, audio or video from a reference) and never commit credentials.
   Tokens pasted into chat should be revoked after use.
+
+## Found while making the vertical film (projects/ocean-glow-short)
+- **A clock tween reads stale values.** The common pattern `tl.fromTo(clk, {t:0}, {t:DUR, onUpdate: frame}, 0)` starts
+  at 0, so on a forward seek GSAP renders it *before* every later tween. If `frame()` reads a value another tween sets
+  (a flash level, a squash amount), it draws last frame's value; on a fresh worker that is the initial value. The
+  jellyfish's flash never showed in some renders this way, and nothing in `check` reports it. Fix: redraw after all
+  children have rendered, from the timeline itself:
+  `frame(); tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });`
+  (and drop the clock tween). Values that only depend on `t` were never affected.
+- **`template_literal_selector`** (checker error): ``document.querySelector(`[data-composition-id="${ID}"]`)`` crashes
+  the HTML bundler's CSS parser. Write the scene id as a plain string.
+- **Captions outside the safe area.** y 1300 is below the Shorts, Reels and TikTok overlays' bottom edge (1248-1260 px
+  on 1920). See `docs/12-vertical-shorts.md` for the boxes.
+- **A moving label over a fixed one** (`content_overlap`): hide the fixed label while the moving one passes.
+- **A silhouette that doesn't vanish.** A silhouette drawn from the body outline alone leaves the fins showing, and the
+  body's anti-aliased edge shows as a thin light line. Cover every shape, with a stroke of the same colour.
+- **`Mix.add` with a negative time** writes to the end of the buffer (negative slice index). Trim the sound's head instead.
+- **Kokoro leaves silence at both ends of each clip**, so fixed pauses come out longer than set. Trim before placing.
+- **Reusing quotes inside a Python f-string** is a syntax error before Python 3.12; build the piece in a variable.

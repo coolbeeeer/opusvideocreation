@@ -1,0 +1,180 @@
+<template id="descent-template">
+  <!-- "Dive in, and sunlight fades fast. By two hundred metres, it's twilight. Below a thousand, it's night. Forever."
+       One continuous dive through a tall world: sky and Sun, the surface, sunbeams, a school of fish, the twilight zone
+       with its first lights, then the dark. The depth gauge reads the depth at the centre of the frame. -->
+  <div data-composition-id="descent" data-width="1080" data-height="1920" data-duration="7.82">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN;
+        const ID = "descent", R = document.querySelector('[data-composition-id="descent"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const S = KO.scene(R, ID, { bg: ["#020d26", "#020a1c"], layers: [0.4, 0.75, 1, 1.45] });
+        const f = K.f, rnd = K.rng(21);
+
+        // depth in metres <-> world y. Surface at y 300; 9 px/m to 200 m, 4 px/m to 1,000 m, then 3 px/m
+        const Y = (d) => (d <= 200 ? 300 + d * 9 : d <= 1000 ? 2100 + (d - 200) * 4 : 5300 + (d - 1000) * 3);
+        const D = (y) => (y <= 2100 ? Math.max(0, (y - 300) / 9) : y <= 5300 ? 200 + (y - 2100) / 4 : 1000 + (y - 5300) / 3);
+
+        // ---------------------------------------------------------------- water and sky (subject layer, moves 1:1)
+        const wg = K.el("linearGradient", { id: `${S.p}-water`, x1: 0, y1: 300, x2: 0, y2: 7600, gradientUnits: "userSpaceOnUse" }, S.defs);
+        [[0, "#55d8ef"], [30, "#2bb2dc"], [100, "#1585bf"], [200, "#0b5a93"], [500, "#073767"], [1000, "#031b40"], [1150, "#020d26"]].forEach(([d, c]) =>
+          K.el("stop", { offset: f((Y(d) - 300) / 7300), "stop-color": c }, wg));
+        K.el("stop", { offset: 1, "stop-color": "#020a1c" }, wg);
+        const sg = K.el("linearGradient", { id: `${S.p}-sky`, x1: 0, y1: -1400, x2: 0, y2: 300, gradientUnits: "userSpaceOnUse" }, S.defs);
+        [[0, "#ffe9b8"], [0.45, "#bdf1ff"], [1, "#8fe3f6"]].forEach(([o, c]) => K.el("stop", { offset: o, "stop-color": c }, sg));
+        const world = S.act;
+        K.el("rect", { x: -400, y: -1400, width: 1880, height: 1700, fill: `url(#${S.p}-sky)` }, world);
+        const sun = KO.glow(world, { x: 790, y: -330, r: 520, color: "warm", p: S.p, core: 0, k: 1 });
+        K.el("circle", { cx: 790, cy: -330, r: 92, fill: "#fff4d0" }, world);
+        K.el("rect", { x: -400, y: 300, width: 1880, height: 7300, fill: `url(#${S.p}-water)` }, world);
+        // surface: a wavy edge with a bright band and caustic ripples under it
+        let wave = "M -400 300";
+        for (let x = -400; x <= 1480; x += 60) wave += ` Q ${x + 30} ${x % 120 ? 288 : 312} ${x + 60} 300`;
+        K.el("path", { d: `${wave} L 1480 330 L -400 330 Z`, fill: "#bff5ff", opacity: 0.85 }, world);
+        K.el("path", { d: wave, fill: "none", stroke: "#ffffff", "stroke-width": 8, opacity: 0.9 }, world);
+        const caust = K.g(world, { fill: "none", stroke: "#e6fdff", "stroke-width": 5, "stroke-linecap": "round", opacity: 0.35 });
+        for (let i = 0; i < 26; i++) {
+          const x = -300 + rnd() * 1700, y = 360 + rnd() * 420, w = 40 + rnd() * 90;
+          K.el("path", { d: `M ${f(x)} ${f(y)} q ${f(w / 2)} ${f(-14 - rnd() * 10)} ${f(w)} 0`, opacity: f(0.4 + rnd() * 0.6) }, caust);
+        }
+        const rays = KO.rays(world, { p: S.p, defs: S.defs, n: 9, y: 300, len: 1900, x0: -200, x1: 1200, seed: 22 });
+        tl.to(rays, { x: 40, duration: DUR, ease: "sine.inOut" }, 0);
+
+        // a school of silver fish near the top, swimming right
+        const school = [], silver = { base: "#c9dcee", shade: "#93aeca", hi: "#f3f9ff", fin: "#aac2dc", dark: "#5f7a99" };
+        for (let i = 0; i < 16; i++) {
+          const x = -200 + (i % 8) * 170 + rnd() * 60, y = Y(45 + Math.floor(i / 8) * 22 + rnd() * 16);
+          const w = K.g(world, { transform: `translate(${f(x)},${f(y)})` });
+          school.push({ a: KO.fish(w, { L: 86, pal: silver, p: S.p, seed: i }), w, x, y, ph: rnd() * 6 });
+        }
+        // a whale silhouette cruising through the sunlit water, so the blue between the school and the twilight isn't empty
+        const whaleW = K.g(world, { transform: `translate(980,${f(Y(150))}) scale(-1,1)`, opacity: 0.55 }), whale = K.g(whaleW);   // faces left
+        const WC = "#0b4f86";
+        K.el("path", { d: "M 330 0 C 300 -95 120 -120 -60 -95 C -260 -70 -420 -40 -540 -8 C -420 30 -240 70 -40 82 C 140 92 300 70 330 0 Z", fill: WC }, whale);
+        K.el("path", { d: "M -520 -6 L -640 -80 Q -610 -10 -650 60 Z", fill: WC }, whale);
+        K.el("path", { d: "M 60 50 Q 20 150 -90 170 Q -40 110 0 50 Z", fill: WC }, whale);
+        K.el("path", { d: "M 300 30 Q 120 70 -60 60", fill: "none", stroke: "#0a4271", "stroke-width": 10, "stroke-linecap": "round" }, whale);
+        K.el("circle", { cx: 210, cy: -10, r: 9, fill: "#cfe9ff", opacity: 0.8 }, whale);
+        tl.to(whale, { x: 1400, duration: DUR, ease: "none" }, 0);           // inside the flip: moves left on screen
+        // twilight zone: the first lights
+        const lan = [[260, 290], [820, 420], [330, 610], [760, 830]].map(([x, d], i) => {
+          const w = K.g(world, { transform: `translate(${x},${f(Y(d))})` });
+          const halo = KO.glow(w, { r: 170, color: "cyan", p: S.p, core: 0, k: 0.45 });
+          return { a: KO.fish(w, { L: 170, pal: KO.C.dim, p: S.p, photo: 6, photoR: 0.12, photoK: 1, seed: 30 + i }), w, halo, ph: rnd() * 6 };
+        });
+        const hw = K.g(world, { transform: `translate(560,${f(Y(330))})` });
+        const hat = KO.hatchet(hw, { L: 150, p: S.p });
+        hat.k = 1; hat.update();
+        const jw = K.g(world, { transform: `translate(610,${f(Y(720))})` });
+        const jel = KO.jelly(jw, { r: 70, p: S.p });
+        jel.flash = 0.7; jel.update();
+        const sparks = KO.sparks(world, { n: 55, p: S.p, seed: 23, x0: -100, x1: 1180, y0: Y(380), y1: Y(1250), rmin: 10, rmax: 34, k: 0 });
+        // in the dark: a pair of nervous eyes
+        const ink = { base: "#0b1834", shade: "#08122a", hi: "#122650", fin: "#0d1c3c", dark: "#050c1c" };
+        const nw = K.g(world, { transform: `translate(600,${f(Y(1104))})` });
+        const lone = KO.fish(nw, { L: 270, pal: ink, p: S.p, eyeR: 36, seed: 40 });
+        // a few distant animals keep the dark alive
+        const deepJ = [[180, 1030, 0.5], [880, 1060, 0.4], [300, 1160, 0.35]].map(([x, d, sc]) => {
+          const w = K.g(world, { transform: `translate(${x},${f(Y(d))}) scale(${sc})`, opacity: 0.8 });
+          const j = KO.jelly(w, { r: 120, p: S.p });
+          j.flash = 0.8; j.update();
+          return j;
+        });
+        lone.eye.lx = 0.2; lone.eye.update();
+
+        // ---------------------------------------------------------------- depth texture: far silhouettes, snow at two depths
+        for (let i = 0; i < 6; i++) {
+          const g = K.g(S.far, { transform: `translate(${f(rnd() * 1080)},${f(400 + i * 520)}) scale(${f(0.5 + rnd() * 0.5)})`, opacity: 0.18 });
+          for (let k = 0; k < 7; k++) KO.fish(g, { L: 120, pal: { base: "#0a2a55", shade: "#0a2a55", hi: "#0a2a55", fin: "#0a2a55", dark: "#0a2a55" }, p: S.p, eyeR: 0.01 }).g.setAttribute("transform", `translate(${f(k * 110 + rnd() * 40)},${f(rnd() * 120)})`);
+        }
+        KO.snow(S.mid, { n: 260, seed: 24, x0: -300, x1: 1380, y0: -400, y1: 5600, a: 0.38 });
+        KO.snow(S.mid, { n: 120, seed: 26, x0: -300, x1: 1380, y0: 3400, y1: 5600, a: 0.5 });
+        KO.snow(S.near, { n: 160, seed: 25, x0: -300, x1: 1380, y0: 0, y1: 9200, rmin: 2.5, rmax: 6, a: 0.3 });
+        KO.snow(S.near, { n: 90, seed: 27, x0: -300, x1: 1380, y0: 7000, y1: 9400, rmin: 3, rmax: 8, a: 0.35 });
+        const bub = K.g(world, { fill: "rgba(230,253,255,0.35)", stroke: "#ffffff", "stroke-width": 3 });
+
+        // ---------------------------------------------------------------- "Dive in": the splash
+        const tDive = at("dive");
+        for (let i = 0; i < 40; i++) {
+          const x = 380 + rnd() * 320, y = 330 + rnd() * 260, r = 6 + rnd() * 20;
+          const c = K.el("circle", { cx: f(x), cy: f(y), r: f(r), opacity: 0 }, bub);
+          const t = tDive - 0.05 + rnd() * 0.35;
+          tl.set(c, { opacity: 0.9 }, t);
+          tl.to(c, { attr: { cy: y - 160 - rnd() * 260, cx: x + (rnd() - 0.5) * 140 }, duration: 1.1, ease: "power1.out" }, t);
+          tl.to(c, { opacity: 0, duration: 0.4 }, t + 0.8);
+        }
+        // a trail of bubbles all the way down
+        for (let i = 0; i < 46; i++) {
+          const t = tDive + 0.3 + i * 0.14, c = K.el("circle", { r: f(4 + rnd() * 10), opacity: 0 }, bub);
+          const y0 = 900 + i * 125;
+          gsap.set(c, { attr: { cx: 520 + (rnd() - 0.5) * 300, cy: y0 } });
+          tl.set(c, { opacity: 0.7 * Math.max(0.15, 1 - i / 46) }, t);
+          tl.to(c, { attr: { cy: y0 - 380 }, duration: 1.4, ease: "none" }, t);
+          tl.to(c, { opacity: 0, duration: 0.3 }, t + 1.1);
+        }
+
+        // ---------------------------------------------------------------- labels and gauge
+        const gauge = KO.depthMeter(S.ui, { x: 104, y0: 330, y1: 1180, marks: [[0, "0 m"], [200, "200 m"], [1000, "1,000 m"]] });
+        tl.to([gauge.el, gauge.chip, ...gauge.marks], { opacity: 1, duration: 0.35, ease: "power2.out" }, tDive + 0.3);
+        const banT = K.callout(S.ui, { text: "Twilight zone", x: 560, y: 420, color: "teal", size: 70 });
+        K.show(tl, banT, at("twilight") - 0.05);
+        K.hide(tl, banT, at("below") - 0.15);
+        const banN = K.callout(S.ui, { text: "Midnight zone", x: 560, y: 420, color: "violet", size: 70 });
+        K.show(tl, banN, at("night") - 0.05);
+        K.hide(tl, banN, DUR - 0.25);
+
+        // the eyes in the dark
+        KP.eyeTo(tl, lone.eye, at("forever") - 0.1, { fear: 0.9, lx: -0.8 }, 0.25);
+        KP.eyeTo(tl, lone.eye, at("forever") + 0.35, { lx: 0.8 }, 0.25);
+        KP.blink(tl, lone.eye, DUR - 0.3);
+
+        // ---------------------------------------------------------------- one clock: camera path, gauge, swimming, twinkle
+        const tBy = at("by"), tTw = at("twilight"), tBe = at("below"), tNi = at("night"), tFo = at("forever");
+        const KEYS = [[0, 180], [tDive - 0.04, 230], [tDive + 0.75, 1000], [tBy, 1700], [tTw, Y(200)], [tBe, Y(500)], [tNi, Y(1000)], [tFo, Y(1100)], [DUR, Y(1135)]];
+        const path = (() => {   // monotone cubic through the keys (no overshoot)
+          const xs = KEYS.map((k) => k[0]), ys = KEYS.map((k) => k[1]), n = xs.length, d = [], m = [];
+          for (let i = 0; i < n - 1; i++) d.push((ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i]));
+          m.push(d[0]);
+          for (let i = 1; i < n - 1; i++) m.push(d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+          m.push(d[n - 2]);
+          for (let i = 0; i < n - 1; i++) {
+            const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+            if (s > 9) { const t = 3 / Math.sqrt(s); m[i] = t * a * d[i]; m[i + 1] = t * b * d[i]; }
+          }
+          return (x) => {
+            let i = 0;
+            while (i < n - 2 && x > xs[i + 1]) i++;
+            const h = xs[i + 1] - xs[i], t = Math.min(1, Math.max(0, (x - xs[i]) / h)), t2 = t * t, t3 = t2 * t;
+            return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * h * m[i] + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * h * m[i + 1];
+          };
+        })();
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          S.cam.py = path(t); S.cam.px = 540 + Math.sin(t * 0.6) * 18; S.cam.s = 1.0; S.cam.apply();
+          gauge.d = D(S.cam.py); gauge.update();
+          school.forEach((F, i) => {
+            F.a.phase = t * 9 + F.ph; F.a.update();
+            F.w.setAttribute("transform", `translate(${f(F.x + t * 70)},${f(F.y + Math.sin(t * 2 + F.ph) * 6)})`);
+          });
+          lan.forEach((F) => { F.a.phase = t * 5 + F.ph; F.a.update(); });
+          jel.phase = t * 2; jel.pulse = 0.5 + 0.5 * Math.sin(t * 3); jel.spin = t * 1.5; jel.update();
+          sparks.list.forEach((s) => { s.glow.k = 0.55 + 0.4 * Math.sin(t * s.sp * 2 + s.ph); s.glow.update(); });
+          deepJ.forEach((j, i) => { j.phase = t * 2 + i; j.pulse = 0.5 + 0.5 * Math.sin(t * 2.6 + i); j.spin = t * (1.2 + i * 0.3); j.update(); });
+          lone.phase = t * 4; lone.update();
+        };
+        // redraw after every tween has rendered: a clock tween would run first on a forward seek and read stale values
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.55, "2,6,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>
