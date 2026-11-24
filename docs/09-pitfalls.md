@@ -71,3 +71,28 @@
 - **`Mix.add` with a negative time** writes to the end of the buffer (negative slice index). Trim the sound's head instead.
 - **Kokoro leaves silence at both ends of each clip**, so fixed pauses come out longer than set. Trim before placing.
 - **Reusing quotes inside a Python f-string** is a syntax error before Python 3.12; build the piece in a variable.
+
+## Found while making the walking-human film (projects/mitochondria-short)
+- **The safe-area check samples only 9 moments.** Tags that were outside Shorts' or TikTok's right edge for two
+  seconds passed the default `check`. Run `npx hyperframes check --samples=150 --no-craft --no-contrast` before a
+  render as well (about a minute).
+- **TikTok's lower band is narrower.** Below y 840 text must stay within x 120-780; a banner centred at 540 that is
+  590 px wide fails. Centre low labels near x 450-470.
+- **Spinning while flying looks like a wrong pivot to the checker** (`rotation_pivot_drift`): coins and enzymes that
+  rotate as they travel. Put intended motion like that in a group with `data-layout-allow-orbit`.
+- **A dial hand in a big scene SVG** (`off_pivot_rotation`): the checker takes the hub from the most-shared circle
+  centre in the whole SVG (here the coins' glow rings), not from the dial. Give the dial a hub circle and, if the
+  warning stays, the same opt-out with a comment saying why.
+- **A missing glyph draws nothing.** "≈" is not in Nunito and the headless renderer showed a blank space. Use "~".
+- **A launch point read from a live value.** Coins took their start position from the current split amount, so
+  coins already in the air jumped when the cell divided. Compute each one's start from the state at its own launch
+  time (a pure function of time).
+- **Overlapping tweens on one property** get their start values from whichever frame is rendered first, so a seek
+  can differ from playback. Key such values in a table of `[time, value]` and interpolate (`camAt(t)` in
+  `compositions/origin.html`) instead of chaining tweens.
+- **An element hidden with `opacity: 0` in a `gsap.set`** stays hidden if its entrance tween only animates
+  `scaleX`: the title bar never appeared. Animate opacity in the same tween.
+- **`tools/frame_stats.py` squashed vertical films** into 480x270, so each block was 27x85 px; it keeps the aspect
+  ratio now and reports more flat seconds for vertical films than before.
+- **Hanging balance pans collide with a standing figure**: the strings run through it. `KC.balance` puts the dishes
+  on stems above the beam ends.

@@ -1,0 +1,95 @@
+<template id="mother-template">
+  <!-- "And every one of yours came from your mother. Thanks, Mom."
+       The egg, full of mitochondria, is met by a sperm coming down from above; the sperm's few mitochondria ("Dad's")
+       shrink away and vanish, the egg glows ("Mom's egg"). Then Mom and you, face to face: she waves, a heart pops. -->
+  <div data-composition-id="mother" data-width="1080" data-height="1920" data-duration="3.755">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KC = window.CELL, KH = window.HUMAN;
+        const ID = "mother", R = document.querySelector('[data-composition-id="mother"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x));
+        const S = KO.scene(R, "mom", { bg: ["#7a3a5a", "#5a2846", "#3a1a30"], pool: { x: 540, y: 820, rx: 720, ry: 800, color: "#ff9ab5", a: 0.25 } });
+        const cyto = KC.cytoplasm(S.far, { tint: "#ffc2d6", seed: 93, folds: 6 });   // soft body-fluid backdrop
+        KO.snow(S.far, { n: 70, seed: 92, a: 0.2, color: "#ffd8e4" });
+
+        // ---------------------------------------------------------------- egg and sperm
+        const EX = 540, EY = 870, ER = 260;
+        const A = K.g(S.act);
+        const eggGlow = KO.glow(A, { x: EX, y: EY, r: 470, color: "warm", p: S.p, core: 0, k: 0 });
+        const ew = K.g(A, { transform: `translate(${EX},${EY})` });
+        const egg = KC.egg(ew, { R: ER, n: 48 });
+        // the sperm points down at the top of the egg; its tail runs up out of the frame
+        const SS = 2.0, SY1 = EY - ER * 1.1 - 34 * SS + 12;
+        const sw = K.g(A), swi = K.g(sw, { transform: "rotate(90)" });
+        const sperm = KC.sperm(swi, { s: SS, prefix: "momsp" });
+        const tagD = K.tag(S.ui, { text: "Dad's", x: 390, y: f(SY1 - 70 * SS + 40), color: "violet", size: 46, pointer: false });
+        K.show(tl, tagD, at("every") - 0.05);
+        K.hide(tl, tagD, at("came") + 0.35);
+        const tagE = K.tag(S.ui, { text: "Mom's egg", x: 300, y: f(EY - ER * 0.72), color: "crimson", size: 54 });
+        K.show(tl, tagE, at("mother") - 0.08);
+        K.hide(tl, tagE, at("thanks") - 0.4);
+
+        // ---------------------------------------------------------------- Mom and you
+        const B = K.g(S.act, { opacity: 0 });
+        const GY = 1100;
+        K.el("ellipse", { cx: 540, cy: GY + 2, rx: 380, ry: 22, fill: "#000000", opacity: 0.16 }, B);
+        const momW = K.g(B, { transform: `translate(350,${GY})` });
+        const mom = KH.human(momW, { look: { hairStyle: "long", hair: "#6b3a2a", hairHi: "#8a5040", shirt: "#c0507a", shirtShade: "#9c3d61", shirtHi: "#dc6f96", pants: "#3a3550", pantsShade: "#2c2840", pantsHi: "#4a4566", skin: "#e2b08e", skinShade: "#c48e6c" } });
+        const youW = K.g(B, { transform: `translate(735,${GY}) scale(-1,1)` });
+        const you = KH.human(youW, { look: {} });
+        const youPose = KH.standPose(); KH.armTo(youPose, 0, 25, 115); you.setPose(youPose);      // hand on the chest
+        const heart = K.el("path", { d: "M 0 22 C -50 -12 -38 -60 0 -34 C 38 -60 50 -12 0 22 Z", fill: "#ff8fb1", opacity: 0 }, B);
+
+        const st = { come: 0, gone: 0, swap: 0, wave: 0, heart: 0, glow: 0, out: 0 };
+        tl.to(st, { come: 1, duration: 1.1, ease: "power2.out" }, 0);
+        tl.to(st, { gone: 1, duration: 0.45, ease: "power2.in" }, at("came") - 0.05);
+        tl.to(st, { glow: 1, duration: 0.4 }, at("mother") - 0.2);
+        const tS = at("thanks") - 0.35;
+        tl.to(st, { out: 1, duration: 0.22, ease: "power2.in" }, tS);
+        tl.to(st, { swap: 1, duration: 0.3, ease: "back.out(1.8)" }, tS + 0.18);
+        tl.to(st, { wave: 1, duration: 1.1, ease: "none" }, tS + 0.3);
+        tl.to(st, { heart: 1, duration: 0.3, ease: "back.out(2.5)" }, at("mom") - 0.1);
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          cyto.update(t);
+          const sy = -300 + (SY1 + 300) * st.come, sx = EX + Math.sin(t * 3) * 8 * (1 - st.come * 0.6);
+          sw.setAttribute("transform", `translate(${f(sx)},${f(sy)}) rotate(${f(4 * Math.sin(t * 2))})`);
+          sperm.phase = t * 14; sperm.update();
+          // Dad's mitochondria shrink and vanish one after another (they are destroyed after fertilisation)
+          sperm.minis.forEach((q, i) => {
+            const u = clamp(st.gone * 1.6 - i * 0.2);
+            q.g.setAttribute("opacity", f(1 - u));
+            q.m.g.setAttribute("transform", `scale(${f(1 - 0.7 * u)})`);
+          });
+          sperm.eyes.lx = 0.8; sperm.eyes.ly = 0; sperm.eyes.update();      // looks down at the egg (its frame is turned 90 degrees)
+          egg.minis.forEach((q, i) => { q.m.phase = t * 2 + i; q.m.update(); });
+          eggGlow.k = 0.5 * st.glow * (0.85 + 0.15 * Math.sin(t * 6)); eggGlow.update();
+          A.setAttribute("opacity", f(1 - st.out));
+          A.setAttribute("transform", `translate(${f(EX)},${f(EY)}) scale(${f(1 - 0.25 * st.out)}) translate(${f(-EX)},${f(-EY)})`);
+          A.setAttribute("display", st.out >= 1 ? "none" : "inline");
+          B.setAttribute("opacity", f(clamp(st.swap * 1.4)));
+          B.setAttribute("transform", `translate(540,${GY}) scale(${f(0.88 + 0.12 * st.swap)}) translate(-540,${-GY})`);
+          // Mom waves: upper arm forward at shoulder height, forearm up, swinging at the elbow
+          const pose = KH.standPose();
+          KH.armTo(pose, 0, 112, 55 + 24 * Math.sin(st.wave * Math.PI * 6));
+          mom.setPose(pose);
+          heart.setAttribute("transform", `translate(545,${f(400 - 50 * st.heart)}) scale(${f(st.heart * 1.3)})`);
+          heart.setAttribute("opacity", f(st.heart));
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.4, "30,8,24"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

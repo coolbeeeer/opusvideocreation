@@ -17,6 +17,11 @@ film script ──vo.py──▶ assets/vo_raw.wav + vo_timing.json ──align.
 - **Fixed film length:** solve the speaking speed so speech + pauses fit between the open and the end card
   (antibiotics: 1.044x for a 60.0 s film with a 5.3 s open). Cap the speed (1.08x); past that, trim the script.
 - **Recording mode** (template: `python vo.py --recording voice.wav`): places the human's recording after the open.
+- **Clips mode** (the vertical films' line-based `vo.py`, newest in `projects/mitochondria-short/`:
+  `python vo.py --clips DIR`): one recorded or generated clip per `film.json` line, in name order (01.wav ...).
+  Silence and room noise are trimmed by loudness (30 ms RMS frames), clips are resampled to 48 kHz and laid out with
+  each line's pause, and the exact line starts go to `vo_timing.json` so `align.py` can pin each line's first word.
+  Nothing is time-stretched. Tested with noisy 44.1 kHz stereo clips: 125/125 words matched.
 - The antibiotics project keeps its script inside `vo.py` (`LINES`); the template reads `film.json`.
 
 ## align.py
@@ -38,7 +43,8 @@ film script ──vo.py──▶ assets/vo_raw.wav + vo_timing.json ──align.
 - Rewrites `data-duration` inside each scene file to match its host.
 
 ## Swapping in the human's own voice
-1. Template: `python vo.py --recording their.wav`. Antibiotics: replace `assets/vo_raw.wav` (48 kHz mono, first
+1. Template: `python vo.py --recording their.wav`. Vertical films: `python vo.py --clips their_clips/` (one file per
+   line) or `--recording`. Antibiotics: replace `assets/vo_raw.wav` (48 kHz mono, first
    word at the cold-open time) and update `vo_timing.json` (`film`, `open`, sentence starts if you use the clamp).
 2. `python align.py` → check every word matched.
 3. `python build.py`, then `audio/sfx_cues.py`, `audio/music.py`, `audio/mix.py`, `python build.py`.

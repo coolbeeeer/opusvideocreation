@@ -70,6 +70,8 @@ subject. For comparison the repo's 60 s antibiotics film measures 27 of 60.
 - Style rule broken on purpose: the sunlit water at 5.9 s and 7.7 s is above the 7 % saturation limit for dark scenes
   (it is a day scene; the style file measured about 30 % in day scenes).
 - 15 seconds are still more than 70 % flat background by the frame_stats measure (listed above).
+  Correction (added later): at the time `tools/frame_stats.py` squashed this vertical film into 480x270. With the
+  aspect ratio kept, the same render measures 26 of 54 seconds over 70 % flat.
 - Science simplifications in the picture (the narration is accurate; sources in `SCRIPT.md`):
   - The light organ close-up shows fuel and enzyme only; oxygen is left out, and the names luciferin and luciferase are not used.
   - The anglerfish lure is drawn green-cyan; real lures glow blue-green, from bacteria living in them.

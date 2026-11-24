@@ -65,6 +65,13 @@ each other; and the fourth bounced molecule faded out on top of another survivor
 ## Measured on the vertical film (`projects/ocean-glow-short/`)
 15 of 54 seconds over 70 % flat (the darkness of the midnight zone is part of the story), -14.0 LUFS, -1.6 dBTP, 0 ms
 sync, and a clean HyperFrames check including the Shorts, Reels and TikTok safe areas. Its REVIEW.md has the details.
+Correction: `tools/frame_stats.py` squashed vertical frames into 480x270 at the time; with the aspect kept, the same
+render measures 26 of 54 seconds over 70 % flat.
+
+## Measured on the walking-human film (`projects/mitochondria-short/`)
+4 of 50 seconds over 70 % flat (v1 had 23, fixed with a low-contrast cell-interior backdrop, `KC.cytoplasm`),
+-14.0 LUFS, -1.6 dBTP, 0 ms sync, a clean HyperFrames check, and a 150-sample safe-area scan. Its REVIEW.md and
+NOTES.md have the details.
 
 ## Still open
 - A recurring musical theme per channel and real instrument timbres (for example a MIDI score rendered through a

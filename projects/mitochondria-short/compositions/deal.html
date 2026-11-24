@@ -1,0 +1,103 @@
+<template id="deal-template">
+  <!-- "The guest got shelter and food. The host got energy. Lots of it."
+       Close inside the host: a cosy bubble around the guest ("Shelter"), food flowing in ("Food"), then energy coins
+       bursting out to the host ("Energy"); on "Lots of it" the guest divides and both pump out coins. -->
+  <div data-composition-id="deal" data-width="1080" data-height="1920" data-duration="4.8">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KC = window.CELL;
+        const ID = "deal", R = document.querySelector('[data-composition-id="deal"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x)), rnd = K.rng(61);
+        const S = KO.scene(R, "del", { bg: ["#2f6a63", "#1f4a46", "#143330"] });
+        KO.snow(S.far, { n: 90, seed: 62, a: 0.25, color: "#cfeadb" });
+
+        // the host fills the frame; its eyes look down at the guest
+        const hw = K.g(S.act, { transform: "translate(540,840)" });
+        const host = KC.host(hw, { R: 720, prefix: "delh", seed: 6 });
+        host.eyes.g.setAttribute("transform", "translate(57.6,-430)");
+        const GX = 540, GY = 930;
+        const bubble = K.el("ellipse", { cx: GX, cy: GY, rx: 250, ry: 160, fill: "#a493d1", stroke: "#d9cff3", "stroke-width": 10 }, S.act);
+        const glowS = KO.glow(S.act, { x: GX, y: GY, r: 360, color: "cyan", p: S.p, core: 0, k: 0 });
+        const foodG = K.g(S.act), atpG = K.g(S.act, { "data-layout-allow-orbit": "" });   // coins spin as they fly: an intended orbit for the checker
+        const g1 = K.g(S.act), g2 = K.g(S.act);
+        const a1 = K.g(g1), a2 = K.g(g2);
+        const guestA = KC.guest(a1, { L: 230, r: 56, prefix: "delg", seed: 4, flagSide: -1 });
+        const guestB = KC.guest(a2, { L: 230, r: 56, prefix: "delg", seed: 5, flagSide: 1 });
+        const hostGlow = KO.glow(S.far, { x: 540, y: 860, r: 900, color: "warm", p: S.p, core: 0, k: 0 });
+
+        // food: sugar rings drifting in from the host's body on the right (under the "Food" tag) into the guest
+        const foods = Array.from({ length: 8 }, (_, i) => {
+          const g = K.g(foodG); KC.sugar(g, { s: 1.6 });
+          const a = -0.4 + 0.8 * (i / 7) + (rnd() - 0.5) * 0.1, d = 560 + rnd() * 60;
+          return { g, x0: GX + Math.cos(a) * d, y0: GY + Math.sin(a) * d * 0.8, t0: at("food") - 0.3 + i * 0.08 };
+        });
+        // energy: coins flung out from the guest(s) into the host, spread wide and kept below the host's eyes
+        const tSp = at("lots") - 0.25, splitEase = gsap.parseEase("power2.inOut");
+        const splitDx = (t) => 125 * sm(splitEase(clamp((t - tSp) / 0.6)));      // how far each half has moved at time t
+        const coins = Array.from({ length: 34 }, (_, i) => {
+          const g = K.g(atpG); KC.atp(g, { s: 1.45, prefix: S.p });
+          const a = -Math.PI * (0.06 + 0.88 * rnd()), d = 250 + rnd() * 200;
+          const t0 = i < 12 ? at("energy") - 0.15 + i * 0.06 : at("lots") - 0.12 + (i - 12) * 0.035;
+          const sx = GX + (i < 12 ? 0 : (i % 2 ? 1 : -1) * splitDx(t0));           // launched from where its guest was at t0
+          return { g, a, d, t0, sx, spin: rnd() * 360 };
+        });
+
+        const st = { shelter: 0, split: 0, happy: 0 };
+        tl.to(st, { shelter: 1, duration: 0.4, ease: "power2.out" }, at("shelter") - 0.1);
+        tl.to(st, { split: 1, duration: 0.6, ease: "power2.inOut" }, tSp);
+        tl.to(st, { happy: 1, duration: 0.3 }, at("energy") + 0.2);
+        const tagS = S.cam.pin(K.tag(S.ui, { text: "Shelter", x: 0, y: 0, color: "teal", size: 56 }), GX - 175, GY - 205);
+        K.show(tl, tagS, at("shelter") - 0.05);
+        const tagF = S.cam.pin(K.tag(S.ui, { text: "Food", x: 0, y: 0, color: "green", size: 56 }), GX + 200, GY - 205);
+        K.show(tl, tagF, at("food") - 0.05);
+        K.hide(tl, tagS, at("host") - 0.15);
+        K.hide(tl, tagF, at("host") - 0.15);
+        const tagE = S.cam.pin(K.tag(S.ui, { text: "Energy", x: 0, y: 0, color: "amber", size: 64 }), 540, 610);
+        K.show(tl, tagE, at("energy") - 0.05);
+        K.camTo(tl, S.cam, 0, { s: 1.06, py: 980 }, at("lots") - 0.3, "sine.inOut");
+        K.camTo(tl, S.cam, at("lots") - 0.3, { s: 0.94, py: 900 }, DUR - at("lots") + 0.3, "power2.inOut");
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          host.phase = t * 1.2; host.update();
+          host.eyes.lx = 0; host.eyes.ly = 0.8 - 0.6 * st.happy; host.eyes.fear = st.happy * 0.6; host.eyes.update();
+          glowS.k = 0.55 * st.shelter * (0.8 + 0.2 * Math.sin(t * 5)); glowS.update();
+          bubble.setAttribute("stroke-width", f(10 + 6 * st.shelter));
+          // the guest divides on "Lots of it": two overlapping copies slide apart (binary fission without morphing)
+          const dx = 125 * sm(st.split), dy = 22 * sm(st.split);
+          g1.setAttribute("transform", `translate(${f(GX - dx)},${f(GY - dy + Math.sin(t * 2) * 5)}) rotate(${f(-6 - 10 * st.split)})`);
+          g2.setAttribute("transform", `translate(${f(GX + dx)},${f(GY + dy + Math.sin(t * 2 + 1) * 5)}) rotate(${f(-6 + 12 * st.split)})`);
+          // flagella stay retracted, as at the end of the origin scene; the second copy only shows once it splits off
+          [guestA, guestB].forEach((G, i) => { G.phase = t * 7 + i; G.amp = 0.4; G.len = 0.15; G.update(); G.eyes.lid = 0.4 - 0.4 * st.happy; G.eyes.lx = 0.2; G.eyes.update(); });
+          g2.setAttribute("opacity", st.split > 0.02 ? 1 : 0);
+          bubble.setAttribute("rx", f(250 + 120 * sm(st.split))); bubble.setAttribute("ry", f(160 + 20 * sm(st.split)));
+          foods.forEach((F) => {
+            const u = clamp((t - F.t0) / 0.75), e = u * u * (3 - 2 * u);
+            F.g.setAttribute("transform", `translate(${f(F.x0 + (GX - F.x0) * e)},${f(F.y0 + (GY - F.y0) * e)}) scale(${f(1 - 0.7 * clamp((u - 0.7) / 0.3))})`);
+            F.g.setAttribute("opacity", f(u <= 0 ? 0 : u >= 1 ? 0 : 1));
+          });
+          // coins fly out on an ease-out arc, then float where they landed (they stay bright: "lots of it" piles up)
+          coins.forEach((C, i) => {
+            const u = clamp((t - C.t0) / 0.8), e = 1 - (1 - u) ** 3;
+            const x = C.sx + Math.cos(C.a) * C.d * e * 1.3, y = GY - 20 + Math.sin(C.a) * C.d * e * 0.8 + Math.sin(t * 3 + i) * 6 * u;
+            C.g.setAttribute("transform", `translate(${f(x)},${f(y)}) rotate(${f(C.spin + 200 * e + 20 * Math.sin(t * 2 + i))}) scale(${f(0.5 + 0.5 * clamp(u * 3))})`);
+            C.g.setAttribute("opacity", u <= 0 ? 0 : 1);
+          });
+          hostGlow.k = 0.25 * st.happy + 0.2 * st.split; hostGlow.update();
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.45, "8,24,22"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

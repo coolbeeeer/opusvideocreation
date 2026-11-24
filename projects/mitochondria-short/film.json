@@ -1,0 +1,33 @@
+{
+  "title": "The Bacteria That Moved Into Your Cells",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "film": "auto",
+  "open": 0.6,
+  "tail": 2.8,
+  "voice": "af_heart",
+  "lang": "en-us",
+  "speed": 0.95,
+  "max_speed": 1.1,
+  "captions": true,
+  "lines": [
+    { "text": "Every step you take is powered by bacteria. Well, former bacteria.", "pause": 0.8 },
+    { "text": "Dive into your leg, into a muscle cell, and there they are: thousands of mitochondria.", "pause": 0.7 },
+    { "text": "Roughly two billion years ago, a bigger cell swallowed a bacterium. But it wasn't digested. It moved in.", "pause": 0.8 },
+    { "text": "The guest got shelter and food. The host got energy. Lots of it.", "pause": 0.6 },
+    { "text": "The proof: mitochondria still carry their own DNA, wear a double wall, and split in two, just like bacteria.", "pause": 0.6 },
+    { "text": "Today they turn food and oxygen into ATP, your cells' fuel. You recycle about your own body weight of it every single day.", "pause": 0.7 },
+    { "text": "And every one of yours came from your mother. Thanks, Mom.", "pause": 0.8 },
+    { "text": "So every step you take runs on a deal made about two billion years ago.", "pause": 0.0 }
+  ],
+  "scenes": [
+    { "id": "walk", "lines": [1, 2], "mood": "walk" },
+    { "id": "origin", "lines": [3], "mood": "ancient" },
+    { "id": "deal", "lines": [4], "mood": "warm" },
+    { "id": "proof", "lines": [5], "mood": "curious" },
+    { "id": "atp", "lines": [6], "mood": "busy" },
+    { "id": "mother", "lines": [7], "mood": "warm" },
+    { "id": "finale", "lines": [8], "mood": "resolve" }
+  ]
+}

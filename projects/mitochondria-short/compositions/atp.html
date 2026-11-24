@@ -1,0 +1,145 @@
+<template id="atp-template">
+  <!-- "Today they turn food and oxygen into ATP, your cells' fuel. You recycle about your own body weight of it every single day."
+       Part 1, the power plant: food (upper left) and oxygen (upper right) stream into a big mitochondrion, ATP coins pour
+       out of its underside into a muscle fibre, which contracts as they arrive.
+       Part 2, the balance: you on one dish, ATP raining onto the other until the beam is level; a day dial turns once. -->
+  <div data-composition-id="atp" data-width="1080" data-height="1920" data-duration="8.755">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KC = window.CELL, KH = window.HUMAN;
+        const ID = "atp", R = document.querySelector('[data-composition-id="atp"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x)), rnd = K.rng(81);
+        const S = KO.scene(R, "atp", { bg: ["#5a1830", "#45122a", "#2c0b1d"], pool: { x: 540, y: 760, rx: 720, ry: 800, color: "#a8344a", a: 0.35 } });
+        const cyto = KC.cytoplasm(S.far, { tint: "#ff9fb0", seed: 83 });   // the inside of the muscle cell, out of focus
+        KO.snow(S.far, { n: 70, seed: 82, a: 0.2, color: "#ffd0c0" });
+        const bez = (a, c, b, u) => [(1 - u) * (1 - u) * a[0] + 2 * (1 - u) * u * c[0] + u * u * b[0], (1 - u) * (1 - u) * a[1] + 2 * (1 - u) * u * c[1] + u * u * b[1]];
+
+        // ================================================================ part 1: the power plant
+        const P1 = K.g(S.act);
+        // the muscle fibre along the bottom (above the captions): a striped band that shortens when it contracts
+        const FY = 1010, FX0 = 110, FX1 = 970, FH = 96;
+        const band = K.g(P1);
+        const bandBody = K.el("rect", { y: FY - FH / 2, height: FH, rx: FH / 2, fill: "#b2475d" }, band);
+        const bandHi = K.el("rect", { y: FY - FH / 2 + 14, height: 12, rx: 6, fill: "#c8627a", opacity: 0.8 }, band);
+        const stripes = Array.from({ length: 11 }, () => K.el("rect", { y: FY - FH / 2 + 6, width: 16, height: FH - 12, rx: 8, fill: "#8c2f45" }, band));
+        const mw = K.g(P1, { transform: "translate(540,660) rotate(-8)" });
+        const plantGlow = KO.glow(P1, { x: 540, y: 660, r: 520, color: "warm", p: S.p, core: 0, k: 0 });
+        P1.insertBefore(plantGlow.g, mw);
+        const big = KC.mito(mw, { L: 600, r: 170, prefix: "atpm", seed: 9 });
+        const flowG = K.g(P1, { "data-layout-allow-orbit": "" });          // molecules and coins spin as they travel (intended, for the checker)
+        const foods = Array.from({ length: 7 }, (_, i) => {
+          const g = K.g(flowG); KC.sugar(g, { s: 1.9 });
+          return { g, a: [-120, 300 + i * 34 + rnd() * 20], c: [200, 350 + i * 10], b: [370, 610], t0: at("food") - 0.35 + i * 0.1 };
+        });
+        const oxys = Array.from({ length: 7 }, (_, i) => {
+          const g = K.g(flowG); KC.o2(g, { s: 1.9 });
+          return { g, a: [1200, 300 + i * 34 + rnd() * 20], c: [900, 350 + i * 10], b: [720, 580], t0: at("oxygen") - 0.35 + i * 0.1 };
+        });
+        // ATP: coins pour from the underside and land in the fibre, where they pop
+        const coins = Array.from({ length: 26 }, (_, i) => {
+          const g = K.g(flowG); KC.atp(g, { s: 1.35, prefix: S.p });
+          const tx = 190 + ((i * 0.618) % 1) * 700;
+          return { g, a: [510 + (rnd() - 0.5) * 120, 820], c: [(510 + tx) / 2, 900 + rnd() * 30], b: [tx, FY], t0: at("atp") - 0.3 + i * 0.09, spin: rnd() * 360 };
+        });
+        const pops = coins.map(() => K.el("circle", { r: 0, fill: "none", stroke: "#ffe7a0", "stroke-width": 6, opacity: 0 }, flowG));
+        // labels below y 840 stay within x 120-780 (TikTok's lower safe band, narrower because of its buttons)
+        const tagA = K.tag(S.ui, { text: "ATP", x: 280, y: 900, color: "amber", size: 64 });
+        K.show(tl, tagA, at("atp") - 0.05);
+        K.hide(tl, tagA, at("you") - 0.4);
+        const tagF = K.tag(S.ui, { text: "Cell fuel", x: 620, y: FY - FH / 2 - 6, color: "amber", size: 50 });
+        K.show(tl, tagF, at("fuel") - 0.1);
+        K.hide(tl, tagF, at("you") - 0.4);
+
+        // ================================================================ part 2: the balance
+        const P2 = K.g(S.act, { opacity: 0 });
+        const BX = 500;                                                      // a little left of centre: the labels below must stay left of x 780
+        const bw = K.g(P2, { transform: `translate(${BX},1110)` });
+        const bal = KC.balance(bw, { w: 660, h: 330 });
+        const you = KH.human(bal.left, { look: {} });
+        you.g.setAttribute("transform", "scale(0.53)");
+        const pose = KH.standPose(); KH.armTo(pose, 0, 140, 25); you.setPose(pose);
+        // the pile: a mound of rows, dropped in one by one, bottom row first
+        const ROWS = [6, 5, 5, 4, 3, 2, 1], pile = [];
+        ROWS.forEach((n, row) => { for (let k = 0; k < n; k++) pile.push({ x: (k - (n - 1) / 2) * 50 + (row % 2 ? 6 : -6), y: -26 - row * 40 }); });
+        pile.forEach((Pc, i) => { Pc.g = K.g(bal.right); KC.atp(Pc.g, { s: 0.85, glow: false }); Pc.t0 = at("recycle") - 0.15 + i * 0.05; Pc.rot = (rnd() - 0.5) * 40; });
+        /* the checker guesses a dial's hub from the most-shared circle centre in the whole scene SVG (here the coins' glow
+           rings), not from this dial, so it reports the hand as off-pivot; the hand does turn on the dial centre */
+        const dial = K.g(P2, { transform: `translate(${BX},445)`, opacity: 0, "data-layout-allow-orbit": "" });
+        K.el("circle", { r: 88, fill: "#2c0b1d", stroke: "#ffd0c0", "stroke-width": 8 }, dial);
+        const hand = K.g(dial);
+        K.el("circle", { cx: 0, cy: -56, r: 24, fill: "#ffd23f" }, hand);
+        K.el("circle", { cx: 0, cy: 56, r: 19, fill: "#dfe8ff" }, hand);
+        K.el("circle", { cx: 8, cy: 50, r: 15, fill: "#2c0b1d" }, hand);
+        K.el("circle", { r: 12, fill: "#ffd0c0" }, dial);                    // the hub the hand turns on
+        const banW = K.callout(S.ui, { text: "~your body weight", x: 470, y: 1000, color: "amber", size: 52 });
+        K.show(tl, banW, at("weight") - 0.12);
+        const tagD = K.callout(S.ui, { text: "every day", x: BX, y: 600, color: "violet", size: 48 });
+        K.show(tl, tagD, at("every") - 0.05);
+
+        const st = { p2: 0, tilt: -12, dial: 0, dialA: 0, flex: 0, work: 0 };
+        const tSwap = at("you") - 0.35;
+        tl.to(st, { work: 1, duration: 0.4 }, at("food") - 0.1);
+        tl.to(st, { flex: 1, duration: 0.25, ease: "power2.out" }, at("fuel") - 0.2);
+        tl.to(st, { flex: 0.35, duration: 0.35, ease: "power2.inOut" }, at("fuel") + 0.1);
+        tl.to(st, { p2: 1, duration: 0.45, ease: "power2.inOut" }, tSwap);
+        tl.to(st, { tilt: 0, duration: 1.3, ease: "power2.inOut" }, at("own") - 0.25);
+        tl.to(st, { dialA: 1, duration: 0.3 }, at("every") - 0.1);
+        tl.to(st, { dial: 1, duration: 0.9, ease: "power1.inOut" }, at("every"));
+        K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, tSwap, "sine.inOut");
+        K.camTo(tl, S.cam, tSwap, { s: 1.0, py: 960 }, DUR - tSwap, "sine.inOut");
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          cyto.update(t);
+          big.phase = t * 2.4 * (1 + st.work); big.update();
+          big.eyes.lid = 0.3 - 0.3 * st.work; big.eyes.lx = 0.4 * Math.sin(t * 1.3); big.eyes.ly = 0.3; big.eyes.update();
+          plantGlow.k = 0.35 * st.work * (0.85 + 0.15 * Math.sin(t * 7)); plantGlow.update();
+          const flow = (F, dur) => {
+            const u = clamp((t - F.t0) / dur), [x, y] = bez(F.a, F.c, F.b, sm(u));
+            F.g.setAttribute("transform", `translate(${f(x)},${f(y)}) rotate(${f(u * 120)}) scale(${f(1 - 0.85 * clamp((u - 0.75) * 4))})`);
+            F.g.setAttribute("opacity", u > 0 && u < 1 ? 1 : 0);
+          };
+          foods.forEach((F) => flow(F, 0.9));
+          oxys.forEach((F) => flow(F, 0.9));
+          coins.forEach((C, i) => {
+            const u = clamp((t - C.t0) / 0.8), e = 1 - (1 - u) ** 2, [x, y] = bez(C.a, C.c, C.b, e);
+            C.g.setAttribute("transform", `translate(${f(x)},${f(y)}) rotate(${f(C.spin + 220 * u)}) scale(${f(0.4 + 0.6 * clamp(u * 4))})`);
+            C.g.setAttribute("opacity", u > 0 && u < 1 ? 1 : 0);
+            const pu = clamp((t - C.t0 - 0.8) / 0.3);                          // the pop where it lands
+            pops[i].setAttribute("cx", f(C.b[0])); pops[i].setAttribute("cy", f(FY));
+            pops[i].setAttribute("r", f(10 + 34 * pu)); pops[i].setAttribute("opacity", f(pu > 0 && pu < 1 ? 1 - pu : 0));
+          });
+          // the fibre: each landing coin gives a small twitch; on "fuel" it contracts properly
+          let twitch = 0;
+          coins.forEach((C) => { const a = t - C.t0 - 0.8; if (a > 0 && a < 0.25) twitch = Math.max(twitch, Math.sin((Math.PI * a) / 0.25)); });
+          const c = clamp(0.12 * twitch + 0.88 * st.flex), mid = (FX0 + FX1) / 2, half = ((FX1 - FX0) / 2) * (1 - 0.16 * c);
+          bandBody.setAttribute("x", f(mid - half)); bandBody.setAttribute("width", f(half * 2));
+          bandHi.setAttribute("x", f(mid - half + 40)); bandHi.setAttribute("width", f(half * 2 - 80));
+          stripes.forEach((s, k) => s.setAttribute("x", f(mid - half + 50 + (k / (stripes.length - 1)) * (half * 2 - 100) - 8)));
+          bandBody.setAttribute("height", f(FH * (1 + 0.12 * c))); bandBody.setAttribute("y", f(FY - (FH * (1 + 0.12 * c)) / 2));
+          P1.setAttribute("opacity", f(1 - st.p2)); P2.setAttribute("opacity", f(st.p2));
+          P1.setAttribute("display", st.p2 >= 1 ? "none" : "inline"); P2.setAttribute("display", st.p2 <= 0 ? "none" : "inline");
+          bal.tilt = st.tilt; bal.update();
+          pile.forEach((Pc) => {
+            const u = clamp((t - Pc.t0) / 0.32), drop = (1 - u * u) * -460;
+            Pc.g.setAttribute("transform", `translate(${f(Pc.x)},${f(Pc.y + drop)}) rotate(${f(Pc.rot * (1 - u))})`);
+            Pc.g.setAttribute("opacity", u > 0 ? 1 : 0);
+          });
+          dial.setAttribute("opacity", f(st.dialA)); hand.setAttribute("transform", `rotate(${f(360 * st.dial)})`);
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.45, "20,4,12"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>
