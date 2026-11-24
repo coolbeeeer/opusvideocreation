@@ -1,0 +1,104 @@
+<template id="friend-template">
+  <!-- Line 5. "But a friend watching from far away sees you slow down, turn red and fade, as if frozen at the edge."
+       The friend floats by a small spaceship far from the giant black hole and watches through a telescope. The
+       telescope view (an inset): the astronaut near the edge, a clock beside them. Both slow to a stop, the view
+       turns red and fades, and a pause sign appears: frozen at the edge. -->
+  <div data-composition-id="friend" data-width="1080" data-height="1920" data-duration="7.055">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KO = window.OCEAN, KH = window.HUMAN, KS = window.SPACE;
+        const ID = "friend", R = document.querySelector('[data-composition-id="friend"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x));
+        const S = KS.stage(R, "fr", { seed: 41 });
+
+        // ---------------------------------------------------------------- far away: the giant black hole small at the bottom, the friend at the top
+        const bh = KS.blackHole(K.g(S.act, { transform: "translate(540,1740)" }), { R: 210, p: S.p, seed: 6, glow: 0.5 });
+        const ship = KS.ship(K.g(S.act, { transform: "translate(250,505) rotate(-8)" }), { s: 0.4 });
+        const fw = K.g(S.act), friend = KH.human(K.g(fw), { look: KS.FRIEND });
+        const FX = 735, FY = 500, FS = 0.25;
+        const scope = K.g(S.act);
+        KS.telescope(K.g(scope, { transform: "rotate(180)" }), { L: 120 });
+        const sight = K.el("line", { stroke: "#dfe8ff", "stroke-width": 4, "stroke-dasharray": "2 14", "stroke-linecap": "round", opacity: 0 }, S.act);
+
+        // ---------------------------------------------------------------- the telescope view
+        const IX = 540, IY = 862, IR = 255;                                  // the inset ends above the captions
+        const inset = document.createElement("div");
+        inset.setAttribute("data-layout-allow-overflow", "");               // the giant black hole is cut by the circle on purpose
+        inset.style.cssText = `position:absolute;left:${IX - IR}px;top:${IY - IR}px;width:${IR * 2}px;height:${IR * 2}px;border-radius:${IR}px;overflow:hidden;background:#140f3f;box-shadow:0 0 0 12px #ffffff, 0 18px 40px rgba(0,0,0,0.4);opacity:0;`;
+        S.ui.appendChild(inset);
+        const isvg = K.el("svg", { viewBox: `${-IR} ${-IR} ${IR * 2} ${IR * 2}`, width: IR * 2, height: IR * 2, style: "position:absolute;inset:0" });
+        inset.appendChild(isvg);
+        const idefs = K.el("defs", {}, isvg); KO.glowDefs(idefs, "fri");
+        KS.stars(isvg, { seed: 43, n: 60, x0: -IR, x1: IR, y0: -IR, y1: IR });
+        const EDGE = 190;
+        KS.blackHole(K.g(isvg, { transform: `translate(0,${EDGE + 1400})` }), { R: 1400, p: "fri", seed: 8, disk: 0.6 }).update(0);
+        K.el("line", { x1: -IR, y1: EDGE + 2, x2: IR, y2: EDGE + 2, stroke: "#ffffff", "stroke-width": 4, "stroke-dasharray": "14 10", opacity: 0.85 }, isvg);
+        const you = K.g(isvg), yw = K.g(you), astro = KH.human(K.g(yw), { look: KS.SUIT });
+        const clock = KS.clock(K.g(you, { transform: "translate(150,-110)" }), { r: 46, period: 4 });
+        const red = document.createElement("div");                         // "turn red": a multiply layer tints everything under it
+        red.style.cssText = "position:absolute;inset:0;background:#ff3020;mix-blend-mode:multiply;opacity:0;";
+        inset.appendChild(red);
+        const pause = document.createElement("div");                       // "frozen": a pause sign, above the tint
+        pause.style.cssText = "position:absolute;left:183px;top:221px;width:144px;height:150px;opacity:0;";
+        pause.innerHTML = '<div style="position:absolute;left:18px;top:0;width:38px;height:150px;border-radius:14px;background:#ffffff"></div><div style="position:absolute;left:88px;top:0;width:38px;height:150px;border-radius:14px;background:#ffffff"></div>';
+        inset.appendChild(pause);
+
+        // ---------------------------------------------------------------- what the friend sees: time running slower and slower until it stops
+        const tSlow = at("slow") - 0.25, tRed = at("red") - 0.1, tFade = at("fade") - 0.05, tFroz = at("frozen") - 0.05;
+        const local = KH.phaseTable([[0, 1], [tSlow, 1], [tFroz + 0.2, 0], [DUR, 0]], DUR + 1, { period: 1 });   // "your" time as the friend sees it
+        const yAt = (s) => 60 + 115 * (1 - Math.exp(-s / 2.2));            // feet height: creeps toward the edge (y 190), never reaching it
+
+        // ---------------------------------------------------------------- labels
+        const tagF = K.tag(S.ui, { text: "Your friend", x: 520, y: 450, color: "teal", size: 44, pointer: false });
+        K.show(tl, tagF, at("friend") - 0.05);
+        K.hide(tl, tagF, at("sees") + 0.3);
+
+        const st = { inset: 0, sight: 0, red: 0, fade: 0, pause: 0 };
+        tl.to(st, { sight: 1, duration: 0.5, ease: "power2.out" }, at("watching") - 0.1);
+        tl.to(st, { inset: 1, duration: 0.35, ease: "back.out(1.6)" }, at("far") - 0.15);
+        tl.to(st, { red: 1, duration: 0.5, ease: "power1.inOut" }, tRed);
+        tl.to(st, { fade: 1, duration: 0.9, ease: "power1.inOut" }, tFade);
+        tl.to(st, { pause: 1, duration: 0.3, ease: "back.out(2.2)" }, tFroz);
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          S.sky.update(t); bh.update(t * 0.6);
+          // the friend floats by the ship, telescope to the eye, pointing down at the black hole
+          const fy = FY + 8 * Math.sin(t * 1.1);
+          fw.setAttribute("transform", `translate(${FX},${f(fy)}) scale(${-FS},${FS}) translate(0,356)`);
+          const P = KS.floatPose(t + 3, { arms: "relax", amp: 0.5 }); KH.armTo(P, 0, 75, 95);        // hand up at the eyepiece
+          friend.setPose(P); friend.setFace({ brow: 0.2, mouth: 0.4 });
+          const eye = [FX - 0.55 * 56 * FS - 6, fy - (628 - 356) * FS - 6];
+          scope.setAttribute("transform", `translate(${f(eye[0])},${f(eye[1])}) rotate(-62) scale(0.7)`);
+          const tip = [eye[0] - Math.cos((62 * Math.PI) / 180) * 120 * 0.7, eye[1] + Math.sin((62 * Math.PI) / 180) * 120 * 0.7];
+          sight.setAttribute("x1", f(tip[0])); sight.setAttribute("y1", f(tip[1]));
+          sight.setAttribute("x2", f(tip[0] + (IX - tip[0]) * 0.92 * st.sight)); sight.setAttribute("y2", f(tip[1] + (IY - IR - tip[1]) * 0.92 * st.sight));
+          sight.setAttribute("opacity", f(0.8 * clamp(st.sight * 3)));
+          // the view: the astronaut drifts down toward the edge on the friend's clock, slowing to a stop
+          const s = local(t);
+          const P2 = KS.floatPose(s, { arms: "relax", amp: 0.9 });
+          astro.setPose(P2); astro.setFace({ mouth: 1, eye: 0.7 });
+          yw.setAttribute("transform", `translate(0,${f(yAt(s))}) rotate(${f(5 * Math.sin(s * 0.9))}) scale(0.34)`);
+          clock.set(s);
+          you.setAttribute("opacity", f(1 - 0.72 * st.fade));
+          inset.style.opacity = f(clamp(st.inset)); inset.style.transform = `scale(${f(0.6 + 0.4 * st.inset)})`;
+          red.style.opacity = f(0.88 * st.red);
+          pause.style.opacity = f(st.pause * 0.92); pause.style.transform = `scale(${f(0.5 + 0.5 * st.pause)})`;
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        K.camTo(tl, S.cam, 0, { s: 1.03, py: 950 }, DUR, "sine.inOut");
+        S.stage.insertBefore(KP.vignette(S.stage, 0.5, "6,4,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

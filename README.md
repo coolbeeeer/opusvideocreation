@@ -17,6 +17,10 @@ Everything here was produced by an AI agent working only with code and a rendere
 > **Vertical, with a walking human and a dive into the body:** [`projects/mitochondria-short/renders/mitochondria-v2.mp4`](projects/mitochondria-short/renders/mitochondria-v2.mp4)
 > "The bacteria that moved into your cells" (50.6 s, 1080×1920, 30 fps, -14 LUFS). How it was made, question by
 > question: `projects/mitochondria-short/NOTES.md`.
+>
+> **Vertical, in space:** [`projects/black-hole-short/renders/black-hole-v3.mp4`](projects/black-hole-short/renders/black-hole-v3.mp4)
+> "What happens if you fall into a black hole?" (51.4 s, 1080×1920, 30 fps, -14 LUFS): spaghettification, an event
+> horizon you don't feel, a friend who sees you freeze, and a tape-stop in the music when time slows.
 
 ## Start here
 1. **`docs/AGENT_PLAYBOOK.md`**: the step-by-step recipe with its approval gates.
@@ -48,6 +52,7 @@ Everything here was produced by an AI agent working only with code and a rendere
 | `lib/kit-ocean.js` | Deep-sea stage builder, glows, depth gauge and a cast with eyes (lanternfish, anglerfish, hatchetfish, jellyfish, shrimp, dragonfish) |
 | `lib/kit-human.js` | An articulated person with a procedural walk cycle (planted feet, IK knees, speed changes without sliding); runs in Node too |
 | `lib/kit-cell.js` | Cell-biology cast: mitochondria, the ancestral bacterium, a host cell that swallows, tissue levels for a dive, ATP, a balance, a cytoplasm backdrop |
+| `lib/kit-space.js` | Space cast: a stage with nebula, stars and dust; a flat-style black hole with a foreshortened disk and lensed arcs; astronaut looks for `kit-human.js`; clock, galaxy, ship, telescope; a spaghettified noodle |
 | `docs/walk-cycle.svg` | Diagram of the walk cycle (key poses, a strobe with footprints, foot and pelvis curves), drawn by `tools/walk_cycle_svg.cjs` |
 | `tools/verify_render.py` | Checks an MP4: specs, loudness, peak, audio sync vs stems, black frames, saturation, contact sheet |
 | `tools/measure_style.py` | Measures a reference video's palette and saturation; verifies timestamps first |
@@ -57,6 +62,7 @@ Everything here was produced by an AI agent working only with code and a rendere
 | `projects/antibiotics/` | The full 60 s film: script, scenes, audio pipeline, review notes, render |
 | `projects/ocean-glow-short/` | The 54 s vertical film: script with sources, 8 scenes + captions, audio, two review passes, render, cover |
 | `projects/mitochondria-short/` | The 50.6 s vertical film: a walking person, a dive into the leg's cells, 7 scenes; NOTES.md answers how the human, walk, dive, pauses, grain, empty frames, voice clips and reviews work |
+| `projects/black-hole-short/` | The 51.4 s vertical film about falling into a black hole: 7 scenes, script with sources, two review passes, render, cover |
 | `projects/ant-fight/` | 4 s style clip with sound (steps 4–5) and its review notes |
 | `projects/one-ant-test/` | The 10 s setup test (step 2) |
 

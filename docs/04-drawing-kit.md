@@ -83,6 +83,7 @@ Load them after `kit.js` in the root `<head>`; each file's header lists its API.
 | `lib/kit-ocean.js` | `window.OCEAN` (`KO`) | `KO.scene()` stage builder, `KO.glow` light sources, marine snow, twinkling lights, sunbeams, a depth gauge, and a deep-sea cast: lanternfish, anglerfish, hatchetfish, Atolla-style jellyfish, shrimp, dragonfish, fuel and enzyme characters |
 | `lib/kit-human.js` | `window.HUMAN` (`KH`) | An articulated person and a procedural walk cycle (below). The maths half also loads in Node with `require` |
 | `lib/kit-cell.js` | `window.CELL` (`KC`) | `KC.mito` (mitochondrion: double wall that can part, folds, DNA ring, eyes), `KC.guest` (the orange ancestral bacterium), `KC.host` (a wobbling cell that opens a pocket to swallow), `KC.thighSection` / `KC.fascicle` / `KC.fiber` (three tissue levels for a dive, each drawn around 0,0 and returning its bundles, fibres or mitochondria), `KC.atp`, `KC.sugar`, `KC.o2`, `KC.egg`, `KC.sperm`, `KC.balance` (dishes ride on the beam), `KC.cytoplasm` (out-of-focus cell interior for dark backgrounds; `update(t)` drifts it) |
+| `lib/kit-space.js` | `window.SPACE` (`KS`) | `KS.stage` (a `KO.scene` with nebula, two star layers sized to the camera's reach, and dust), `KS.blackHole` (glow, accretion disk drawn as circles in a group squashed by `tilt` so it foreshortens, its near half again in front of the shadow, lensed arcs, photon ring; layers `back`, `mid` (under the shadow, clipped at the centre line: put things that fall in here) and `front`; `api.disk` dims the disk), `KS.stars`, `KS.nebula`, `KS.wisps`, `KS.dust`, `KS.clock` (`set(seconds)`), `KS.galaxy`, `KS.sun`, `KS.ship`, `KS.telescope`, `KS.noodle` (`set(top, bottom, x, w, phase)`), looks `KS.SUIT`, `KS.FRIEND`, `KS.LAB` and a weightless `KS.floatPose(t, o)` for `KH.human` |
 
 Every creature returns an API object: set its numbers (`phase`, `jaw`, `flash`, `k`, ...) and call `update()`.
 Redraw from the timeline's `onUpdate` (see `docs/09-pitfalls.md`) so tweened values are current when you draw.
@@ -96,7 +97,8 @@ Worked example and a long explanation: `projects/mitochondria-short/NOTES.md`, q
 |---|---|---|
 | `KH.walkPose(phase, gait?)` | joint positions (y-up body frame) | pure maths; phase in cycles, any real number |
 | `KH.standPose()`, `KH.armTo(pose, arm, a1, a2)` | a pose | angles in degrees from hanging down, + = forward; arm 0 is the near arm |
-| `KH.human(parent, { look })` | `{ g, setPose(pose), pose }` | the figure, facing +x, feet on y = 0; `look` overrides `KH.LOOK` colours and `hairStyle` |
+| `KH.human(parent, { look })` | `{ g, setPose(pose), setFace(f), pose }` | the figure, facing +x, feet on y = 0; `look` overrides `KH.LOOK` colours and `hairStyle`, and switches on outfit parts: `suit` (long sleeves, `glove`), `helmet` (glass dome and collar; `visor`, `rim`), `pack` (a backpack colour), `stripe`, `glasses` |
+| `h.setFace({ brow, mouth, open, eye })` | | expressions: `brow` + raises the brow (worry), - frowns; `mouth` + smile, - frown (0.8 rests); `open` 0..1 an "o" mouth; `eye` 1 normal, 0.15 closed, 1.4 wide |
 | `KH.walker(parent, { x0, y0, look })` | `{ at(phase), x(phase), thighPoint(u) }` | a human plus its walk; `x(phase)` moves it exactly as far as a planted foot slides, so feet never skate |
 | `KH.phaseTable(keys, t1)` | `phase(t)`, plus `.rate(t)` and `.strikes(ta, tb)` | speed keys `[[t, rate], ...]` eased and integrated: slow-motion without foot sliding; strikes for footstep sounds |
 

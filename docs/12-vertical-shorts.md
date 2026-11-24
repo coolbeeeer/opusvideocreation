@@ -1,7 +1,8 @@
 # 12 · Vertical films for YouTube Shorts and Instagram Reels
 
-Worked examples: `projects/ocean-glow-short/` (54 s) and `projects/mitochondria-short/` (50.6 s, a walking person and
-a dive into the body), both 1080x1920, 30 fps, burned-in captions, -14 LUFS. Their `build.py`, `vo.py`, `align.py`,
+Worked examples: `projects/ocean-glow-short/` (54 s), `projects/mitochondria-short/` (50.6 s, a walking person and
+a dive into the body) and `projects/black-hole-short/` (51.4 s, in space), all 1080x1920, 30 fps, burned-in captions,
+-14 LUFS. Their `build.py`, `vo.py`, `align.py`,
 `compositions/captions.html` and `audio/mix.py` are vertical-aware and can be copied into a new project as they are;
 the newest `vo.py` (in `mitochondria-short`) also takes one recorded clip per line (`--clips`).
 
@@ -34,6 +35,7 @@ The bottom quarter can hold scenery but nothing anyone needs to read. Mark delib
   between them: before you render, also run `npx hyperframes check --samples=150 --no-craft --no-contrast` (about a
   minute for a 50 s film). In the mitochondria film it found five problems the default run missed.
 - Labels pinned to a moving point (a zoom) can drift out of the safe area: clamp their screen position.
+- The Shorts box is off-centre (x 48-888): centre wide titles near x 500, not 540, and measure their width.
 
 ## Captions
 Most people scroll with the sound off, so burn captions in. `build.py` cuts the measured words into chunks of up to
@@ -68,7 +70,8 @@ Most people scroll with the sound off, so burn captions in. `build.py` cuts the 
   `jelly` (Atolla-style, with a spinning ring of lights), `shrimp`, `dragon` (stoplight loosejaw with a red beam),
   `fuel`, `enzyme`. Model sheet: render each once on a test stage before building scenes.
 - `lib/kit-human.js` and `lib/kit-cell.js`, and `KP.zoomChain` for dives through scales: `docs/04-drawing-kit.md`.
-- Dark scenes need something alive behind the subject: `KC.cytoplasm` (cell interior), `KO.snow` (marine snow).
+- Dark scenes need something alive behind the subject: `KC.cytoplasm` (cell interior), `KO.snow` (marine snow),
+  `KS.stage` (space: nebula wisps, two star layers sized to the camera, dust).
 
 ## Checks that caught real problems here
 - `template_literal_selector` (error): ``querySelector(`[data-composition-id="${ID}"]`)`` crashes the HTML bundler's

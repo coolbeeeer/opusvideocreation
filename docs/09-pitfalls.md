@@ -96,3 +96,22 @@
   ratio now and reports more flat seconds for vertical films than before.
 - **Hanging balance pans collide with a standing figure**: the strings run through it. `KC.balance` puts the dishes
   on stems above the beam ends.
+
+## Found while making the black hole film (projects/black-hole-short)
+- **A value set after the redraw is a frame late.** Inside one `frame()`, the giant scene set the black hole's disk
+  brightness *after* calling its `update()`. Played in order, each frame showed the previous frame's value (close
+  enough to look right); a fresh seek showed the starting value, and 44 % of the pixels differed. Nothing in `check`
+  catches it. Compare a few MP4 frames with fresh snapshots at the same times (REVIEW.md of that film has the
+  script), and inside `frame()` set every number before the `update()` that reads it.
+- **A starfield spread over the whole world looks empty.** 320 stars over an area 12 times the frame left about 30
+  in view, and frame_stats flagged 34 of 51 seconds. Size the star area to what the camera can reach (`KS.stage`
+  does), give the near layers bigger stars, and add soft-edged shapes (nebula wisps, dust): tiny stars and smooth
+  gradients both count as "flat".
+- **Greek letters would render blank**, like "≈" did: Nunito has no Greek, so the film's equations use Latin letters
+  only (E = mc², F = ma, F = GMm/r², with `<sup>` for the powers).
+- **The Shorts safe area is off-centre** (x 48-888, centre 468). A wide title centred on 540 crossed its right edge
+  only in the 150-sample run; centre wide titles near x 500 and measure them (184 px Yanone "BLACK HOLE?" is 800 px).
+- **Circular insets overflow on purpose.** Art cut by an inset's circle is reported as `container_overflow`; mark
+  the inset `data-layout-allow-overflow`.
+- **A stretched figure can poke out the far side of a black hole.** Draw whatever falls in under the shadow and clip
+  that layer at the hole's centre line (`KS.blackHole` `mid`).

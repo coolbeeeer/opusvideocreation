@@ -1,0 +1,103 @@
+<template id="giant-template">
+  <!-- Line 4. "A giant one, like the one at the center of our galaxy, is gentler. You'd cross its edge, the event
+       horizon, and feel nothing."
+       A tiny astronaut above a giant black hole. An inset shows the Milky Way with its centre marked. The camera
+       pushes in on the top edge until it is an almost flat horizon; a dashed line marks the event horizon, and the
+       astronaut drifts across it, relaxed, whistling. -->
+  <div data-composition-id="giant" data-width="1080" data-height="1920" data-duration="8.38">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KH = window.HUMAN, KS = window.SPACE;
+        const ID = "giant", R = document.querySelector('[data-composition-id="giant"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x));
+        const S = KS.stage(R, "gi", { seed: 31 });
+        const GX = 540, GY = 2100, GR = 1200, EDGE = GY - GR;
+        const bh = KS.blackHole(K.g(S.act, { transform: `translate(${GX},${GY})` }), { R: GR, p: S.p, seed: 5, glow: 0.5, spin: 0.5 });
+        // inside the horizon: faint light from outside, falling inward (clipped to the shadow)
+        const cpIn = K.el("clipPath", { id: "gi-inside" }, S.defs); K.el("circle", { cx: GX, cy: GY, r: GR * 0.996 }, cpIn);
+        const fall = K.g(S.act, { "clip-path": "url(#gi-inside)", opacity: 0 }), rnf = K.rng(33);
+        const falls = Array.from({ length: 34 }, (_, i) => ({ el: K.el("line", { stroke: i % 3 ? "#cfd6ff" : "#ffd9a6", "stroke-width": f(1.2 + rnf() * 1.6), "stroke-linecap": "round" }, fall), x: 160 + rnf() * 760, ph: rnf(), sp: 0.25 + rnf() * 0.3, len: 30 + rnf() * 70 }));
+        const horizon = K.el("circle", { cx: GX, cy: GY, r: GR, fill: "none", stroke: "#ffffff", "stroke-width": 2.6, "stroke-dasharray": "14 10", opacity: 0 }, S.act);
+        const aw = K.g(S.act), astro = KH.human(K.g(aw), { look: KS.SUIT });
+        const AS = 0.32, AXW = 590;                              // astronaut scale and x (right of the tag)
+        const note = K.g(S.act, { opacity: 0 });
+        K.el("path", { d: "M 0 0 L 0 -46 L 30 -54 L 30 -10", fill: "none", stroke: "#fff4cf", "stroke-width": 7, "stroke-linejoin": "round" }, note);
+        K.el("ellipse", { cx: -7, cy: 2, rx: 11, ry: 8, fill: "#fff4cf", transform: "rotate(-20 -7 2)" }, note);
+        K.el("ellipse", { cx: 23, cy: -8, rx: 11, ry: 8, fill: "#fff4cf", transform: "rotate(-20 23 -8)" }, note);
+
+        // ---------------------------------------------------------------- timing
+        const tCross = at("cross"), tEv = at("event"), tFeel = at("feel"), tGal = at("galaxy"), tGen = at("gentler");
+        // astronaut mid-body height: drifts, then crosses the edge between "event horizon" and "nothing"
+        const YK = [[0, 300], [tCross - 0.5, 520], [tEv + 0.3, EDGE - AS * 356], [tFeel + 0.2, EDGE + AS * 380], [DUR, EDGE + AS * 560]];
+        const lerpK = (K2, t) => {
+          for (let i = 0; i < K2.length - 1; i++) if (t <= K2[i + 1][0]) { const u = sm(clamp((t - K2[i][0]) / (K2[i + 1][0] - K2[i][0]))); return K2[i].slice(1).map((v, k) => v + (K2[i + 1][k + 1] - v) * u); }
+          return K2[K2.length - 1].slice(1);
+        };
+        const CK = [[0, 0.36, 540, 1500], [tGal - 0.2, 0.36, 540, 1470], [tCross - 0.5, 0.8, 540, 1150], [tEv + 0.4, 2.3, 540, 860], [DUR, 2.3, 540, 990]];
+
+        // ---------------------------------------------------------------- labels and the galaxy inset
+        const tagG = S.cam.pin(K.tag(S.ui, { text: "Giant", x: 0, y: 0, color: "crimson", size: 60 }), GX - 700, GY - 1150);
+        K.show(tl, tagG, at("giant") - 0.05);
+        K.hide(tl, tagG, at("like") + 0.5);
+        const inset = document.createElement("div");
+        inset.style.cssText = "position:absolute;left:645px;top:340px;width:260px;height:260px;border-radius:130px;overflow:hidden;background:#0b0a24;box-shadow:0 0 0 10px #ffffff, 0 16px 36px rgba(0,0,0,0.35);opacity:0;";
+        S.ui.appendChild(inset);
+        const gsvg = K.el("svg", { viewBox: "-130 -130 260 260", width: 260, height: 260, style: "position:absolute;inset:0" });
+        inset.appendChild(gsvg);
+        const gdefs = K.el("defs", {}, gsvg); window.OCEAN.glowDefs(gdefs, "gin");
+        const gal = KS.galaxy(gsvg, { r: 112, p: "gin", seed: 7 });
+        const mark = K.el("circle", { r: 16, fill: "none", stroke: "#ff6a3d", "stroke-width": 5 }, gsvg);
+        const tagW = K.tag(S.ui, { text: "Milky Way", x: 740, y: 680, color: "ocean", size: 46, pointer: false });
+        K.show(tl, tagW, tGal - 0.05);
+        K.hide(tl, tagW, tGen + 0.45);
+        const tagE = S.cam.pin(K.tag(S.ui, { text: "Event horizon", x: 0, y: 0, color: "violet", size: 50 }), 445, EDGE - 6);
+        K.show(tl, tagE, tEv - 0.08);
+
+        const st = { inset: 0, calm: 0, line: 0, note: 0, shrug: 0 };
+        tl.to(st, { inset: 1, duration: 0.3, ease: "back.out(1.8)" }, at("like") - 0.1);
+        tl.to(st, { inset: 0, duration: 0.25, ease: "power2.in" }, tGen + 0.4);
+        tl.to(st, { calm: 1, duration: 0.5 }, tGen - 0.15);
+        tl.to(st, { line: 1, duration: 0.4 }, tEv - 0.15);
+        tl.to(st, { note: 1, duration: 0.3, ease: "back.out(2)" }, tFeel - 0.1);
+        tl.to(st, { shrug: 1, duration: 0.35, ease: "power2.out" }, tFeel + 0.05);
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          const [cs, cx, cy] = lerpK(CK, t);
+          S.cam.s = cs; S.cam.px = cx; S.cam.py = cy; S.cam.apply();
+          // set every value the black hole reads before it redraws (a value set after update() would show a frame
+          // late, and on a fresh seek it would show its initial value: docs/09-pitfalls.md)
+          bh.disk = 1 - 0.4 * clamp((cs - 0.8) / 1.5);           // the disk's glare drops as we get close to the edge
+          S.sky.update(t); bh.update(t);
+          const [y] = lerpK(YK, t), rot = 6 * Math.sin(t * 0.9);
+          aw.setAttribute("transform", `translate(${AXW},${f(y)}) rotate(${f(rot)}) scale(${AS}) translate(0,356)`);
+          const P = KS.floatPose(t, { arms: st.calm > 0.5 ? "relax" : "out", amp: 0.8 });
+          if (st.shrug > 0) { KH.armTo(P, 0, 40 + 70 * st.shrug, 30 + 40 * st.shrug); KH.armTo(P, 1, -40 - 70 * st.shrug, -30 - 40 * st.shrug); }
+          astro.setPose(P);
+          astro.setFace({ brow: 0.5 - 0.5 * st.calm + 0.4 * st.shrug, mouth: 0.2 + 0.9 * st.calm, eye: 1 - 0.35 * st.calm, open: 0 });
+          note.setAttribute("opacity", f(st.note * (1 - clamp((t - tFeel - 0.8) / 0.4) * 0.3)));
+          note.setAttribute("transform", `translate(${f(AXW + 70 + 8 * Math.sin(t * 3))},${f(y - AS * 330 - 30 * st.note)}) scale(${f(0.45 * st.note)})`);
+          horizon.setAttribute("opacity", f(0.85 * st.line));
+          fall.setAttribute("opacity", f(0.5 * clamp((cs - 1.2) / 0.8)));
+          falls.forEach((q) => { const u = (t * q.sp + q.ph) % 1, y0 = EDGE + 20 + u * 520; q.el.setAttribute("x1", f(q.x)); q.el.setAttribute("x2", f(q.x)); q.el.setAttribute("y1", f(y0)); q.el.setAttribute("y2", f(y0 + q.len)); q.el.setAttribute("opacity", f(Math.sin(Math.PI * u))); });
+          horizon.setAttribute("stroke-dashoffset", f(-t * 8));
+          // the inset: the galaxy turns, its centre pulses
+          inset.style.opacity = f(clamp(st.inset)); inset.style.transform = `scale(${f(0.5 + 0.5 * st.inset)})`;
+          gal.update(t); mark.setAttribute("r", f(14 + 5 * Math.sin(t * 6))); mark.setAttribute("opacity", f(0.7 + 0.3 * Math.sin(t * 6)));
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.5, "6,4,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>
