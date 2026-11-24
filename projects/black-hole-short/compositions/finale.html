@@ -1,0 +1,95 @@
+<template id="finale-template">
+  <!-- Line 8. "So if you get the choice, pick a giant one. Or better: be the friend."
+       The two black holes side by side: a red cross on the small one, a green tick on the giant one. Then they shrink
+       into the distance while the spaceship drifts in with the friend and you on board, waving. Title. -->
+  <div data-composition-id="finale" data-width="1080" data-height="1920" data-duration="7.03">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KH = window.HUMAN, KS = window.SPACE;
+        const ID = "finale", R = document.querySelector('[data-composition-id="finale"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x));
+        const S = KS.stage(R, "fi", { seed: 71 });
+
+        // ---------------------------------------------------------------- the choice
+        const comp = K.g(S.act);
+        const bhS = KS.blackHole(K.g(comp, { transform: "translate(330,600)" }), { R: 80, p: S.p, seed: 1 });
+        const bhG = KS.blackHole(K.g(comp, { transform: "translate(680,1060)" }), { R: 230, p: S.p, seed: 2, glow: 0.5 });
+        const cross = K.g(comp, { opacity: 0 });
+        K.el("path", { d: "M -62 -62 L 62 62 M 62 -62 L -62 62", stroke: "#ff3b4d", "stroke-width": 30, "stroke-linecap": "round" }, cross);
+        const tick = K.g(comp, { opacity: 0 });
+        K.el("circle", { r: 74, fill: "#3d9a3c" }, tick);
+        K.el("path", { d: "M -34 2 L -10 28 L 38 -26", fill: "none", stroke: "#ffffff", "stroke-width": 18, "stroke-linecap": "round", "stroke-linejoin": "round" }, tick);
+        const tagS = K.tag(S.ui, { text: "Small", x: 330, y: 470, color: "violet", size: 50 });
+        const tagG = K.tag(S.ui, { text: "Giant", x: 720, y: 712, color: "crimson", size: 56 });
+        K.show(tl, tagS, at("you") - 0.1);
+        K.show(tl, tagG, at("get") + 0.05);
+        const tOr = at("or") - 0.1;
+        K.hide(tl, tagS, tOr);
+        K.hide(tl, tagG, tOr);
+
+        // ---------------------------------------------------------------- be the friend: the ship drifts in with both of you
+        const crew = K.g(S.act);
+        const ship = KS.ship(K.g(crew, { transform: "translate(290,1075) rotate(-6)" }), { s: 0.5 });
+        const mk = (look, x, y, s, flip) => { const w = K.g(crew), h = KH.human(K.g(w), { look }); return { w, h, x, y, s, flip }; };
+        const pals = [mk(KS.FRIEND, 650, 1040, 0.3, -1), mk(KS.SUIT, 835, 1072, 0.3, -1)];
+
+        // ---------------------------------------------------------------- title
+        const tT = at("friend") + 0.55;
+        const card = document.createElement("div");
+        card.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0;pointer-events:none;";
+        card.innerHTML =
+          `<div style="position:absolute;left:505px;top:470px;width:1060px;height:460px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center, rgba(10,6,30,0.6) 0%, rgba(10,6,30,0.35) 45%, rgba(10,6,30,0) 72%);"></div>` +
+          `<div class="sub" style="position:absolute;left:505px;top:372px;transform:translate(-50%,-50%);white-space:nowrap;font:800 46px Nunito,sans-serif;color:#ffe7b0;text-shadow:0 0 18px rgba(255,170,80,0.6)">what happens if you fall into a</div>` +
+          `<div class="big" style="position:absolute;left:505px;top:488px;transform:translate(-50%,-50%);white-space:nowrap;font:700 168px/1 'Yanone Kaffeesatz',sans-serif;color:#fff1d6;letter-spacing:0.03em;text-shadow:0 0 30px rgba(255,144,0,0.85),0 0 80px rgba(255,120,40,0.55)">BLACK HOLE?</div>` +
+          `<div class="bar" style="position:absolute;left:505px;top:590px;width:460px;height:12px;border-radius:6px;transform:translate(-50%,-50%);background:linear-gradient(90deg,#ff9a45,#b46ad8 50%,#3f6fe0)"></div>`;
+        S.ui.appendChild(card);
+        const sub = card.querySelector(".sub"), big = card.querySelector(".big"), bar = card.querySelector(".bar");
+        gsap.set([sub, big, bar], { opacity: 0 });
+        tl.set(card, { opacity: 1 }, tT);
+        tl.fromTo(card.firstChild, { opacity: 0 }, { opacity: 1, duration: 0.5, immediateRender: false }, tT);
+        tl.fromTo(big, { opacity: 0, filter: "blur(16px)", scale: 1.1 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.7, ease: "power2.out", immediateRender: false }, tT);
+        tl.fromTo(sub, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, immediateRender: false }, tT + 0.3);
+        tl.fromTo(bar, { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, tT + 0.45);
+
+        const st = { cross: 0, tick: 0, away: 0, crew: 0, wave: 0 };
+        tl.to(st, { cross: 1, duration: 0.3, ease: "back.out(2.4)" }, at("pick") - 0.05);
+        tl.to(st, { tick: 1, duration: 0.3, ease: "back.out(2.4)" }, at("giant") - 0.08);
+        tl.to(st, { away: 1, duration: 1.0, ease: "power2.inOut" }, tOr);
+        tl.to(st, { crew: 1, duration: 1.0, ease: "back.out(1.3)" }, tOr + 0.15);
+        tl.to(st, { wave: 1, duration: 2.6, ease: "none" }, at("be") - 0.15);
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          S.sky.update(t); bhS.update(t); bhG.update(t * 0.6);
+          // the choice shrinks into the distance
+          const a = sm(clamp(st.away)), sc = 1 - 0.76 * a;               // into the distance, between the title and the crew
+          comp.setAttribute("transform", `translate(${f(540 + 20 * a)},${f(760 - 20 * a)}) scale(${f(sc)}) translate(-540,-760)`);
+          cross.setAttribute("opacity", f(clamp(st.cross) * (1 - a))); cross.setAttribute("transform", `translate(330,600) scale(${f(0.5 + 0.5 * st.cross)})`);
+          tick.setAttribute("opacity", f(clamp(st.tick) * (1 - a))); tick.setAttribute("transform", `translate(680,1060) scale(${f(0.5 + 0.5 * st.tick)})`);
+          // the crew drifts up into view and waves
+          crew.setAttribute("transform", `translate(0,${f(1000 * (1 - st.crew))})`);
+          crew.setAttribute("opacity", st.crew > 0.001 ? 1 : 0);
+          ship.flame.setAttribute("opacity", f(0.6 + 0.3 * Math.sin(t * 20)));
+          pals.forEach((p, i) => {
+            const P = KS.floatPose(t + i * 2, { arms: "relax", amp: 0.6 });
+            if (st.wave > 0) KH.armTo(P, 0, 150, 20 + 30 * Math.sin(st.wave * Math.PI * 9 + i));
+            p.h.setPose(P); p.h.setFace({ mouth: 1.3, eye: 0.8, brow: 0.2 });
+            p.w.setAttribute("transform", `translate(${p.x},${f(p.y + 10 * Math.sin(t * 1.2 + i * 2))}) scale(${f(p.s * p.flip)},${p.s}) translate(0,356)`);
+          });
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.5, "6,4,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>

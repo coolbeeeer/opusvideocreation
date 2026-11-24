@@ -1,0 +1,57 @@
+{
+ "film": 51.4,
+ "open": 0.6,
+ "source": "tts",
+ "voice": "af_heart",
+ "speed": 0.95,
+ "lines": [
+  {
+   "line": 1,
+   "text": "What happens if you fall into a black hole? It depends on how big it is.",
+   "start": 0.6,
+   "end": 4.65
+  },
+  {
+   "line": 2,
+   "text": "A small one, ten times as heavy as the Sun, pulls much harder on your feet than on your head.",
+   "start": 5.25,
+   "end": 10.45
+  },
+  {
+   "line": 3,
+   "text": "You'd be stretched into a noodle before you even reach it. Astronomers really call this spaghettification.",
+   "start": 10.85,
+   "end": 16.98
+  },
+  {
+   "line": 4,
+   "text": "A giant one, like the one at the center of our galaxy, is gentler. You'd cross its edge, the event horizon, and feel nothing.",
+   "start": 17.78,
+   "end": 25.48
+  },
+  {
+   "line": 5,
+   "text": "But a friend watching from far away sees you slow down, turn red and fade, as if frozen at the edge.",
+   "start": 26.08,
+   "end": 32.39
+  },
+  {
+   "line": 6,
+   "text": "For you, time goes on. Inside, every path leads to the center, and you have only seconds left.",
+   "start": 33.09,
+   "end": 39.38
+  },
+  {
+   "line": 7,
+   "text": "What happens there? Nobody knows. Our laws of physics break down.",
+   "start": 40.08,
+   "end": 44.06
+  },
+  {
+   "line": 8,
+   "text": "So if you get the choice, pick a giant one. Or better: be the friend.",
+   "start": 44.86,
+   "end": 48.6
+  }
+ ]
+}

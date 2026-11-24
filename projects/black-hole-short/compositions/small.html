@@ -1,0 +1,140 @@
+<template id="small-template">
+  <!-- Lines 2-3. "A small one, ten times as heavy as the Sun, pulls much harder on your feet than on your head.
+       You'd be stretched into a noodle before you even reach it. Astronomers really call this spaghettification."
+       The astronaut hangs above a small black hole. Ten suns pop in a row ("ten times as heavy as the Sun").
+       Two arrows: a long pull on the feet, a short one on the head. Then the astronaut stretches (head held back,
+       feet pulled ahead), turns into a wobbling noodle well above the hole, and slides in. An astronomer in an
+       inset nods: yes, that is the real word. -->
+  <div data-composition-id="small" data-width="1080" data-height="1920" data-duration="12.375">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const K = window.KIT, KP = window.KITPLUS, KH = window.HUMAN, KS = window.SPACE;
+        const ID = "small", R = document.querySelector('[data-composition-id="small"]');
+        const T0 = K.scene(ID).start, DUR = K.scene(ID).dur;
+        const at = (w, n = 1) => K.t(w, n, T0) - T0;
+        const tl = gsap.timeline({ paused: true });
+        const f = K.f, sm = (x) => x * x * (3 - 2 * x), clamp = (x) => Math.max(0, Math.min(1, x));
+        const S = KS.stage(R, "sm", { seed: 21 });
+        const BX = 540, BY = 1400, BR = 150;
+        const bh = KS.blackHole(K.g(S.act, { transform: `translate(${BX},${BY})` }), { R: BR, p: S.p, seed: 3 });
+        const AS = 0.62, HEAD = 628, MIDB = 356;                     // astronaut scale; head centre and mid-body in rig units
+
+        // ---------------------------------------------------------------- the astronaut and the noodle (in the hole's `mid` layer: local y, 0 = the hole's centre)
+        const aw = K.g(bh.mid), astro = KH.human(K.g(aw), { look: KS.SUIT });
+        const noodle = KS.noodle(bh.mid, {});
+        noodle.g.setAttribute("opacity", 0);
+        const tSt = at("stretched") - 0.2, tNo = at("noodle") - 0.05, tSp = at("spaghettification");
+        // head height (world y) over time: hangs, is held back while the feet race ahead, then slides in
+        const HK = [[0, 445], [tSt, 465], [tNo, 475], [at("reach") + 0.3, 540], [at("astronomers"), 610], [tSp - 0.2, 740], [tSp + 0.65, 1120], [tSp + 1.05, 1400]];
+        const headY = (t) => {
+          for (let i = 0; i < HK.length - 1; i++) if (t <= HK[i + 1][0]) { const u = clamp((t - HK[i][0]) / (HK[i + 1][0] - HK[i][0])); const e = i >= HK.length - 3 ? u * u : sm(u); return HK[i][1] + (HK[i + 1][1] - HK[i][1]) * e; }
+          return HK[HK.length - 1][1];
+        };
+        const stretchK = (t) => 1 + 1.15 * sm(clamp((t - tSt) / (tNo - tSt + 0.1)));
+        const noodleLen = (t) => HEAD * AS * stretchK(t) * (1 + 0.55 * sm(clamp((t - tNo) / 2.2)));
+
+        // ---------------------------------------------------------------- ten suns
+        const sunG = K.g(S.act);
+        const suns = Array.from({ length: 10 }, (_, i) => {
+          const g = K.g(sunG); KS.sun(g, { r: 24 });
+          return { g, x: 255 + i * 63, y: 1020, t0: at("ten") - 0.05 + i * 0.1 };
+        });
+        const tSun = at("sun"), tOut = at("pulls") - 0.2;
+
+        // ---------------------------------------------------------------- the pull on the feet and on the head
+        const arrow = (col, w) => {
+          const g = K.g(S.act, { opacity: 0 });
+          const shaft = K.el("line", { stroke: col, "stroke-width": w, "stroke-linecap": "round" }, g);
+          const head = K.el("path", { fill: col }, g);
+          return { g, set: (x, y0, y1) => {
+            shaft.setAttribute("x1", f(x)); shaft.setAttribute("x2", f(x)); shaft.setAttribute("y1", f(y0)); shaft.setAttribute("y2", f(Math.max(y0, y1 - w * 1.2)));
+            head.setAttribute("d", `M ${f(x - w * 1.5)} ${f(y1 - w * 1.9)} L ${f(x + w * 1.5)} ${f(y1 - w * 1.9)} L ${f(x)} ${f(y1)} Z`);
+          } };
+        };
+        const arF = arrow("#ff6a3d", 24), arH = arrow("#ffd23f", 11);
+        const tFeet = at("feet"), tHead = at("head");
+
+        // ---------------------------------------------------------------- the astronomer, in an inset bubble
+        const inset = document.createElement("div");
+        inset.setAttribute("data-layout-allow-overflow", "");               // the figure is cut by the circle on purpose
+        inset.style.cssText = "position:absolute;left:90px;top:640px;width:280px;height:280px;border-radius:140px;overflow:hidden;background:#2b2457;box-shadow:0 0 0 10px #ffffff, 0 16px 36px rgba(0,0,0,0.35);opacity:0;";
+        S.ui.appendChild(inset);
+        const isvg = K.el("svg", { viewBox: "-140 -140 280 280", width: 280, height: 280, style: "position:absolute;inset:0" });
+        inset.appendChild(isvg);
+        K.el("rect", { x: -140, y: -110, width: 280, height: 150, rx: 10, fill: "#2f5a4a" }, isvg);                      // a chalkboard
+        K.el("path", { d: "M -96 -82 L -96 10 M -112 -40 L -80 -40 M -96 10 L -108 26 M -96 10 L -84 26", stroke: "#e9f2ea", "stroke-width": 4, "stroke-linecap": "round", fill: "none", opacity: 0.85 }, isvg);
+        K.el("circle", { cx: -96, cy: -92, r: 9, fill: "none", stroke: "#e9f2ea", "stroke-width": 4, opacity: 0.85 }, isvg);
+        K.el("path", { d: "M 40 -90 L 40 20", stroke: "#e9f2ea", "stroke-width": 3, "stroke-linecap": "round", opacity: 0.6, "stroke-dasharray": "6 8" }, isvg);
+        const prof = KH.human(K.g(isvg, { transform: "translate(-12,236) scale(0.42)" }), { look: KS.LAB });
+        const tAst = at("astronomers"), tReal = at("really");
+
+        // ---------------------------------------------------------------- labels
+        const note = document.createElement("div");
+        note.style.cssText = "position:absolute;left:150px;top:1088px;font:italic 800 36px Nunito,sans-serif;color:#d9d4ff;opacity:0;letter-spacing:0.02em;";
+        note.textContent = "not to scale";
+        S.ui.appendChild(note);
+        tl.to(note, { opacity: 0.8, duration: 0.3 }, 0.3);
+        tl.to(note, { opacity: 0, duration: 0.3 }, tOut);
+        const ban = K.callout(S.ui, { text: "Spaghettification", x: 540, y: 380, color: "violet", size: 64 });
+        K.show(tl, ban, tSp - 0.1);
+
+        // ---------------------------------------------------------------- tweened states
+        const st = { arF: 0, arH: 0, arA: 0, panic: 0, inset: 0, nod: 0, flare: 0 };
+        tl.to(st, { arA: 1, duration: 0.25 }, at("pulls") - 0.1);
+        tl.to(st, { arF: 1, duration: 0.6, ease: "power2.out" }, at("harder") - 0.1);
+        tl.to(st, { arH: 1, duration: 0.3, ease: "back.out(2)" }, tHead - 0.12);
+        tl.to(st, { arA: 0, duration: 0.25 }, tSt - 0.05);
+        tl.to(st, { panic: 1, duration: 0.3 }, tFeet + 0.4);
+        tl.to(st, { inset: 1, duration: 0.3, ease: "back.out(1.8)" }, tAst - 0.12);
+        tl.to(st, { nod: 1, duration: 0.6, ease: "none" }, tReal - 0.05);
+        tl.to(st, { inset: 0, duration: 0.25, ease: "power2.in" }, tSp + 0.9);
+        tl.to(st, { flare: 1, duration: 0.15 }, tSp + 0.9);
+        tl.to(st, { flare: 0, duration: 0.6 }, tSp + 1.05);
+        K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, tSt, "sine.inOut");
+        K.camTo(tl, S.cam, tSt, { s: 1.1, py: 980 }, DUR - tSt, "sine.inOut");
+
+        const clk = { t: 0 };
+        const frame = () => {
+          const t = clk.t;
+          S.sky.update(t); bh.update(t * (1 + st.flare * 2));
+          bh.glow.k = 0.55 + 0.6 * st.flare; bh.glow.update();
+          // suns: pop in one by one, pulse on "Sun", shrink away
+          suns.forEach((s, i) => {
+            const u = clamp((t - s.t0) / 0.25), out = clamp((t - tOut - i * 0.03) / 0.25), pul = Math.sin(Math.PI * clamp((t - tSun - i * 0.02) / 0.35));
+            const sc = (u < 1 ? 1.25 * Math.sin(Math.PI * 0.62 * u) / Math.sin(Math.PI * 0.62) : 1) * (1 + 0.22 * pul) * (1 - out);
+            s.g.setAttribute("transform", `translate(${s.x},${f(s.y + 4 * Math.sin(t * 2 + i))}) scale(${f(Math.max(0, sc))})`);
+            s.g.setAttribute("opacity", u > 0 && out < 1 ? 1 : 0);
+          });
+          // the astronaut: head held back, feet pulled ahead (stretch about the head)
+          const hy = headY(t), k = stretchK(t), ly = hy - BY;
+          const P = KS.floatPose(t, { arms: st.panic > 0.5 ? "up" : "out", amp: 1 + st.panic });
+          astro.setPose(P);
+          astro.setFace({ brow: 0.4 + 0.6 * st.panic, open: 0.15 + 0.75 * st.panic, eye: 1 + 0.4 * st.panic, mouth: 0.1 - 0.6 * st.panic });
+          aw.setAttribute("transform", `translate(0,${f(ly)}) scale(${f(AS / Math.sqrt(k))},${f(AS * k)}) translate(0,${HEAD})`);
+          const fade = clamp((t - tNo) / 0.2);
+          aw.setAttribute("opacity", f(1 - fade));
+          noodle.g.setAttribute("opacity", f(fade));
+          if (fade > 0) noodle.set(ly, ly + noodleLen(t), 0, Math.max(20, 42 - 20 * clamp((t - tNo) / 3.5)), t * 7, 1 - 0.5 * clamp((t - tNo) / 4));
+          // the arrows sit right of the body: long on the feet, short on the head
+          const feetY = hy + HEAD * AS * k;
+          arF.g.setAttribute("opacity", f(st.arA)); arH.g.setAttribute("opacity", f(st.arA * clamp(st.arH * 3)));
+          arF.set(720, feetY - 20, feetY - 20 + 40 + 300 * st.arF);
+          arH.set(720, hy - 40, hy - 40 + 20 + 60 * st.arH);
+          // the astronomer nods on "really" and points at the noodle
+          inset.style.opacity = f(clamp(st.inset)); inset.style.transform = `scale(${f(0.5 + 0.5 * st.inset)})`;
+          const PP = KH.standPose(); KH.armTo(PP, 0, 100, 8);
+          PP.headTilt = 0.16 * Math.sin(Math.PI * 3 * st.nod) * (1 - st.nod * 0.3);
+          prof.setPose(PP); prof.setFace({ brow: 0.8 * Math.sin(Math.PI * st.nod), mouth: 0.4 });
+        };
+        frame();
+        tl.eventCallback("onUpdate", () => { clk.t = tl.time(); frame(); });
+        S.stage.insertBefore(KP.vignette(S.stage, 0.5, "6,4,20"), S.ui);
+
+        tl.set({}, {}, DUR);
+        window.__timelines = window.__timelines || {};
+        window.__timelines[ID] = tl;
+      })();
+    </script>
+  </div>
+</template>
