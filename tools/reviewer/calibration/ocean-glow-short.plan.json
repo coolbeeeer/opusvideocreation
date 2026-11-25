@@ -1,0 +1,768 @@
+{
+ "version": 1,
+ "_note": "Auto-converted from `review.py draft-plan` output for stage-3 calibration (calibration/autoplan.py): timeline events from the scene code, merged when they start within 0.25 s; descriptions are code lines; reactions have who/where read off the frames. Shots and casts are not filled in, so stage 2 results for this plan mean nothing.",
+ "characters": [],
+ "holds": [],
+ "scenes": [
+  {
+   "id": "hook",
+   "transition": "cold open",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0, { s: 1.06, py: 900 }, tUp, \"sine.inOut\");",
+     "where": "full"
+    },
+    {
+     "word": "three",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "four",
+     "n": 1,
+     "offset": -0.02,
+     "kind": "label",
+     "text": "3 out of 4",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "animals",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "open",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "ocean",
+     "n": 1,
+     "offset": 0.2,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "own",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "why",
+     "n": 1,
+     "offset": -0.04,
+     "kind": "move",
+     "does": "auto: tl.fromTo(q, { opacity: 0, scale: 0.3, rotation: -20 }, { opacity: 1, ",
+     "where": "full",
+     "sfx": "boing"
+    }
+   ]
+  },
+  {
+   "id": "descent",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "word": "dive",
+     "n": 1,
+     "offset": 0.3,
+     "kind": "move",
+     "does": "auto: tl.to([gauge.el, gauge.chip, ...gauge.marks], { opacity: 1, duration: ",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "by",
+     "n": 1,
+     "offset": 0.0,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "twilight",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Twilight zone",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "below",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "night",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Midnight zone",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "forever",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    }
+   ]
+  },
+  {
+   "id": "chemistry",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, A.cam, 0, { s: 1.05, py: 930 }, tCut - 0.65, \"sine.inOut\")",
+     "where": "full"
+    },
+    {
+     "word": "so",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(st, { k: 1.2, duration: 0.3, ease: \"power2.out\", onUpdate: () =>",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "by",
+     "n": 1,
+     "offset": -0.73,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, A.cam, tCut - 0.65, { px: PX, py: PY, s: 9 }, 0.65, \"power",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "by",
+     "n": 1,
+     "offset": -0.22,
+     "kind": "move",
+     "does": "auto: tl.fromTo(flash, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: \"",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "fuel",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "with",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: tl.to(fw, { x: 600, y: 815, duration: tMeet - at(\"with\") - 0.05, ease:",
+     "where": "full"
+    },
+    {
+     "word": "enzyme",
+     "n": 1,
+     "offset": -0.08,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "enzyme",
+     "n": 1,
+     "offset": 0.06,
+     "kind": "move",
+     "does": "auto: tl.to(mo, { v: 0.05, duration: 0.1, ease: \"power3.in\", onUpdate: () =>",
+     "where": "full",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "enzyme",
+     "n": 1,
+     "offset": 0.26,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "enzyme",
+     "n": 1,
+     "offset": 0.51,
+     "kind": "move",
+     "does": "auto: tl.to(s, { opacity: 0, duration: 0.25 }, tMeet + 0.45);",
+     "where": "full",
+     "sfx": "pop_word"
+    }
+   ]
+  },
+  {
+   "id": "angler",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.15,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0.15, { px: 560, py: 900, s: 1.0 }, at(\"dangles\") +",
+     "where": "full"
+    },
+    {
+     "word": "anglerfish",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "label",
+     "text": "Anglerfish",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "dangles",
+     "n": 1,
+     "offset": 0.65,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, at(\"dangles\") + 0.65, { px: 600, py: 880, s: 1.06 }",
+     "where": "full"
+    },
+    {
+     "word": "lure",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Lure",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "curious",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: tl.to(pw, { x: PX, duration: tStop - tIn, ease: \"power2.out\" }, tIn);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "swims",
+     "n": 1,
+     "offset": 0.0,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "closer",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: tl.fromTo(heart, { opacity: 0, scale: 0.3, svgOrigin: \"0 0\", x: PX + 1",
+     "where": "full",
+     "sfx": "bubble"
+    },
+    {
+     "word": "bad",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: tl.to(aw, { x: AX - 24, y: AY + 12, duration: 0.18, ease: \"power2.out\"",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "bad",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "move",
+     "does": "auto: tl.to(j, { v: 0, duration: 0.08, ease: \"power3.in\", onUpdate: upd }, t",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "bad",
+     "n": 1,
+     "offset": 0.45,
+     "kind": "move",
+     "does": "auto: tl.fromTo(burp, { opacity: 0, attr: { cx: LUNGE[0] + 0.9 * AR, cy: LUN",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  },
+  {
+   "id": "hatchet",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0, { s: 1.38, py: HY + 60 }, at(\"seen\") - 0.35, \"si",
+     "where": "full"
+    },
+    {
+     "word": "hatchetfish",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "label",
+     "text": "Hatchetfish",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "lights",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(lights, { k: 1.1, duration: 0.45, ease: \"power2.out\", onUpdate: ",
+     "where": "full",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "match",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "glow",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "descend_ting"
+    },
+    {
+     "word": "above",
+     "n": 1,
+     "offset": 0.25,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "seen",
+     "n": 1,
+     "offset": -0.3,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, tS, { px: 540, py: 960, s: 1.0 }, 0.85, \"power2.inO",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "seen",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: tl.to(sil, { v: 1, duration: 0.3, ease: \"power2.inOut\", onUpdate: () =",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "below",
+     "n": 1,
+     "offset": 0.0,
+     "kind": "move",
+     "does": "auto: tl.to(los, { opacity: 0.9, duration: 0.25 }, tB);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "vanishes",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(lights, { k: 1, duration: 0.35, ease: \"power2.out\", onUpdate: se",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "vanishes",
+     "n": 1,
+     "offset": 0.3,
+     "kind": "move",
+     "does": "auto: tl.fromTo(q, { opacity: 0, scale: 0.3, rotation: -20 }, { opacity: 1, ",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  },
+  {
+   "id": "alarm",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.1,
+     "kind": "move",
+     "does": "auto: tl.to(aw, { x: A1[0], y: A1[1], duration: tG - 0.15, ease: \"power2.out",
+     "where": "full"
+    },
+    {
+     "word": "grab",
+     "n": 1,
+     "offset": 0.0,
+     "kind": "move",
+     "does": "auto: tl.to(aw, { x: A1[0] + 22, duration: 0.08, ease: \"power3.out\" }, tG);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "jellyfish",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Atolla jellyfish",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "flash",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "effect",
+     "does": "auto: tl.to(jst, { flash: 1.25, duration: 0.15, ease: \"power2.out\" }, tF);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "burglar",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Burglar alarm",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "likely",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, tL - 0.1, { s: 0.94, px: 600, py: 980 }, 1.1, \"powe",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "something",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "thump"
+    },
+    {
+     "word": "bigger",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Something bigger",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "eat",
+     "n": 1,
+     "offset": -0.4,
+     "kind": "move",
+     "does": "auto: tl.to(bw, { x: B1[0] + 50, duration: 0.2, ease: \"power2.out\" }, tE - 0",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "attacker",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: tl.set(aw, { opacity: 0 }, tA);",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  },
+  {
+   "id": "colours",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "move",
+     "does": "auto: tl.to(schoolG, { x: -260, duration: at(\"because\") + 0.3, ease: \"none\" ",
+     "where": "full"
+    },
+    {
+     "word": "blue",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(blueOn, { k: 1.35, duration: 0.15, ease: \"power2.out\" }, at(\"blu",
+     "where": "full",
+     "sfx": "chime"
+    },
+    {
+     "word": "because",
+     "n": 1,
+     "offset": -0.25,
+     "kind": "move",
+     "does": "auto: tl.to(schoolG, { opacity: 0, duration: 0.35, ease: \"power1.in\" }, at(\"",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "because",
+     "n": 1,
+     "offset": 0.02,
+     "kind": "move",
+     "does": "auto: tl.to(r, { attr: { height: len }, duration: dur, ease: \"none\" }, tGo);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "farthest",
+     "n": 1,
+     "offset": -0.02,
+     "kind": "label",
+     "text": "Farthest",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "but",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(beamG, { opacity: 0, duration: 0.35, ease: \"power2.in\" }, tBut);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "dragonfish",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "label",
+     "text": "Dragonfish",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "cheats",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "with",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "prey",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "can't",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Can't see red",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "see",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    }
+   ]
+  },
+  {
+   "id": "finale",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.05,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0.05, { px: 540, py: 1000, s: 1.0 }, at(\"ocean\") + ",
+     "where": "full"
+    },
+    {
+     "word": "never",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "No sunlight",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "reaches",
+     "n": 1,
+     "offset": 0.05,
+     "kind": "label",
+     "text": "Sunlit zone",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "most",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.fromTo(br, { opacity: 0.95, strokeDasharray: brLen, strokeDashoffse",
+     "where": "full",
+     "sfx": "zip_"
+    },
+    {
+     "word": "ocean",
+     "n": 1,
+     "offset": 0.15,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, at(\"ocean\") + 0.15, { py: 990, s: 1.03 }, DUR - at(",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "so",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: tl.to(br, { opacity: 0, duration: 0.3 }, at(\"so\") - 0.2);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "own",
+     "n": 1,
+     "offset": 0.4,
+     "kind": "title",
+     "text": "auto",
+     "sfx": "cue"
+    }
+   ]
+  }
+ ]
+}

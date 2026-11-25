@@ -1,0 +1,760 @@
+{
+ "version": 1,
+ "_note": "Auto-converted from `review.py draft-plan` output for stage-3 calibration (calibration/autoplan.py): timeline events from the scene code, merged when they start within 0.25 s; descriptions are code lines; reactions have who/where read off the frames. Shots and casts are not filled in, so stage 2 results for this plan mean nothing.",
+ "characters": [
+  "bacterium",
+  "host cell",
+  "mitochondria",
+  "you"
+ ],
+ "holds": [
+  {
+   "from": 11.0,
+   "to": 13.0,
+   "why": "the match cut into the past: the vignette closes and opens (REVIEW.md, accepted flat seconds 11-12)"
+  },
+  {
+   "from": 14.0,
+   "to": 15.0,
+   "why": "the big cell closes around the bacterium (REVIEW.md, accepted flat second 14)"
+  },
+  {
+   "from": 23.0,
+   "to": 24.0,
+   "why": "the first second of the proof scene (REVIEW.md, accepted flat second 23)"
+  }
+ ],
+ "scenes": [
+  {
+   "id": "walk",
+   "transition": "cold open",
+   "cast": [
+    "mitochondria"
+   ],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "word": "you",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "bacteria",
+     "n": 1,
+     "offset": -0.08,
+     "kind": "move",
+     "does": "auto: tl.to(st, { insetIn: 1, duration: 0.3, ease: \"back.out(2)\" }, at(\"bact",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "former",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(st, { morph: 1, duration: 0.35, ease: \"power2.inOut\" }, at(\"form",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "dive",
+     "n": 1,
+     "offset": -0.45,
+     "kind": "move",
+     "does": "auto: tl.to(st, { insetIn: 0, duration: 0.25, ease: \"power2.in\" }, tDive - 0",
+     "where": "full"
+    },
+    {
+     "word": "dive",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "camera",
+     "does": "auto: tl.to(st, { lens: 1, duration: 0.38, ease: \"back.out(1.7)\" }, tDive - ",
+     "where": "full"
+    },
+    {
+     "word": "leg",
+     "n": 1,
+     "offset": 0.12,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "cue"
+    },
+    {
+     "word": "into",
+     "n": 2,
+     "offset": 0.05,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "muscle",
+     "n": 1,
+     "offset": -0.12,
+     "kind": "label",
+     "text": "auto",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "cell",
+     "n": 1,
+     "offset": 0.42,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "there",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "react",
+     "who": "mitochondria",
+     "where": "full",
+     "does": "the mitochondria wake up: eyes open all over the muscle",
+     "sfx": "cue"
+    },
+    {
+     "word": "thousands",
+     "n": 1,
+     "offset": 0.0,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "mitochondria",
+     "n": 1,
+     "offset": -0.08,
+     "kind": "label",
+     "text": "Mitochondria",
+     "sfx": "pop_word"
+    }
+   ]
+  },
+  {
+   "id": "origin",
+   "transition": "cut",
+   "cast": [
+    "bacterium"
+   ],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.05,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { vig: 0, duration: 0.9, ease: \"power2.out\" }, 0.05);",
+     "where": "full"
+    },
+    {
+     "word": "billion",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "label",
+     "text": "~2 billion years ago",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "bigger",
+     "n": 1,
+     "offset": -0.55,
+     "kind": "move",
+     "does": "auto: tl.to(st, { hx: HX1, duration: 1.0, ease: \"power2.out\" }, tB - 0.55);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "swallowed",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "move",
+     "does": "auto: tl.to(st, { pocket: 1, duration: 0.35, ease: \"power2.out\" }, tSw - 0.2",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "swallowed",
+     "n": 1,
+     "offset": 0.3,
+     "kind": "camera",
+     "does": "auto: tl.to(st, { pull: 1, duration: 0.55, ease: \"power2.inOut\" }, tSw + 0.3",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "bacterium",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(st, { pocket: 0, duration: 0.45, ease: \"power2.inOut\" }, tBa - 0",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "but",
+     "n": 1,
+     "offset": -0.35,
+     "kind": "move",
+     "does": "auto: tl.to(st, { enzIn: 1, duration: 0.6, ease: \"power2.out\" }, tBut - 0.35",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "digested",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(st, { chomp: 1, duration: 0.12, ease: \"power3.in\" }, tDig - 0.05",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "digested",
+     "n": 1,
+     "offset": 0.3,
+     "kind": "react",
+     "who": "bacterium",
+     "where": [
+      300,
+      700,
+      640,
+      960
+     ],
+     "does": "the bacterium calms down: not digested after all",
+     "sfx": "cue"
+    },
+    {
+     "word": "moved",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: tl.to(st, { suit: 1, duration: 0.35, ease: \"back.out(2.2)\" }, at(\"move",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  },
+  {
+   "id": "deal",
+   "transition": "cut",
+   "cast": [
+    "host cell"
+   ],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0, { s: 1.06, py: 980 }, at(\"lots\") - 0.3, \"sine.in",
+     "where": "full"
+    },
+    {
+     "word": "shelter",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { shelter: 1, duration: 0.4, ease: \"power2.out\" }, at(\"shelt",
+     "where": "full",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "shelter",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Shelter",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "food",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Food",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "host",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "energy",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Energy",
+     "sfx": "cue"
+    },
+    {
+     "word": "energy",
+     "n": 1,
+     "offset": 0.2,
+     "kind": "react",
+     "who": "host cell",
+     "where": [
+      380,
+      220,
+      820,
+      520
+     ],
+     "does": "the host cell beams: energy",
+     "sfx": "cue"
+    },
+    {
+     "word": "lots",
+     "n": 1,
+     "offset": -0.3,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, at(\"lots\") - 0.3, { s: 0.94, py: 900 }, DUR - at(\"l",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  },
+  {
+   "id": "proof",
+   "transition": "cut",
+   "cast": [
+    "mitochondria"
+   ],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, DUR, \"sine.inOut\");",
+     "where": "full"
+    },
+    {
+     "word": "proof",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "label",
+     "text": "The proof",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "mitochondria",
+     "n": 1,
+     "offset": -0.02,
+     "kind": "label",
+     "text": "Mitochondrion",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "mitochondria",
+     "n": 1,
+     "offset": 0.28,
+     "kind": "label",
+     "text": "Bacterium",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "dna",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { dna: 1, duration: 0.3, ease: \"power2.out\" }, at(\"dna\") - 0",
+     "where": "full",
+     "sfx": "sparkle"
+    },
+    {
+     "word": "dna",
+     "n": 1,
+     "offset": 0.7,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { dna: 0.25, duration: 0.6 }, at(\"dna\") + 0.7);",
+     "where": "full",
+     "sfx": "sparkle"
+    },
+    {
+     "word": "wall",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "move",
+     "does": "auto: tl.to(st, { wall: 1, duration: 0.45, ease: \"back.out(1.8)\" }, at(\"wall",
+     "where": "full",
+     "sfx": "zip_"
+    },
+    {
+     "word": "split",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: tl.to(st, { wall: 0.35, duration: 0.5 }, at(\"split\") - 0.1);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "two",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full"
+    },
+    {
+     "word": "like",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: tl.to(st, { eq: 1, duration: 0.3, ease: \"back.out(2.5)\" }, at(\"like\") ",
+     "where": "full",
+     "sfx": "chime"
+    },
+    {
+     "word": "bacteria",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "react",
+     "who": "mitochondria",
+     "where": [
+      140,
+      400,
+      1080,
+      800
+     ],
+     "does": "mitochondria and bacteria smile side by side"
+    }
+   ]
+  },
+  {
+   "id": "atp",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "camera",
+     "does": "auto: K.camTo(tl, S.cam, 0, { s: 1.04, py: 940 }, tSwap, \"sine.inOut\");",
+     "where": "full"
+    },
+    {
+     "word": "food",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { work: 1, duration: 0.4 }, at(\"food\") - 0.1);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "oxygen",
+     "n": 1,
+     "offset": -0.35,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "atp",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "ATP",
+     "sfx": "cue"
+    },
+    {
+     "word": "fuel",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { flex: 1, duration: 0.25, ease: \"power2.out\" }, at(\"fuel\") ",
+     "where": "full",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "fuel",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "label",
+     "text": "Cell fuel",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "fuel",
+     "n": 1,
+     "offset": 0.1,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { flex: 0.35, duration: 0.35, ease: \"power2.inOut\" }, at(\"fu",
+     "where": "full",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "you",
+     "n": 1,
+     "offset": -0.35,
+     "kind": "move",
+     "does": "auto: tl.to(st, { p2: 1, duration: 0.45, ease: \"power2.inOut\" }, tSwap);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "recycle",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "move",
+     "does": "auto: drives frame() code",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "own",
+     "n": 1,
+     "offset": -0.25,
+     "kind": "move",
+     "does": "auto: tl.to(st, { tilt: 0, duration: 1.3, ease: \"power2.inOut\" }, at(\"own\") ",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "weight",
+     "n": 1,
+     "offset": -0.12,
+     "kind": "label",
+     "text": "~your body weight",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "every",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "move",
+     "does": "auto: tl.to(st, { dialA: 1, duration: 0.3 }, at(\"every\") - 0.1);",
+     "where": "full",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "every",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "every day",
+     "sfx": "pop_word"
+    }
+   ]
+  },
+  {
+   "id": "mother",
+   "transition": "cut",
+   "cast": [
+    "you"
+   ],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "time": 0.0,
+     "kind": "move",
+     "does": "auto: tl.to(st, { come: 1, duration: 1.1, ease: \"power2.out\" }, 0);",
+     "where": "full"
+    },
+    {
+     "word": "every",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "label",
+     "text": "Dad's",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "came",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "move",
+     "does": "auto: tl.to(st, { gone: 1, duration: 0.45, ease: \"power2.in\" }, at(\"came\") -",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "mother",
+     "n": 1,
+     "offset": -0.2,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { glow: 1, duration: 0.4 }, at(\"mother\") - 0.2);",
+     "where": "full",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "mother",
+     "n": 1,
+     "offset": -0.08,
+     "kind": "label",
+     "text": "Mom's egg",
+     "sfx": "glow_on"
+    },
+    {
+     "word": "thanks",
+     "n": 1,
+     "offset": -0.35,
+     "kind": "move",
+     "does": "auto: tl.to(st, { out: 1, duration: 0.22, ease: \"power2.in\" }, tS);",
+     "where": "full",
+     "sfx": "cue"
+    },
+    {
+     "word": "thanks",
+     "n": 1,
+     "offset": -0.05,
+     "kind": "react",
+     "who": "you",
+     "where": [
+      220,
+      330,
+      480,
+      760
+     ],
+     "does": "you wave: thanks, Mom",
+     "sfx": "cue"
+    },
+    {
+     "word": "mom",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "appear",
+     "where": [
+      460,
+      240,
+      640,
+      420
+     ],
+     "does": "a heart pops up above the hand",
+     "sfx": "bubble"
+    }
+   ]
+  },
+  {
+   "id": "finale",
+   "transition": "cut",
+   "cast": [],
+   "shots": [
+    {
+     "time": 0,
+     "size": "medium",
+     "move": "not filled in"
+    }
+   ],
+   "events": [
+    {
+     "time": 0,
+     "kind": "transition",
+     "does": "cut to the next scene"
+    },
+    {
+     "word": "take",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "camera",
+     "does": "auto: tl.to(st, { lens: 0, duration: 0.3, ease: \"power2.in\" }, tOut - 0.15);",
+     "where": "full"
+    },
+    {
+     "word": "deal",
+     "n": 1,
+     "offset": -0.1,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { sparks: 1, duration: 0.4 }, at(\"deal\") - 0.1);",
+     "where": "full",
+     "sfx": "sparkle"
+    },
+    {
+     "word": "billion",
+     "n": 1,
+     "offset": -0.15,
+     "kind": "label",
+     "text": "~2 billion years",
+     "sfx": "pop_word"
+    },
+    {
+     "word": "ago",
+     "n": 1,
+     "offset": 0.25,
+     "kind": "title",
+     "text": "auto",
+     "sfx": "cue"
+    },
+    {
+     "word": "ago",
+     "n": 1,
+     "offset": 0.25,
+     "kind": "effect",
+     "does": "auto: tl.to(st, { sparks: 0, duration: 0.4 }, tT);",
+     "where": "full",
+     "sfx": "cue"
+    }
+   ]
+  }
+ ]
+}
