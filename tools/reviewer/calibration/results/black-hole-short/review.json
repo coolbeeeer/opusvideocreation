@@ -8,7 +8,7 @@
  ],
  "quick": false,
  "reviewer": "1.0",
- "reviewer_hash": "236bd2dbfad45a8b41a63c50508648b4f4a45dc4dc5d168ab6c48c5c3008e768",
+ "reviewer_hash": "02a7edf15391b564cec2eb2ee2cb2e87abc9c4db62f17aabe3561706f0cef0a6",
  "plan": "../../tools/reviewer/calibration/black-hole-short.plan.json",
  "issues": [
   {
@@ -279,6 +279,26 @@
    "fix": "Add or retime its cue.",
    "scene": "finale",
    "t0": 47.11,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F14",
+   "problem": "HyperFrames check (default): 1 errors, 0 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
+   "scene": "",
+   "t0": null,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F14",
+   "problem": "HyperFrames check (dense): 2 errors, 3 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED | \u2717 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 124.84px, right 54.5px \"BLACK HOLE?\" \u2014 Text extends outside its nearest visual/container box. | \u26a0 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s canvas_overflow div.big inside #root overflowed left 124.84px, right 54.5px \"BLACK HOLE?\" \u2014 Text extends outside the composition canvas. | \u26a0 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) overflowed left 124.84px, right 54.5px \u2014 Nowrap text is wider than its container.",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
+   "scene": "",
+   "t0": null,
    "t1": null
   }
  ],
@@ -1835,14 +1855,14 @@
    "sync_ms": 0.0,
    "black": [],
    "flash": [],
-   "caption_corr": 0.319,
+   "caption_corr": 0.343,
    "caption_band_px": [
     1152,
     1224
    ],
    "onsets_per_s": 1.32,
    "median_motion": 1.49,
-   "captions_follow": 0.851,
+   "captions_follow": 0.979,
    "still_runs": [
     [
      32.0,
@@ -1922,9 +1942,9 @@
     ]
    ],
    "shown_share": 0.909,
-   "shown_shifted": 0.441,
-   "event_lock_p": 3.3e-13,
-   "lock_ratio": 1.462,
+   "shown_shifted": 0.437,
+   "event_lock_p": 2.3e-13,
+   "lock_ratio": 1.49,
    "lock_p": 0.007,
    "acts_shown": 0.769,
    "events": [
@@ -1992,7 +2012,7 @@
      "wi": 10,
      "shown": true,
      "lag": 0.45,
-     "score": 4.77,
+     "score": 4.76,
      "cue_t": 3.5
     },
     {
@@ -2016,7 +2036,7 @@
      "wi": 10,
      "shown": true,
      "lag": 0.24,
-     "score": 22.13,
+     "score": 21.96,
      "cue_t": 4.07
     },
     {
@@ -2040,7 +2060,7 @@
      "wi": 13,
      "shown": false,
      "lag": -0.29,
-     "score": 595.22
+     "score": 583.58
     },
     {
      "scene": "small",
@@ -2058,7 +2078,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.05,
-     "score": 11.93,
+     "score": 11.98,
      "cue_t": 5.33
     },
     {
@@ -2082,7 +2102,7 @@
      "wi": 19,
      "shown": true,
      "lag": 0.29,
-     "score": 60.88,
+     "score": 54.3,
      "cue_t": 6.46
     },
     {
@@ -2106,7 +2126,7 @@
      "wi": 25,
      "shown": true,
      "lag": 0.21,
-     "score": 65.54,
+     "score": 57.3,
      "cue_t": 7.62
     },
     {
@@ -2130,7 +2150,7 @@
      "wi": 26,
      "shown": true,
      "lag": 0.26,
-     "score": 97.56,
+     "score": 86.22,
      "cue_t": null
     },
     {
@@ -2154,7 +2174,7 @@
      "wi": 28,
      "shown": true,
      "lag": 0.07,
-     "score": 44.99,
+     "score": 46.27,
      "cue_t": 9.05
     },
     {
@@ -2178,7 +2198,7 @@
      "wi": 31,
      "shown": true,
      "lag": 0.11,
-     "score": 9.72
+     "score": 9.65
     },
     {
      "scene": "small",
@@ -2201,7 +2221,7 @@
      "wi": 35,
      "shown": true,
      "lag": 0.04,
-     "score": 7.4,
+     "score": 7.17,
      "cue_t": 10.06
     },
     {
@@ -2225,7 +2245,7 @@
      "wi": 38,
      "shown": true,
      "lag": 0.41,
-     "score": 2.61,
+     "score": 2.6,
      "cue_t": 11.26
     },
     {
@@ -2249,7 +2269,7 @@
      "wi": 41,
      "shown": true,
      "lag": 0.18,
-     "score": 3.28,
+     "score": 3.29,
      "cue_t": 11.76
     },
     {
@@ -2273,7 +2293,7 @@
      "wi": 47,
      "shown": true,
      "lag": 0.11,
-     "score": 858.4,
+     "score": 848.98,
      "cue_t": 14.28
     },
     {
@@ -2297,7 +2317,7 @@
      "wi": 48,
      "shown": true,
      "lag": -0.28,
-     "score": 159.69,
+     "score": 158.66,
      "cue_t": 14.91
     },
     {
@@ -2345,7 +2365,7 @@
      "wi": 51,
      "shown": true,
      "lag": 0.08,
-     "score": 16.08,
+     "score": 15.67,
      "cue_t": 16.82
     },
     {
@@ -2364,7 +2384,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.01,
-     "score": 83.28,
+     "score": 83.34,
      "cue_t": null
     },
     {
@@ -2388,7 +2408,7 @@
      "wi": 55,
      "shown": true,
      "lag": 0.13,
-     "score": 405.86,
+     "score": 364.91,
      "cue_t": 18.36
     },
     {
@@ -2412,7 +2432,7 @@
      "wi": 65,
      "shown": false,
      "lag": -0.24,
-     "score": 6.82
+     "score": 6.88
     },
     {
      "scene": "giant",
@@ -2435,7 +2455,7 @@
      "wi": 65,
      "shown": true,
      "lag": 0.21,
-     "score": 34.89
+     "score": 34.07
     },
     {
      "scene": "giant",
@@ -2453,7 +2473,7 @@
      "wi": 67,
      "shown": true,
      "lag": 0.0,
-     "score": 1.51,
+     "score": 1.53,
      "cue_t": 21.91
     },
     {
@@ -2477,7 +2497,7 @@
      "wi": 71,
      "shown": true,
      "lag": 0.12,
-     "score": 40.05,
+     "score": 40.7,
      "cue_t": 23.68
     },
     {
@@ -2501,7 +2521,7 @@
      "wi": 74,
      "shown": true,
      "lag": 0.4,
-     "score": 6.81,
+     "score": 6.88,
      "cue_t": 24.57
     },
     {
@@ -2525,7 +2545,7 @@
      "wi": 74,
      "shown": true,
      "lag": -0.15,
-     "score": 86.18,
+     "score": 91.09,
      "cue_t": 25.02
     },
     {
@@ -2544,7 +2564,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.03,
-     "score": 25.42,
+     "score": 25.61,
      "cue_t": null
     },
     {
@@ -2568,7 +2588,7 @@
      "wi": 79,
      "shown": true,
      "lag": -0.16,
-     "score": 3.46,
+     "score": 2.85,
      "cue_t": 26.64
     },
     {
@@ -2592,7 +2612,7 @@
      "wi": 81,
      "shown": true,
      "lag": 0.1,
-     "score": 340.81,
+     "score": 335.92,
      "cue_t": 27.14
     },
     {
@@ -2616,7 +2636,7 @@
      "wi": 85,
      "shown": false,
      "lag": -0.19,
-     "score": 1.12,
+     "score": 1.11,
      "cue_t": 28.14
     },
     {
@@ -2640,7 +2660,7 @@
      "wi": 88,
      "shown": true,
      "lag": 0.29,
-     "score": 253.92,
+     "score": 220.6,
      "cue_t": 29.3
     },
     {
@@ -2664,7 +2684,7 @@
      "wi": 90,
      "shown": true,
      "lag": -0.26,
-     "score": 90.36,
+     "score": 79.05,
      "cue_t": 30.23
     },
     {
@@ -2688,7 +2708,7 @@
      "wi": 93,
      "shown": true,
      "lag": 0.11,
-     "score": 38.39,
+     "score": 34.97,
      "cue_t": 31.09
     },
     {
@@ -2707,7 +2727,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 162.42
+     "score": 165.03
     },
     {
      "scene": "inside",
@@ -2730,7 +2750,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.09,
-     "score": 194.83,
+     "score": 199.83,
      "cue_t": 33.19
     },
     {
@@ -2754,7 +2774,7 @@
      "wi": 99,
      "shown": true,
      "lag": 0.32,
-     "score": 20.0,
+     "score": 19.96,
      "cue_t": 33.69
     },
     {
@@ -2778,7 +2798,7 @@
      "wi": 102,
      "shown": true,
      "lag": 0.28,
-     "score": 37.98,
+     "score": 38.83,
      "cue_t": 35.19
     },
     {
@@ -2802,7 +2822,7 @@
      "wi": 102,
      "shown": true,
      "lag": 0.18,
-     "score": 102.76
+     "score": 106.1
     },
     {
      "scene": "inside",
@@ -2825,7 +2845,7 @@
      "wi": 103,
      "shown": true,
      "lag": 0.47,
-     "score": 24.14,
+     "score": 23.88,
      "cue_t": 35.66
     },
     {
@@ -2849,7 +2869,7 @@
      "wi": 103,
      "shown": true,
      "lag": 0.22,
-     "score": 5.35,
+     "score": 5.33,
      "cue_t": 35.66
     },
     {
@@ -2873,7 +2893,7 @@
      "wi": 105,
      "shown": true,
      "lag": -0.25,
-     "score": 12.24
+     "score": 12.09
     },
     {
      "scene": "inside",
@@ -2896,7 +2916,7 @@
      "wi": 112,
      "shown": true,
      "lag": -0.12,
-     "score": 17.35,
+     "score": 17.27,
      "cue_t": 38.01
     },
     {
@@ -2915,7 +2935,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.06,
-     "score": 7.38,
+     "score": 7.32,
      "cue_t": 39.73
     },
     {
@@ -2939,7 +2959,7 @@
      "wi": 118,
      "shown": true,
      "lag": 0.12,
-     "score": 4.75,
+     "score": 4.78,
      "cue_t": 41.1
     },
     {
@@ -2963,7 +2983,7 @@
      "wi": 121,
      "shown": true,
      "lag": 0.27,
-     "score": 5.69
+     "score": 5.66
     },
     {
      "scene": "unknown",
@@ -2986,7 +3006,7 @@
      "wi": 121,
      "shown": true,
      "lag": 0.12,
-     "score": 6.59,
+     "score": 6.56,
      "cue_t": 42.77
     },
     {
@@ -3010,7 +3030,7 @@
      "wi": 124,
      "shown": true,
      "lag": -0.27,
-     "score": 6.71,
+     "score": 6.68,
      "cue_t": 43.15
     },
     {
@@ -3034,7 +3054,7 @@
      "wi": 124,
      "shown": true,
      "lag": 0.44,
-     "score": 4.21,
+     "score": 4.18,
      "cue_t": 43.32
     },
     {
@@ -3053,7 +3073,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.03,
-     "score": 23.43
+     "score": 23.88
     },
     {
      "scene": "finale",
@@ -3076,7 +3096,7 @@
      "wi": 132,
      "shown": true,
      "lag": 0.06,
-     "score": 52.93,
+     "score": 56.34,
      "cue_t": 46.12
     },
     {
@@ -3100,7 +3120,7 @@
      "wi": 134,
      "shown": true,
      "lag": 0.07,
-     "score": 64.32,
+     "score": 62.69,
      "cue_t": 46.12
     },
     {
@@ -3119,7 +3139,7 @@
      "wi": 136,
      "shown": true,
      "lag": 0.49,
-     "score": 138.81,
+     "score": 138.43,
      "cue_t": null
     },
     {
@@ -3143,7 +3163,7 @@
      "wi": 136,
      "shown": true,
      "lag": 0.34,
-     "score": 238.08,
+     "score": 238.15,
      "cue_t": 47.68
     },
     {
@@ -3167,7 +3187,7 @@
      "wi": 138,
      "shown": true,
      "lag": -0.12,
-     "score": 46.98
+     "score": 47.88
     },
     {
      "scene": "finale",
@@ -3190,7 +3210,7 @@
      "wi": 138,
      "shown": true,
      "lag": -0.19,
-     "score": 68.12
+     "score": 67.87
     }
    ],
    "cue_cover": 0.909,
@@ -3203,17 +3223,25 @@
    "hyperframes": {
     "default": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
+     "passed": false,
+     "errors": 1,
      "warnings": 0,
-     "findings": []
+     "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED"
+     ]
     },
     "dense": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
-     "warnings": 0,
-     "findings": []
+     "passed": false,
+     "errors": 2,
+     "warnings": 3,
+     "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
+      "\u2717 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 124.84px, right 54.5px \"BLACK HOLE?\" \u2014 Text extends outside its nearest visual/container box.",
+      "\u26a0 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s canvas_overflow div.big inside #root overflowed left 124.84px, right 54.5px \"BLACK HOLE?\" \u2014 Text extends outside the composition canvas.",
+      "\u26a0 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) overflowed left 124.84px, right 54.5px \u2014 Nowrap text is wider than its container.",
+      "\u26a0 t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s outside_safe_zone div.big \"BLACK HOLE?\" \u2014 <div> \"BLACK HOLE?\" is outside the safe area: TikTok (left and right edges), Instagram Reels (left and right edges), YouTube Shorts (left and right edges)."
+     ]
     }
    },
    "seek": {
@@ -3258,5 +3286,5 @@
    }
   }
  },
- "date": "2026-11-25T07:14:09"
+ "date": "2026-11-25T10:00:17"
 }

@@ -58,6 +58,25 @@ so an approval always belongs to the last review. `APPROVED.json` holds the SHA-
 | `history.md` | One line per review round: stages, verdict, must counts per stage, should count, the MP4's hash. |
 | `APPROVED.json` | Only when nothing must be fixed in a full three-stage review. |
 
+## The published reviewer hash
+
+The reviewer checks itself: an approval only counts from the reviewer whose code hashes to the value published
+here. `common.reviewer_hash()` hashes the reviewer's top-level `.py` files; `common.published_hash()` reads the
+line below. When the two differ, `review` reports a must item with rule id REVIEWER and withholds
+`APPROVED.json`, and `verify` refuses the stamp. A maker who edits the reviewer's code or thresholds before a
+review changes its hash, so the published hash no longer matches. The only way to get an approval from changed
+code is to also change this line — a visible, deliberate edit in git history that invalidates every earlier
+approval (their stamps record the old hash).
+
+Published reviewer hash: 02a7edf15391b564cec2eb2ee2cb2e87abc9c4db62f17aabe3561706f0cef0a6
+
+Record the reason for every hash change here:
+
+| Date | Hash (first 12) | Reason |
+| ---- | --------------- | ------ |
+| 2026-11-25 | 0a563bdd6b24 | Finish work: F14 fix (`passed` needs 0 warnings), published-hash self-check in `review.py` and `common.py`, calibration README. Rules and thresholds unchanged. |
+| 2026-11-25 | 02a7edf15391 | F14 `ran` fix: a warnings-only check still ran (previously misreported as "did not run" because `ran` followed the new `passed`). Rules and thresholds unchanged. |
+
 ## What it checks
 
 The rules, their thresholds and why are in [STANDARD.md](STANDARD.md). In short:

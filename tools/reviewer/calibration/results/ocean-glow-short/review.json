@@ -8,7 +8,7 @@
  ],
  "quick": false,
  "reviewer": "1.0",
- "reviewer_hash": "236bd2dbfad45a8b41a63c50508648b4f4a45dc4dc5d168ab6c48c5c3008e768",
+ "reviewer_hash": "02a7edf15391b564cec2eb2ee2cb2e87abc9c4db62f17aabe3561706f0cef0a6",
  "plan": "../../tools/reviewer/calibration/ocean-glow-short.plan.json",
  "issues": [
   {
@@ -125,7 +125,7 @@
    "stage": "plan",
    "level": "must",
    "rule": "P11",
-   "problem": "' ' is the cue for 25 of 35 picture events.",
+   "problem": "'cue' is the cue for 25 of 35 picture events.",
    "fix": "Design a sound for each action; one stock sound for everything reads as generic.",
    "scene": "",
    "t0": null,
@@ -545,8 +545,18 @@
    "stage": "film",
    "level": "must",
    "rule": "F14",
-   "problem": "HyperFrames check (dense): 0 errors, 17 warnings: \u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 81px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin). | \u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 85px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin). | \u26a0 t=4.878s rotation_pivot_drift g.L-act > g:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 99px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin). | \u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(4) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 92px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin).",
-   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones).",
+   "problem": "HyperFrames check (default): 1 errors, 0 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
+   "scene": "",
+   "t0": null,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F14",
+   "problem": "HyperFrames check (dense): 1 errors, 17 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED | \u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 81px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin). | \u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 85px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin). | \u26a0 t=4.878s rotation_pivot_drift g.L-act > g:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 99px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin).",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
    "scene": "",
    "t0": null,
    "t1": null
@@ -729,7 +739,7 @@
    "cast": {},
    "sfx_cover": 0.56,
    "sfx_top": [
-    " ",
+    "cue",
     25,
     35
    ],
@@ -2258,14 +2268,14 @@
    "sync_ms": 0.0,
    "black": [],
    "flash": [],
-   "caption_corr": 0.347,
+   "caption_corr": 0.381,
    "caption_band_px": [
     1128,
     1224
    ],
-   "onsets_per_s": 1.38,
+   "onsets_per_s": 1.46,
    "median_motion": 1.42,
-   "captions_follow": 0.826,
+   "captions_follow": 0.97,
    "still_runs": [
     [
      28.9,
@@ -2338,8 +2348,8 @@
     },
     "angler": {
      "dur": 5.82,
-     "onsets": 7,
-     "onset_rate": 1.2,
+     "onsets": 8,
+     "onset_rate": 1.37,
      "median_motion": 1.42
     },
     "hatchet": {
@@ -2350,8 +2360,8 @@
     },
     "alarm": {
      "dur": 7.31,
-     "onsets": 10,
-     "onset_rate": 1.37,
+     "onsets": 12,
+     "onset_rate": 1.64,
      "median_motion": 4.03
     },
     "colours": {
@@ -2362,8 +2372,8 @@
     },
     "finale": {
      "dur": 7.65,
-     "onsets": 8,
-     "onset_rate": 1.05,
+     "onsets": 9,
+     "onset_rate": 1.18,
      "median_motion": 0.2
     }
    },
@@ -2384,8 +2394,8 @@
    "shown_share": 0.714,
    "shown_shifted": 0.518,
    "event_lock_p": 0.0012,
-   "lock_ratio": 1.382,
-   "lock_p": 0.027,
+   "lock_ratio": 1.428,
+   "lock_p": 0.005,
    "events": [
     {
      "scene": "hook",
@@ -2408,7 +2418,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.27,
-     "score": 3.23
+     "score": 3.17
     },
     {
      "scene": "hook",
@@ -2431,7 +2441,7 @@
      "wi": 0,
      "shown": true,
      "lag": 0.48,
-     "score": 3.53,
+     "score": 3.41,
      "cue_t": 0.97
     },
     {
@@ -2455,7 +2465,7 @@
      "wi": 4,
      "shown": true,
      "lag": -0.18,
-     "score": 3.46
+     "score": 3.33
     },
     {
      "scene": "hook",
@@ -2478,7 +2488,7 @@
      "wi": 7,
      "shown": false,
      "lag": 0.13,
-     "score": 0.92
+     "score": 0.93
     },
     {
      "scene": "hook",
@@ -2524,7 +2534,7 @@
      "wi": 12,
      "shown": false,
      "lag": 0.06,
-     "score": 0.83
+     "score": 0.81
     },
     {
      "scene": "hook",
@@ -2547,7 +2557,7 @@
      "wi": 14,
      "shown": false,
      "lag": 0.49,
-     "score": 1.64,
+     "score": 1.52,
      "cue_t": 4.38
     },
     {
@@ -2566,7 +2576,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.02,
-     "score": 33.33
+     "score": 31.13
     },
     {
      "scene": "descent",
@@ -2589,7 +2599,7 @@
      "wi": 15,
      "shown": true,
      "lag": 0.16,
-     "score": 3.01,
+     "score": 3.04,
      "cue_t": 5.76
     },
     {
@@ -2613,7 +2623,7 @@
      "wi": 21,
      "shown": false,
      "lag": -0.02,
-     "score": 1.11
+     "score": 1.1
     },
     {
      "scene": "descent",
@@ -2636,7 +2646,7 @@
      "wi": 27,
      "shown": false,
      "lag": 0.19,
-     "score": 2.3
+     "score": 2.18
     },
     {
      "scene": "descent",
@@ -2659,7 +2669,7 @@
      "wi": 32,
      "shown": false,
      "lag": -0.27,
-     "score": 0.56
+     "score": 0.58
     },
     {
      "scene": "chemistry",
@@ -2677,7 +2687,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.06,
-     "score": 7.05
+     "score": 6.71
     },
     {
      "scene": "chemistry",
@@ -2700,7 +2710,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.06,
-     "score": 7.05
+     "score": 6.71
     },
     {
      "scene": "chemistry",
@@ -2723,7 +2733,7 @@
      "wi": 33,
      "shown": false,
      "lag": 0.08,
-     "score": 1.07,
+     "score": 1.01,
      "cue_t": 13.48
     },
     {
@@ -2747,7 +2757,7 @@
      "wi": 38,
      "shown": true,
      "lag": 0.48,
-     "score": 11.65,
+     "score": 11.25,
      "cue_t": null
     },
     {
@@ -2771,7 +2781,7 @@
      "wi": 38,
      "shown": true,
      "lag": 0.23,
-     "score": 44.48,
+     "score": 42.49,
      "cue_t": 15.0
     },
     {
@@ -2794,8 +2804,8 @@
      "anchored": true,
      "wi": 43,
      "shown": true,
-     "lag": 0.47,
-     "score": 2.89
+     "lag": 0.4,
+     "score": 2.95
     },
     {
      "scene": "chemistry",
@@ -2818,7 +2828,7 @@
      "wi": 45,
      "shown": true,
      "lag": 0.13,
-     "score": 32.45,
+     "score": 31.44,
      "cue_t": 16.8
     },
     {
@@ -2842,7 +2852,7 @@
      "wi": 45,
      "shown": true,
      "lag": 0.28,
-     "score": 33.45,
+     "score": 31.98,
      "cue_t": 17.31
     },
     {
@@ -2861,7 +2871,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.06,
-     "score": 33.45
+     "score": 31.98
     },
     {
      "scene": "angler",
@@ -2884,7 +2894,7 @@
      "wi": null,
      "shown": true,
      "lag": -0.09,
-     "score": 33.8
+     "score": 32.73
     },
     {
      "scene": "angler",
@@ -2907,7 +2917,7 @@
      "wi": 48,
      "shown": true,
      "lag": 0.0,
-     "score": 1.7
+     "score": 1.66
     },
     {
      "scene": "angler",
@@ -2930,7 +2940,7 @@
      "wi": 53,
      "shown": false,
      "lag": 0.37,
-     "score": 1.39,
+     "score": 1.37,
      "cue_t": 20.5
     },
     {
@@ -2954,7 +2964,7 @@
      "wi": 54,
      "shown": false,
      "lag": -0.21,
-     "score": 1.54
+     "score": 1.56
     },
     {
      "scene": "angler",
@@ -3001,7 +3011,7 @@
      "wi": 56,
      "shown": true,
      "lag": 0.28,
-     "score": 17.79,
+     "score": 17.67,
      "cue_t": 22.44
     },
     {
@@ -3025,7 +3035,7 @@
      "wi": 56,
      "shown": true,
      "lag": -0.02,
-     "score": 20.47,
+     "score": 19.45,
      "cue_t": 22.74
     },
     {
@@ -3049,7 +3059,7 @@
      "wi": 56,
      "shown": true,
      "lag": 0.49,
-     "score": 119.26,
+     "score": 112.5,
      "cue_t": 22.74
     },
     {
@@ -3068,7 +3078,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 122.38
+     "score": 117.58
     },
     {
      "scene": "hatchet",
@@ -3091,7 +3101,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 122.38
+     "score": 117.58
     },
     {
      "scene": "hatchet",
@@ -3114,7 +3124,7 @@
      "wi": 60,
      "shown": false,
      "lag": -0.23,
-     "score": 1.7,
+     "score": 1.73,
      "cue_t": 24.74
     },
     {
@@ -3138,7 +3148,7 @@
      "wi": 65,
      "shown": false,
      "lag": 0.37,
-     "score": 1.87
+     "score": 1.84
     },
     {
      "scene": "hatchet",
@@ -3161,7 +3171,7 @@
      "wi": 68,
      "shown": false,
      "lag": -0.07,
-     "score": 1.86,
+     "score": 1.82,
      "cue_t": 26.2
     },
     {
@@ -3208,7 +3218,7 @@
      "wi": 71,
      "shown": true,
      "lag": 0.43,
-     "score": 33.94,
+     "score": 32.21,
      "cue_t": 28.06
     },
     {
@@ -3232,7 +3242,7 @@
      "wi": 71,
      "shown": true,
      "lag": 0.08,
-     "score": 33.02,
+     "score": 31.67,
      "cue_t": 28.06
     },
     {
@@ -3256,7 +3266,7 @@
      "wi": 73,
      "shown": true,
      "lag": -0.27,
-     "score": 34.57,
+     "score": 32.62,
      "cue_t": 28.58
     },
     {
@@ -3280,7 +3290,7 @@
      "wi": 76,
      "shown": true,
      "lag": 0.23,
-     "score": 4.3,
+     "score": 3.91,
      "cue_t": 29.77
     },
     {
@@ -3304,7 +3314,7 @@
      "wi": 76,
      "shown": true,
      "lag": -0.12,
-     "score": 4.16,
+     "score": 3.82,
      "cue_t": 29.92
     },
     {
@@ -3323,7 +3333,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.05,
-     "score": 326.1
+     "score": 291.97
     },
     {
      "scene": "alarm",
@@ -3346,7 +3356,7 @@
      "wi": null,
      "shown": true,
      "lag": -0.05,
-     "score": 308.57
+     "score": 277.59
     },
     {
      "scene": "alarm",
@@ -3369,7 +3379,7 @@
      "wi": 77,
      "shown": true,
      "lag": -0.25,
-     "score": 5.81,
+     "score": 5.74,
      "cue_t": 31.12
     },
     {
@@ -3393,7 +3403,7 @@
      "wi": 82,
      "shown": true,
      "lag": 0.5,
-     "score": 34.6,
+     "score": 30.73,
      "cue_t": 32.97
     },
     {
@@ -3417,7 +3427,7 @@
      "wi": 87,
      "shown": true,
      "lag": 0.4,
-     "score": 13.95,
+     "score": 13.43,
      "cue_t": null
     },
     {
@@ -3441,7 +3451,7 @@
      "wi": 90,
      "shown": true,
      "lag": -0.3,
-     "score": 8.7,
+     "score": 8.51,
      "cue_t": 36.09
     },
     {
@@ -3464,8 +3474,8 @@
      "anchored": true,
      "wi": 93,
      "shown": true,
-     "lag": -0.11,
-     "score": 5.25,
+     "lag": 0.49,
+     "score": 5.09,
      "cue_t": 36.31
     },
     {
@@ -3489,7 +3499,7 @@
      "wi": 95,
      "shown": false,
      "lag": 0.05,
-     "score": 1.94,
+     "score": 2.0,
      "cue_t": 37.15
     },
     {
@@ -3508,7 +3518,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.01,
-     "score": 8.78
+     "score": 9.12
     },
     {
      "scene": "colours",
@@ -3531,7 +3541,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.01,
-     "score": 8.78
+     "score": 9.12
     },
     {
      "scene": "colours",
@@ -3554,7 +3564,7 @@
      "wi": 101,
      "shown": true,
      "lag": 0.07,
-     "score": 8.58,
+     "score": 7.91,
      "cue_t": 39.19
     },
     {
@@ -3578,7 +3588,7 @@
      "wi": 102,
      "shown": true,
      "lag": 0.2,
-     "score": 25.96,
+     "score": 24.84,
      "cue_t": 39.79
     },
     {
@@ -3602,7 +3612,7 @@
      "wi": 102,
      "shown": true,
      "lag": -0.07,
-     "score": 25.96,
+     "score": 24.84,
      "cue_t": 40.34
     },
     {
@@ -3626,7 +3636,7 @@
      "wi": 108,
      "shown": true,
      "lag": 0.36,
-     "score": 8.66,
+     "score": 8.02,
      "cue_t": 42.95
     },
     {
@@ -3650,7 +3660,7 @@
      "wi": 111,
      "shown": true,
      "lag": 0.33,
-     "score": 2.56,
+     "score": 2.58,
      "cue_t": 43.56
     },
     {
@@ -3674,7 +3684,7 @@
      "wi": 112,
      "shown": false,
      "lag": 0.22,
-     "score": 2.08
+     "score": 2.39
     },
     {
      "scene": "colours",
@@ -3697,7 +3707,7 @@
      "wi": 116,
      "shown": false,
      "lag": 0.37,
-     "score": 1.22,
+     "score": 1.44,
      "cue_t": 45.43
     },
     {
@@ -3721,7 +3731,7 @@
      "wi": 118,
      "shown": true,
      "lag": 0.36,
-     "score": 5.45
+     "score": 5.7
     },
     {
      "scene": "finale",
@@ -3739,7 +3749,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.05,
-     "score": 22.92
+     "score": 21.0
     },
     {
      "scene": "finale",
@@ -3762,7 +3772,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.0,
-     "score": 22.92
+     "score": 21.0
     },
     {
      "scene": "finale",
@@ -3785,7 +3795,7 @@
      "wi": 122,
      "shown": true,
      "lag": 0.02,
-     "score": 15.99,
+     "score": 15.45,
      "cue_t": 47.99
     },
     {
@@ -3809,7 +3819,7 @@
      "wi": 125,
      "shown": true,
      "lag": -0.26,
-     "score": 10.14,
+     "score": 9.78,
      "cue_t": null
     },
     {
@@ -3833,7 +3843,7 @@
      "wi": 126,
      "shown": true,
      "lag": 0.15,
-     "score": 12.95,
+     "score": 12.83,
      "cue_t": 49.98
     }
    ],
@@ -3847,17 +3857,20 @@
    "hyperframes": {
     "default": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
+     "passed": false,
+     "errors": 1,
      "warnings": 0,
-     "findings": []
+     "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED"
+     ]
     },
     "dense": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
+     "passed": false,
+     "errors": 1,
      "warnings": 17,
      "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
       "\u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 81px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin).",
       "\u26a0 t=4.878s rotation_pivot_drift #host-hook > div:nth-of-type(2) > svg:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 85px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin).",
       "\u26a0 t=4.878s rotation_pivot_drift g.L-act > g:nth-of-type(1) > g:nth-of-type(3) > g:nth-of-type(1) > g:nth-of-type(2) > g:nth-of-type(1) \u2014 Rotating element's bounding-box center drifts 99px across rotation \u2014 it is not spinning about its own center (check transformOrigin/svgOrigin).",
@@ -3874,7 +3887,7 @@
       "\u26a0 t=43.902, 44.263s outside_safe_zone #host-colours > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(1) \"Dragonfish\" \u2014 <span> \"Dragonfish\" is outside the safe area: TikTok (left edge).",
       "\u26a0 t=47.877, 48.238, 48.599, 48.961, 49.322, 49.683s outside_safe_zone #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(1) \"Sunlit\" \u2014 <span> \"Sunlit\" is outside the safe area: TikTok (top edge), Instagram Reels (top edge), YouTube Shorts (top edge).",
       "\u26a0 t=48.238, 48.599, 48.961, 49.322, 49.683s outside_safe_zone #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2) \"zone\" \u2014 <span> \"zone\" is outside the safe area: TikTok (top edge), Instagram Reels (top edge), YouTube Shorts (top edge).",
-      "\u26a0 t=51.49, 51.851, 52.213, 52.574, 52.935, 53.297, 53.658, 54.019s outside_safe_zone div.big \"GLOW\" \u2014 <div> \"GLOW\" is outside the safe area: TikTok (right edge).",
+      "\u26a0 t=51.49, 51.851, 52.213, 52.574, 52.935, 53.297, 53.658, 54.019s outside_safe_zone div.big \"GLOW\" \u2014 <div> \"GLOW\" is outside the safe area: TikTok (left and right edges), YouTube Shorts (right edge).",
       "\u2139 t=18.247s canvas_overflow #host-angler > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1) inside #root overflowed left 224.25px \"Anglerfish\" \u2014 Text extends outside the composition canvas.",
       "\u2139 t=18.247s panel_out_of_canvas #host-angler > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) inside #root overflowed left 238.7px \"Anglerfish\" \u2014 Painted panel extends outside the composition canvas.",
       "\u2139 t=47.877s canvas_overflow #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(1) inside #root overflowed top 137.68px \"Sunlit\" \u2014 Text extends outside the composition canvas.",
@@ -3929,5 +3942,5 @@
    }
   }
  },
- "date": "2026-11-25T07:18:49"
+ "date": "2026-11-25T10:23:33"
 }

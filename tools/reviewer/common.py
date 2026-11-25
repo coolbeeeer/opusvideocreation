@@ -80,6 +80,19 @@ def reviewer_hash() -> str:
     return h.hexdigest()
 
 
+def published_hash():
+    """The reviewer hash as published in this folder's README.md, or None when no hash is published yet.
+
+    An approval only counts from the reviewer whose code hashes to the published value. A maker who edits the
+    reviewer's code or thresholds before a review changes its hash, so it no longer matches the published one and
+    the reviewer refuses to approve (and verify() refuses the stamp). The only way to get an approval from changed
+    code is to also change the published hash in README.md — a visible, deliberate edit in git history that
+    invalidates every earlier approval, whose stamps record the old hash.
+    """
+    m = re.search(r"Published reviewer hash:\s*([0-9a-f]{64})", (REVIEWER_DIR / "README.md").read_text())
+    return m.group(1) if m else None
+
+
 SENT_SPLIT = re.compile(r"(?<=[.?!])\s+")
 
 

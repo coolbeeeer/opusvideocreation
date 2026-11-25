@@ -442,8 +442,12 @@ class Film:
             found = [ln.strip() for ln in out.splitlines() if re.match(r"\s+[✗⚠ℹ] ", ln)]
             errs = sum(int(x) for x in re.findall(r"(\d+) error\(s\)", out))
             warns = sum(int(x) for x in re.findall(r"(\d+) warning\(s\)", out))
-            passed = "Check passed" in out
-            res[name] = {"ran": passed or "Check failed" in out, "passed": passed, "errors": errs, "warnings": warns, "findings": found[:40]}
+            # F14 requires 0 errors AND 0 warnings: HyperFrames prints "Check passed" even when it lists
+            # warnings, so "passed" here means the rule's requirement, not HyperFrames' verdict. "ran" is
+            # separate: the check ran if HyperFrames reached a verdict either way (a warnings-only check still
+            # ran; only a missing verdict means it did not run).
+            passed = "Check passed" in out and errs == 0 and warns == 0
+            res[name] = {"ran": ("Check passed" in out or "Check failed" in out), "passed": passed, "errors": errs, "warnings": warns, "findings": found[:40]}
             if not res[name]["ran"]:
                 res[name]["error"] = out[-600:]
         self.m["hyperframes"] = res
@@ -780,8 +784,8 @@ def run(P, issues: Issues, plan_m, mp4=None, quick=False):
             if not r.get("ran"):
                 issues.must(st, "F14", f"HyperFrames check ({name}) did not run: {r.get('error', '')[:200]}", "Run it in the project folder (docs/01-environment.md), then review again.")
                 continue
-            if r["errors"] or r["warnings"]:
-                issues.must(st, "F14", f"HyperFrames check ({name}): {r['errors']} errors, {r['warnings']} warnings: " + " | ".join(r["findings"][:4]), "Fix every finding (docs/09-pitfalls.md has the usual ones).")
+            if not r["passed"]:
+                issues.must(st, "F14", f"HyperFrames check ({name}): {r['errors']} errors, {r['warnings']} warnings: " + " | ".join(r["findings"][:4]), "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.")
             elif any(f.startswith("ℹ") for f in r["findings"]):
                 issues.should(st, "F14", f"HyperFrames check ({name}) info: " + " | ".join(f for f in r["findings"] if f.startswith("ℹ"))[:300], "Review the info findings.")
         sample = []

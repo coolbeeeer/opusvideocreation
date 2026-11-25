@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import film_check  # noqa: E402
 import plan_check  # noqa: E402
 import script_check  # noqa: E402
-from common import VERSION, Issues, Project, fmt_span, reviewer_hash, sha256  # noqa: E402
+from common import VERSION, Issues, Project, fmt_span, published_hash, reviewer_hash, sha256  # noqa: E402
 from standard import KINDS_PICTURE, RULES, rules_table  # noqa: E402
 
 STAGES = ["script", "plan", "film"]
@@ -194,6 +194,13 @@ def cmd_review(a, stages):
             except Exception as e:                       # sheets are evidence, not a check: never fail the review on them
                 print(f"(sheets not written: {e})")
     must = [i for i in issues if i.level == "must"]
+    # The reviewer checks itself: an approval from code whose hash differs from the hash published in README.md
+    # does not count (see common.published_hash). Reported as a must item with rule id REVIEWER.
+    pub = published_hash()
+    if pub and reviewer_hash() != pub:
+        issues.must("film", "REVIEWER", f"The reviewer is not the published reviewer (its hash is {reviewer_hash()[:12]}, published {pub[:12]}).",
+                    "Do not approve with modified reviewer code: restore tools/reviewer to the published version, or publish the new hash in README.md with the reason recorded, and review again.")
+        must = [i for i in issues if i.level == "must"]
     complete = stages == STAGES and not a.quick
     verdict = "APPROVED" if (complete and not must) else ("REJECTED" if must else ("PASSED (stages " + ", ".join(stages) + ")"))
     hist = out / "history.md"
@@ -245,6 +252,9 @@ def cmd_verify(a):
             bad.append(f"{rel} changed after approval")
     if d.get("reviewer_hash") != reviewer_hash():
         bad.append("the reviewer's code or rules changed since this approval (review again with the current reviewer)")
+    pub = published_hash()
+    if pub and reviewer_hash() != pub:
+        bad.append(f"the reviewer is not the published reviewer (its hash is {reviewer_hash()[:12]}, published {pub[:12]}); approvals from modified code do not count")
     # an approval only means something from an unmodified reviewer: refuse one given by locally edited code
     import subprocess
     here = Path(__file__).resolve().parent

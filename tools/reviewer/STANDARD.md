@@ -123,3 +123,8 @@ are exempt from the frozen-picture checks.
 Change a number in `standard.py`, run `python tools/reviewer/selftest.py` (every damaged copy must still be
 rejected) and the calibration reviews in `calibration/README.md`, and record why. Any change to the reviewer's code
 or rules changes its hash, so earlier approvals stop verifying and films must be reviewed again.
+
+The reviewer also checks itself: it refuses to approve (reported as a must item with rule id REVIEWER) and
+`verify` refuses the stamp when its own hash differs from the hash published in `README.md` (see "The published
+reviewer hash"). To publish a changed reviewer, record the new hash there with the reason — and know that every
+earlier approval stops verifying.

@@ -1,9 +1,9 @@
 # Film review: black-hole-short: REJECTED
 
-Reviewed 2026-11-25 07:14 by tools/reviewer 1.0 (reviewer hash 236bd2dbfad4), round 1.
+Reviewed 2026-11-25 10:00 by tools/reviewer 1.0 (reviewer hash 02a7edf15391), round 4.
 Film: `renders/black-hole-v3.mp4`, plan: `../../tools/reviewer/calibration/black-hole-short.plan.json`.
 
-Stages: 1 script: PASSED / 2 scenes (plan): REJECTED (1 must) / 3 film: REJECTED (1 must).
+Stages: 1 script: PASSED / 2 scenes (plan): REJECTED (1 must) / 3 film: REJECTED (3 must).
 
 ## What to do
 
@@ -13,12 +13,14 @@ Each item says what was measured and what to change; times are film seconds with
 frames of every event and flagged moment, `EVENTS.md` what was measured for every planned event. Change the film to do what
 the plan says; do not weaken the plan to match the film. Rules: `tools/reviewer/STANDARD.md`.
 
-## Must fix (2)
+## Must fix (4)
 
 | # | Stage | Rule | Time | Scene | Problem | Fix |
 |---|---|---|---|---|---|---|
 | 1 | plan | P10 | 25.64-32.69 s (frames 769-981) | friend | Scene 'friend': 'friend' is on screen for 7.1 s and only poses (looks). | Give 'friend' actions on the words: react with the face, gesture, move with purpose (my films: panic on 'feet', stretch on 'stretched', shrug on 'nothing'). If the character is only a prop here, take it out of the cast. |
-| 2 | film | F11 | 1.97-3.76 s (frames 59-113) | hook | In 'hook', 'astronaut' only poses: none of its 2 planned acts shows up in its box. | Animate 'astronaut' on the planned words (black, big). |
+| 2 | film | F14 |  |  | HyperFrames check (default): 1 errors, 0 warnings: ✗ request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED | Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings. |
+| 3 | film | F14 |  |  | HyperFrames check (dense): 2 errors, 3 warnings: ✗ request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED / ✗ t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 124.84px, right 54.5px "BLACK HOLE?" — Text extends outside its nearest visual/container box. / ⚠ t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s canvas_overflow div.big inside #root overflowed left 124.84px, right 54.5px "BLACK HOLE?" — Text extends outside the composition canvas. / ⚠ t=48.83, 49.173, 49.515, 49.858, 50.201, 50.543, 50.886, 51.229s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) overflowed left 124.84px, right 54.5px — Nowrap text is wider than its container. | Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings. |
+| 4 | film | F11 | 1.97-3.76 s (frames 59-113) | hook | In 'hook', 'astronaut' only poses: none of its 2 planned acts shows up in its box. | Animate 'astronaut' on the planned words (black, big). |
 
 ## Should fix (25)
 
@@ -77,11 +79,11 @@ Plan: text share 0.2, anchored to words 0.87, sizes used extreme-wide, wide, med
 | Empty frames | mean flat 60.7 %; seconds over 70 %: [21, 22, 48] |
 | Picture onsets | 1.32 per second; dead stretches [(29.67, 31.2), (31.2, 32.73)] |
 | Events shown | 0.909 of planned picture events at their time and place; acts shown 0.769 |
-| Word lock | the same events moved 0.7-2.5 s are seen 0.441 of the time (p = 3.3e-13); big picture onsets 1.462x as frequent at planned times as elsewhere (p = 0.007) |
+| Word lock | the same events moved 0.7-2.5 s are seen 0.437 of the time (p = 2.3e-13); big picture onsets 1.49x as frequent at planned times as elsewhere (p = 0.007) |
 | Sound | cued events with a sound starting at their time 0.909 (shifted cues: 0.75, p = 0.005); largest group of identical cues 0.05 |
 | Mix | voice over the bed 9.2 dB, music under the voice 15.1 dB, music present 0.98 |
-| Captions | band [1152, 1224] px (correlation 0.319), follow 0.851 of words |
-| HyperFrames | default: passed (0 errors, 0 warnings); dense: passed (0 errors, 0 warnings) |
+| Captions | band [1152, 1224] px (correlation 0.343), follow 0.979 of words |
+| HyperFrames | default: FAILED (1 errors, 0 warnings); dense: FAILED (2 errors, 3 warnings) |
 | Seek test | 3.233 s: 1.47, 10.1 s: 1.45, 21.833 s: 1.13, 28.133 s: 1.49, 35.1 s: 1.46, 42.5 s: 1.48, 47.267 s: 1.48 (mean difference per frame) |
 
 ## The rules

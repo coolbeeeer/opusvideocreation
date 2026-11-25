@@ -8,7 +8,7 @@
  ],
  "quick": false,
  "reviewer": "1.0",
- "reviewer_hash": "236bd2dbfad45a8b41a63c50508648b4f4a45dc4dc5d168ab6c48c5c3008e768",
+ "reviewer_hash": "02a7edf15391b564cec2eb2ee2cb2e87abc9c4db62f17aabe3561706f0cef0a6",
  "plan": "../../tools/reviewer/calibration/mitochondria-short.plan.json",
  "issues": [
   {
@@ -125,7 +125,7 @@
    "stage": "plan",
    "level": "must",
    "rule": "P11",
-   "problem": "' ' is the cue for 26 of 37 picture events.",
+   "problem": "'cue' is the cue for 26 of 37 picture events.",
    "fix": "Design a sound for each action; one stock sound for everything reads as generic.",
    "scene": "",
    "t0": null,
@@ -185,7 +185,7 @@
    "stage": "film",
    "level": "must",
    "rule": "F09",
-   "problem": "Only 32 of 54 planned picture events visibly happen at their time (59 %).",
+   "problem": "Only 31 of 54 planned picture events visibly happen at their time (57 %).",
    "fix": "See the events marked 'not seen' below and in sheets/events-*.jpg: make each one visible (bigger, brighter, moving), on its word.",
    "scene": "",
    "t0": null,
@@ -259,6 +259,16 @@
    "fix": "Make it visible at that moment: larger, more contrast, a clear start (a pop, a snap, a fast move).",
    "scene": "origin",
    "t0": 16.37,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "should",
+   "rule": "F09",
+   "problem": "origin event 10 (react, 'digested'): \"the bacterium calms down: not digested after all\" is not seen in its box at its time.",
+   "fix": "Make it visible at that moment: larger, more contrast, a clear start (a pop, a snap, a fast move).",
+   "scene": "origin",
+   "t0": 16.720000000000002,
    "t1": null
   },
   {
@@ -415,7 +425,7 @@
    "stage": "film",
    "level": "must",
    "rule": "F10",
-   "problem": "The picture is not tied to the words: planned events are seen at their times 59 % of the time, and 47 % of the time when moved 0.7-2.5 s (p = 0.045).",
+   "problem": "The picture is not tied to the words: planned events are seen at their times 57 % of the time, and 46 % of the time when moved 0.7-2.5 s (p = 0.07).",
    "fix": "Start each event on its word (at(\"word\") in the scene, the same anchor as plan.json) with a clear start, and keep the rest of its box calm between events; do not run animations on their own clock.",
    "scene": "",
    "t0": null,
@@ -425,11 +435,31 @@
    "stage": "film",
    "level": "should",
    "rule": "F10",
-   "problem": "The film's big changes are only 1.15x as frequent at the planned times as elsewhere (p = 0.14).",
+   "problem": "The film's big changes are only 1.14x as frequent at the planned times as elsewhere (p = 0.15).",
    "fix": "Check that the big animations start on their words, and that plan.json lists every big change as an event.",
    "scene": "",
    "t0": null,
    "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F11",
+   "problem": "Only 3 of 5 character acts/reacts visibly happen inside their box.",
+   "fix": "The characters pose: make each act read on a phone (big gestures, eyes and mouth that change, a squash or stretch).",
+   "scene": "",
+   "t0": null,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F11",
+   "problem": "In 'origin', 'bacterium' only poses: none of its 1 planned acts shows up in its box.",
+   "fix": "Animate 'bacterium' on the planned words (digested).",
+   "scene": "origin",
+   "t0": 16.720000000000002,
+   "t1": 16.720000000000002
   },
   {
    "stage": "film",
@@ -459,6 +489,26 @@
    "fix": "Add or retime its cue.",
    "scene": "proof",
    "t0": 26.939999999999998,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F14",
+   "problem": "HyperFrames check (default): 1 errors, 1 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED | \u26a0 t=47.789s outside_safe_zone div.big \"YOUR CELLS\" \u2014 <div> \"YOUR CELLS\" is outside the safe area: TikTok (left and right edges), Instagram Reels (left and right edges), YouTube Shorts (left and right edges). | \u2139 t=47.789s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 96.32px, right 96.26px \"YOUR CELLS\" \u2014 Text extends outside its nearest visual/container box. | \u2139 t=47.789s canvas_overflow div.big inside #root overflowed left 96.32px, right 96.26px \"YOUR CELLS\" \u2014 Text extends outside the composition canvas.",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
+   "scene": "",
+   "t0": null,
+   "t1": null
+  },
+  {
+   "stage": "film",
+   "level": "must",
+   "rule": "F14",
+   "problem": "HyperFrames check (dense): 2 errors, 3 warnings: \u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED | \u2717 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 80.56px, right 80.5px \"YOUR CELLS\" \u2014 Text extends outside its nearest visual/container box. | \u26a0 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s canvas_overflow div.big inside #root overflowed left 80.56px, right 80.5px \"YOUR CELLS\" \u2014 Text extends outside the composition canvas. | \u26a0 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) overflowed left 80.56px, right 80.5px \u2014 Nowrap text is wider than its container.",
+   "fix": "Fix every finding (docs/09-pitfalls.md has the usual ones). A check only counts as passed with 0 errors and 0 warnings.",
+   "scene": "",
+   "t0": null,
    "t1": null
   }
  ],
@@ -655,7 +705,7 @@
    "lead": "bacterium",
    "sfx_cover": 0.67,
    "sfx_top": [
-    " ",
+    "cue",
     26,
     37
    ],
@@ -2024,14 +2074,14 @@
    "sync_ms": 0.0,
    "black": [],
    "flash": [],
-   "caption_corr": 0.273,
+   "caption_corr": 0.289,
    "caption_band_px": [
     1128,
     1248
    ],
-   "onsets_per_s": 1.84,
+   "onsets_per_s": 1.78,
    "median_motion": 2.9,
-   "captions_follow": 0.76,
+   "captions_follow": 0.8,
    "still_runs": [],
    "flat_seconds": [
     11,
@@ -2043,8 +2093,8 @@
    "scenes": {
     "walk": {
      "dur": 11.14,
-     "onsets": 27,
-     "onset_rate": 2.42,
+     "onsets": 24,
+     "onset_rate": 2.15,
      "median_motion": 5.44
     },
     "origin": {
@@ -2085,12 +2135,12 @@
     }
    },
    "dead": [],
-   "shown_share": 0.593,
-   "shown_shifted": 0.468,
-   "event_lock_p": 0.045,
-   "lock_ratio": 1.145,
-   "lock_p": 0.14,
-   "acts_shown": 0.8,
+   "shown_share": 0.574,
+   "shown_shifted": 0.465,
+   "event_lock_p": 0.07,
+   "lock_ratio": 1.144,
+   "lock_p": 0.155,
+   "acts_shown": 0.6,
    "events": [
     {
      "scene": "walk",
@@ -2113,7 +2163,7 @@
      "wi": 7,
      "shown": false,
      "lag": 0.07,
-     "score": 2.27,
+     "score": 2.28,
      "cue_t": 2.34
     },
     {
@@ -2137,7 +2187,7 @@
      "wi": 9,
      "shown": false,
      "lag": 0.2,
-     "score": 1.21,
+     "score": 1.22,
      "cue_t": 4.07
     },
     {
@@ -2161,7 +2211,7 @@
      "wi": 11,
      "shown": true,
      "lag": 0.48,
-     "score": 3.22
+     "score": 3.41
     },
     {
      "scene": "walk",
@@ -2184,7 +2234,7 @@
      "wi": 11,
      "shown": true,
      "lag": 0.46,
-     "score": 11.86
+     "score": 11.88
     },
     {
      "scene": "walk",
@@ -2207,7 +2257,7 @@
      "wi": 15,
      "shown": true,
      "lag": 0.26,
-     "score": 6.09,
+     "score": 6.35,
      "cue_t": 7.3
     },
     {
@@ -2230,8 +2280,8 @@
      "anchored": true,
      "wi": 18,
      "shown": true,
-     "lag": -0.11,
-     "score": 9.73,
+     "lag": -0.17,
+     "score": 9.92,
      "cue_t": 8.19
     },
     {
@@ -2255,7 +2305,7 @@
      "wi": 20,
      "shown": true,
      "lag": -0.29,
-     "score": 8.02,
+     "score": 8.18,
      "cue_t": 8.39
     },
     {
@@ -2279,7 +2329,7 @@
      "wi": 23,
      "shown": false,
      "lag": 0.21,
-     "score": 1.12,
+     "score": 1.09,
      "cue_t": 9.4
     },
     {
@@ -2298,7 +2348,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.12,
-     "score": 12.38
+     "score": 11.35
     },
     {
      "scene": "origin",
@@ -2321,7 +2371,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.07,
-     "score": 12.38
+     "score": 11.35
     },
     {
      "scene": "origin",
@@ -2344,7 +2394,7 @@
      "wi": 32,
      "shown": false,
      "lag": 0.34,
-     "score": 1.75,
+     "score": 1.95,
      "cue_t": 13.38
     },
     {
@@ -2368,7 +2418,7 @@
      "wi": 34,
      "shown": false,
      "lag": -0.29,
-     "score": 2.27,
+     "score": 2.41,
      "cue_t": null
     },
     {
@@ -2392,7 +2442,7 @@
      "wi": 34,
      "shown": false,
      "lag": 0.15,
-     "score": 2.24,
+     "score": 2.41,
      "cue_t": 14.32
     },
     {
@@ -2416,7 +2466,7 @@
      "wi": 36,
      "shown": true,
      "lag": 0.46,
-     "score": 3.04,
+     "score": 3.46,
      "cue_t": 14.61
     },
     {
@@ -2440,7 +2490,7 @@
      "wi": 37,
      "shown": true,
      "lag": -0.29,
-     "score": 4.0,
+     "score": 4.12,
      "cue_t": 15.84
     },
     {
@@ -2464,7 +2514,7 @@
      "wi": 40,
      "shown": false,
      "lag": 0.3,
-     "score": 2.45,
+     "score": 1.96,
      "cue_t": 16.47
     },
     {
@@ -2486,9 +2536,9 @@
      ],
      "anchored": true,
      "wi": 40,
-     "shown": true,
+     "shown": false,
      "lag": -0.19,
-     "score": 2.62,
+     "score": 2.47,
      "cue_t": 16.68
     },
     {
@@ -2512,7 +2562,7 @@
      "wi": 42,
      "shown": false,
      "lag": 0.12,
-     "score": 0.62,
+     "score": 0.64,
      "cue_t": 17.6
     },
     {
@@ -2531,7 +2581,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 34.69
+     "score": 37.8
     },
     {
      "scene": "deal",
@@ -2554,7 +2604,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 34.69
+     "score": 37.8
     },
     {
      "scene": "deal",
@@ -2577,7 +2627,7 @@
      "wi": 47,
      "shown": false,
      "lag": 0.18,
-     "score": 1.32,
+     "score": 1.38,
      "cue_t": 19.53
     },
     {
@@ -2601,7 +2651,7 @@
      "wi": 51,
      "shown": true,
      "lag": -0.23,
-     "score": 3.44
+     "score": 3.47
     },
     {
      "scene": "deal",
@@ -2624,7 +2674,7 @@
      "wi": 53,
      "shown": true,
      "lag": -0.11,
-     "score": 5.2,
+     "score": 5.22,
      "cue_t": 21.65
     },
     {
@@ -2648,7 +2698,7 @@
      "wi": 54,
      "shown": true,
      "lag": 0.49,
-     "score": 11.49,
+     "score": 11.46,
      "cue_t": 22.5
     },
     {
@@ -2667,7 +2717,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 117.68
+     "score": 113.7
     },
     {
      "scene": "proof",
@@ -2690,7 +2740,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.04,
-     "score": 117.68
+     "score": 113.7
     },
     {
      "scene": "proof",
@@ -2713,7 +2763,7 @@
      "wi": 64,
      "shown": true,
      "lag": 0.06,
-     "score": 3.09,
+     "score": 3.08,
      "cue_t": 26.36
     },
     {
@@ -2737,7 +2787,7 @@
      "wi": 64,
      "shown": false,
      "lag": 0.06,
-     "score": 2.13,
+     "score": 2.03,
      "cue_t": null
     },
     {
@@ -2761,7 +2811,7 @@
      "wi": 68,
      "shown": true,
      "lag": 0.14,
-     "score": 9.71,
+     "score": 9.2,
      "cue_t": 27.8
     },
     {
@@ -2785,7 +2835,7 @@
      "wi": 70,
      "shown": true,
      "lag": 0.45,
-     "score": 22.56,
+     "score": 21.49,
      "cue_t": 28.42
     },
     {
@@ -2809,7 +2859,7 @@
      "wi": 72,
      "shown": true,
      "lag": 0.04,
-     "score": 22.53
+     "score": 21.49
     },
     {
      "scene": "proof",
@@ -2832,7 +2882,7 @@
      "wi": 74,
      "shown": false,
      "lag": 0.07,
-     "score": 1.56,
+     "score": 1.53,
      "cue_t": 29.54
     },
     {
@@ -2856,7 +2906,7 @@
      "wi": 75,
      "shown": false,
      "lag": -0.2,
-     "score": 2.35
+     "score": 2.33
     },
     {
      "scene": "atp",
@@ -2874,7 +2924,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.03,
-     "score": 10.46
+     "score": 10.42
     },
     {
      "scene": "atp",
@@ -2897,7 +2947,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.03,
-     "score": 10.46
+     "score": 10.42
     },
     {
      "scene": "atp",
@@ -2944,7 +2994,7 @@
      "wi": 81,
      "shown": false,
      "lag": 0.45,
-     "score": 0.81,
+     "score": 0.83,
      "cue_t": 32.31
     },
     {
@@ -2968,7 +3018,7 @@
      "wi": 86,
      "shown": false,
      "lag": 0.14,
-     "score": 1.79,
+     "score": 1.76,
      "cue_t": 35.02
     },
     {
@@ -2992,7 +3042,7 @@
      "wi": 86,
      "shown": false,
      "lag": -0.16,
-     "score": 1.79,
+     "score": 1.76,
      "cue_t": 35.16
     },
     {
@@ -3016,7 +3066,7 @@
      "wi": 87,
      "shown": true,
      "lag": 0.26,
-     "score": 3.17,
+     "score": 3.23,
      "cue_t": 35.87
     },
     {
@@ -3040,7 +3090,7 @@
      "wi": 88,
      "shown": true,
      "lag": 0.0,
-     "score": 3.17,
+     "score": 3.23,
      "cue_t": 36.35
     },
     {
@@ -3064,7 +3114,7 @@
      "wi": 91,
      "shown": false,
      "lag": 0.44,
-     "score": 1.36,
+     "score": 1.37,
      "cue_t": 36.65
     },
     {
@@ -3088,7 +3138,7 @@
      "wi": 96,
      "shown": false,
      "lag": -0.27,
-     "score": 1.01,
+     "score": 1.04,
      "cue_t": 37.9
     },
     {
@@ -3107,7 +3157,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.0,
-     "score": 47.81
+     "score": 46.98
     },
     {
      "scene": "mother",
@@ -3130,7 +3180,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.0,
-     "score": 47.81
+     "score": 46.98
     },
     {
      "scene": "mother",
@@ -3153,7 +3203,7 @@
      "wi": 104,
      "shown": false,
      "lag": -0.27,
-     "score": 0.69,
+     "score": 0.67,
      "cue_t": 40.62
     },
     {
@@ -3177,7 +3227,7 @@
      "wi": 107,
      "shown": false,
      "lag": 0.24,
-     "score": 1.22,
+     "score": 1.12,
      "cue_t": 41.14
     },
     {
@@ -3201,7 +3251,7 @@
      "wi": 108,
      "shown": true,
      "lag": 0.22,
-     "score": 3.34,
+     "score": 3.19,
      "cue_t": 41.91
     },
     {
@@ -3225,7 +3275,7 @@
      "wi": 108,
      "shown": true,
      "lag": -0.08,
-     "score": 5.38,
+     "score": 5.07,
      "cue_t": 41.91
     },
     {
@@ -3249,7 +3299,7 @@
      "wi": 109,
      "shown": true,
      "lag": 0.11,
-     "score": 3.64,
+     "score": 3.81,
      "cue_t": 42.56
     },
     {
@@ -3268,7 +3318,7 @@
      "wi": null,
      "shown": true,
      "lag": 0.12,
-     "score": 17.46
+     "score": 17.37
     },
     {
      "scene": "finale",
@@ -3291,7 +3341,7 @@
      "wi": 114,
      "shown": true,
      "lag": -0.25,
-     "score": 6.86
+     "score": 6.79
     },
     {
      "scene": "finale",
@@ -3338,7 +3388,7 @@
      "wi": 124,
      "shown": false,
      "lag": 0.09,
-     "score": 2.34,
+     "score": 2.32,
      "cue_t": 47.67
     }
    ],
@@ -3352,17 +3402,29 @@
    "hyperframes": {
     "default": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
-     "warnings": 0,
-     "findings": []
+     "passed": false,
+     "errors": 1,
+     "warnings": 1,
+     "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
+      "\u26a0 t=47.789s outside_safe_zone div.big \"YOUR CELLS\" \u2014 <div> \"YOUR CELLS\" is outside the safe area: TikTok (left and right edges), Instagram Reels (left and right edges), YouTube Shorts (left and right edges).",
+      "\u2139 t=47.789s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 96.32px, right 96.26px \"YOUR CELLS\" \u2014 Text extends outside its nearest visual/container box.",
+      "\u2139 t=47.789s canvas_overflow div.big inside #root overflowed left 96.32px, right 96.26px \"YOUR CELLS\" \u2014 Text extends outside the composition canvas.",
+      "\u2139 t=47.789s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) overflowed left 96.32px, right 96.26px \u2014 Nowrap text is wider than its container."
+     ]
     },
     "dense": {
      "ran": true,
-     "passed": true,
-     "errors": 0,
-     "warnings": 0,
-     "findings": []
+     "passed": false,
+     "errors": 2,
+     "warnings": 3,
+     "findings": [
+      "\u2717 request_failed: Failed to load css2: net::ERR_TUNNEL_CONNECTION_FAILED",
+      "\u2717 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s text_box_overflow div.big inside #host-finale > div:nth-of-type(2) overflowed left 80.56px, right 80.5px \"YOUR CELLS\" \u2014 Text extends outside its nearest visual/container box.",
+      "\u26a0 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s canvas_overflow div.big inside #root overflowed left 80.56px, right 80.5px \"YOUR CELLS\" \u2014 Text extends outside the composition canvas.",
+      "\u26a0 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s container_overflow div.big inside #host-finale > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) overflowed left 80.56px, right 80.5px \u2014 Nowrap text is wider than its container.",
+      "\u26a0 t=47.733, 48.07, 48.407, 48.745, 49.082, 49.419, 49.757, 50.094, 50.431s outside_safe_zone div.big \"YOUR CELLS\" \u2014 <div> \"YOUR CELLS\" is outside the safe area: TikTok (left and right edges), Instagram Reels (left and right edges), YouTube Shorts (left and right edges)."
+     ]
     }
    },
    "seek": {
@@ -3407,5 +3469,5 @@
    }
   }
  },
- "date": "2026-11-25T07:16:51"
+ "date": "2026-11-25T10:13:26"
 }
